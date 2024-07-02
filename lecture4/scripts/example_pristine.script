@@ -1,0 +1,56 @@
+def tet():
+  global _hidden_verificationVariable=0
+  step_count_dd224155_c74c_4f10_8dd9_ef439f154a42 = 0.0
+  thread Step_Counter_Thread_a9ed8054_ae2e_46dc_808e_085cd88509f0():
+    while (True):
+      step_count_dd224155_c74c_4f10_8dd9_ef439f154a42 = step_count_dd224155_c74c_4f10_8dd9_ef439f154a42 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_a9ed8054_ae2e_46dc_808e_085cd88509f0()
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  set_runstate_standard_digital_outputs([2,3])
+  set_runstate_standard_digital_output_to_value(2, 1)
+  set_runstate_standard_digital_output_to_value(3, 1)
+  set_safety_mode_transition_hardness(1)
+  set_tcp(p[0.0,0.0,0.0,0.0,0.0,0.0])
+  set_gravity([0.0, 0.0, 9.82])
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  set_target_payload(0.290000, [0.000000, 0.000000, 0.000000], [0.000196, 0.000196, 0.000196, 0.000000, 0.000000, 0.000000])
+  
+  global lock_trig=False
+  global lock_count=0
+  global Point_1=p[0.0,0.0,0.0,3.141592653589793,0.0,0.0]
+  global u50920u51060u54252u51064u53944_1_p=p[-.001351785444, -.501550300588, .398833986305, .009473105284, .002959952645, -.010425900997]
+  global u50920u51060u54252u51064u53944_1_q=[1.1565710306167603, -0.9171767991832276, 2.6633556524859827, -3.3097416363158167, 1.562380313873291, 0.40639400482177734]
+  global u50920u51060u54252u51064u53944_2_p=p[-.311896601822, -.497767352542, .359126668675, -.293550209062, -.526495256292, -.351472268864]
+  global u50920u51060u54252u51064u53944_2_q=[0.8180070519447327, -0.9178529542735596, 2.438558880482809, -3.0471888981261195, 2.1669809818267822, 0.4063746929168701]
+  while (True):
+    $ 2 "ROBOT PROGRAM"
+    $ 3 "5 times Loop:"
+    u47336u54532_1 = 0
+    while (u47336u54532_1 < 5):
+      $ 4 "If digital_out[0]≟ True "
+      if (get_standard_digital_out(0) ==   True  ):
+        $ 5 "wait: 0.01"
+        sleep(0.01)
+      end
+      u47336u54532_1 = u47336u54532_1 + 1
+    end
+    $ 6 "MoveJ"
+    $ 7 "Waypoint_1" "breakAfter"
+    movej(get_inverse_kin(u50920u51060u54252u51064u53944_1_p, qnear=u50920u51060u54252u51064u53944_1_q), a=1.3962634015954636, v=1.0471975511965976)
+    $ 8 "Waypoint_2" "breakAfter"
+    movej(get_inverse_kin(u50920u51060u54252u51064u53944_2_p, qnear=u50920u51060u54252u51064u53944_2_q), a=1.3962634015954636, v=1.0471975511965976)
+  end
+end

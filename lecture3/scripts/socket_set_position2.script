@@ -1,0 +1,26 @@
+def socket_set_position2():
+    server_ip = "192.168.0.7"
+    port = 12345
+    socket_open(server_ip,port,"socket_0")
+
+    socket_send_line("req_data","socket_0")
+    sleep(0.1)
+    buf=socket_read_ascii_float(18,socket_name="socket_0", timeout=2)
+    p_goal = p[buf[1],buf[2],buf[3],buf[4],buf[5],buf[6]]
+    p_rel = p[buf[7],buf[8],buf[9],buf[10],buf[11],buf[12]]
+    q_ref = [buf[13],buf[14],buf[15],buf[16],buf[17],buf[18]]
+
+    socket_close("socket_0")
+
+    p_=get_actual_tcp_pose()
+    q_=get_actual_joint_positions()
+
+    q_goal = get_inverse_kin(p_goal,q_ref)
+    p_ready = get_forward_kin(q=q_goal,tcp=p_rel)
+    q_ready = get_inverse_kin(p_ready,q_ref)
+
+    movej(q_ref, a=1.2, v=0.1, t=0, r=0)
+    sleep(1)
+    movej(q_ready, a=1.2, v=0.1, t=0, r=0.01)
+    movel(q_goal, a=1.2, v=0.1, t=0, r=0)
+end
