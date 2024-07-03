@@ -1,0 +1,84 @@
+def unnamed():
+  global _hidden_verificationVariable=0
+  step_count_d0a2c061_d0db_4555_ad26_d4523f024ba2 = 0.0
+  thread Step_Counter_Thread_71bbeef5_284f_4727_a564_94af7ef98923():
+    while (True):
+      step_count_d0a2c061_d0db_4555_ad26_d4523f024ba2 = step_count_d0a2c061_d0db_4555_ad26_d4523f024ba2 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_71bbeef5_284f_4727_a564_94af7ef98923()
+  set_tool_communication(True, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(24)
+  set_target_payload(0.000000, [0.000000, 0.000000, 0.000000], [0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000])
+  set_gravity([0.0, 0.0, 9.82])
+  modbus_add_signal("192.168.0.1", 255, 131, 2, "Grab", False)
+  modbus_set_signal_update_frequency("Grab", 10)
+  modbus_add_signal("192.168.0.1", 255, 134, 2, "Y_Move", False)
+  modbus_set_signal_update_frequency("Y_Move", 10)
+  modbus_add_signal("192.168.0.1", 255, 135, 2, "X_Move", False)
+  modbus_set_signal_update_frequency("X_Move", 10)
+  modbus_add_signal("192.168.0.1", 255, 128, 3, "cor_x", False)
+  modbus_set_signal_update_frequency("cor_x", 10)
+  modbus_add_signal("192.168.0.1", 255, 136, 2, "rzP", False)
+  modbus_set_signal_update_frequency("rzP", 10)
+  modbus_add_signal("192.168.0.1", 255, 137, 2, "rzM", False)
+  modbus_set_signal_update_frequency("rzM", 10)
+  modbus_add_signal("192.168.0.1", 255, 129, 3, "cor_y", False)
+  modbus_set_signal_update_frequency("cor_y", 10)
+  modbus_set_runstate_dependent_choice("cor_x",0)
+  modbus_set_runstate_dependent_choice("cor_y",0)
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 1)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  set_safety_mode_transition_hardness(1)
+  set_tcp(p[0.0,0.0,0.0,0.0,0.0,0.0])
+  global Pallet_1_cnt=4
+  global u54252u51064u53944_1=p[-0.019633020024126535,-0.33721751686787493,0.42505385749740165,0.36973370863393246,-1.564001581063396,0.4212139846779598]
+  global u54252u51064u53944_2=p[0.3246394437526867,-0.29650040291507446,0.1967381093900621,1.2152105857978894,1.228125163865283,1.2034296311986068]
+  global u54252u51064u53944_3=p[-0.16950721640296468,-0.2964634227155062,0.23134978552895782,-1.2211354680995476,-1.1956245675622965,1.2140707852953228]
+  global u54252u51064u53944_4=p[0.13256860822640806,-0.4830102965404586,0.3014260597269136,1.3819742077713477,1.360768395745645,-1.1210601708807049]
+  global u54252u51064u53944_5=p[0.1732851100571935,-0.01972860575730112,0.2541367202968618,-1.1942320307120706,-1.2293113732871288,-1.225402096906777]
+  rtde_set_watchdog("speed_slider_mask", 10.0, "ignore")
+  # begin: URCap Installation Node
+  #   Source: SCHUNK Co-act EGP-C for UR, 1.0.0.SNAPSHOT, SCHUNK GmbH & Co.
+  #   Type: SCHUNK Co-act Gripper
+  Gripper_LB_Enabled = False
+  def GrpOpen():
+  set_tool_digital_out(1, False)
+  sleep(0.015)
+  set_tool_digital_out(0, True)
+  sleep(0.5)
+  end
+  def GrpClose():
+  set_tool_digital_out(0, False)
+  sleep(0.015)
+  set_tool_digital_out(1, True)
+  sleep(0.5)
+  end
+  # end: URCap Installation Node
+  i=0
+  while (i<1):
+    i=i+1
+    $ 1 "Robot Program"
+    # begin: URCap Program Node
+    #   Source: SCHUNK Co-act EGP-C for UR, 1.0.0.SNAPSHOT, SCHUNK GmbH & Co.
+    #   Type: Close Co-act EGP-C
+    $ 2 "Close Co-act EGP-C"
+    GrpClose()
+    # end: URCap Program Node
+    # begin: URCap Program Node
+    #   Source: SCHUNK Co-act EGP-C for UR, 1.0.0.SNAPSHOT, SCHUNK GmbH & Co.
+    #   Type: Open Co-act EGP-C
+    $ 3 "Open Co-act EGP-C"
+    GrpOpen()
+    # end: URCap Program Node
+  end
+end

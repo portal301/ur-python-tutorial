@@ -7,16 +7,10 @@ def socket_set_position2():
     sleep(0.1)
 
     p_=get_actual_tcp_pose()
-    q_=get_actual_joint_positions()
 
     i=0
     while (i<6):
         socket_send_int(p_[i]*10000)
-        i=i+1
-    end
-    i=0
-    while (i<6):
-        socket_send_int(q_[i]*10000)
         i=i+1
     end
 

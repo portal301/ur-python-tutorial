@@ -1,0 +1,15 @@
+def freedrive():
+    # This script is not confirmed. (2024-07-03)
+    socket_open("192.168.0.7",12345,"socket_0")
+    while (True):
+        cmd=socket_read_line("socket_0",timeout=2)
+        if (cmd == "start_freedrive"):
+            freedrive_mode()
+        elif (cmd == "stop_freedrive"):    
+            end_freedrive_mode()
+        elif (cmd == "finish"):
+            break
+        end
+    end
+    socket_close("socket_0")
+end

@@ -1,0 +1,7 @@
+def io_control():
+    set_standard_digital_out(2,True)
+    while (get_standard_digital_in(2) == False):
+        sleep(0.1)
+    end
+    set_standard_digital_out(2,False)
+end

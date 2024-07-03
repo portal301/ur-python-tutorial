@@ -22,7 +22,7 @@ PORT_SECONDARY_CLIENT = 30002
 
 server_ip = "192.168.0.2"
 robot_ip = "192.168.0.5"
-script_path = "scripts/socket_get_position.script"
+script_path = "scripts/socket_get_position1.script"
 
 async def handle_client(reader, writer):
     addr = writer.get_extra_info('peername')
@@ -38,11 +38,9 @@ async def handle_client(reader, writer):
             print(f"Received from {addr}: {message}")
 
             if message == "current_pos":
-                print("Received position data request")
+                print("receive and handle current_pos message")
                 p_ = await handle_pos_data(reader)
                 print2(f"p_: {p_}", Color.GREEN)
-                q_ = await handle_pos_data(reader)
-                print2(f"q_: {q_}", Color.GREEN)
 
 
             writer.write(data)  # Echo back the received message
@@ -98,24 +96,3 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nServer is shutting down...")
 
-
-
-
-
-
-# Get robot state
-
-# set the robot to freedrive mode
-
-# open socket server
-
-# Send the script to the robot
-    # connect to socket server
-    # get current position and send it the server
-    # end connection
-
-# save the position data
-
-# finish the freedrive mode
-
-# close socket server
