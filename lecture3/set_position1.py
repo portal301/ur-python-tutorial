@@ -20,9 +20,9 @@ def print2(str, color=Color.YELLOW):
 PORT_PRIMARY_CLIENT = 30001
 PORT_SECONDARY_CLIENT = 30002
 
-server_ip = "192.168.0.7"
-robot_ip = "192.168.0.21"
-script_path = "scripts/socket_get_position.script"
+server_ip = "192.168.0.2"
+robot_ip = "192.168.0.5"
+script_path = "scripts/socket_set_position1.script"
 
 async def handle_client(reader, writer):
     addr = writer.get_extra_info('peername')
@@ -43,16 +43,20 @@ async def handle_client(reader, writer):
                 print2(f"p_: {p_}", Color.GREEN)
                 q_ = await handle_pos_data(reader)
                 print2(f"q_: {q_}", Color.GREEN)
-
-
-            writer.write(data)  # Echo back the received message
-            await writer.drain()
+            elif message == "req_data":
+                print("Received data request")
+                p_rel = [0.0, 0.0, -0.03, 0.0, 0.0, 0.0]
+                float_string = "({})\n".format(','.join(map(str, p_rel)))
+                writer.write(float_string.encode())
+                await writer.drain()
     except asyncio.CancelledError:
         pass
+    except Exception as e:
+        print("Error:", e)
     finally:
         print(f"Connection with {addr} closed")
         writer.close()
-        await writer.wait_closed()
+
 
 async def handle_pos_data(reader):
     integers_data = []
@@ -97,25 +101,3 @@ if __name__ == "__main__":
         asyncio.run(main(host=server_ip))
     except KeyboardInterrupt:
         print("\nServer is shutting down...")
-
-
-
-
-
-
-# Get robot state
-
-# set the robot to freedrive mode
-
-# open socket server
-
-# Send the script to the robot
-    # connect to socket server
-    # get current position and send it the server
-    # end connection
-
-# save the position data
-
-# finish the freedrive mode
-
-# close socket server

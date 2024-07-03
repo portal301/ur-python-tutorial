@@ -34,6 +34,15 @@
 
     git clone git@github.com:portal301/ur-python-tutorial.git
 
+### 개발환경
 
+1. VS code 설치
+
+https://code.visualstudio.com/download
+
+2. python 설치
+- python venv (virtual environment)
+
+3. (optional) git bash
 
 Written by AffineRobotics(Portal301)

@@ -4,8 +4,8 @@ import socket
 PORT_PRIMARY_CLIENT = 30001
 PORT_SECONDARY_CLIENT = 30002
 
-server_ip = "192.168.0.7"
-robot_ip = "192.168.0.21"
+server_ip = "192.168.0.2"
+robot_ip = "192.168.0.5"
 script_path = "scripts/hellosocket.script"
 
 async def handle_client(reader, writer):
