@@ -23,12 +23,18 @@
 혹시 문제가 발생하거나 추가 요청사항이 있을경우 Issue탭이나 contact@portal301.com으로 문의주세요 :)
 
 
+### 주요 링크
+
+- UR remote control interface
+
+https://www.universal-robots.com/articles/ur/interface-communication/remote-control-via-tcpip/
+
 
 ### 프로젝트 다운받기
 
 1. ZIP file
 
-'<>Code' button -> Download ZIP
+  '<>Code' button -> Download ZIP
 
 
 2. git clone (git bash 필요)
@@ -37,6 +43,20 @@
 
     git clone git@github.com:portal301/ur-python-tutorial.git
 
+
+### 터미널 프롬프트 명령어
+
+- 하위 폴더로 이동
+
+    cd {foldername}
+
+- 상위 폴더로 이동
+
+    cd .. 
+
+- 현재위치에서 VScode 실행
+
+    code .
 
 
 ### 개발환경
