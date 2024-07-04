@@ -30,8 +30,8 @@
 ### ZIP file
 ![image](https://github.com/portal301/ur-python-tutorial/assets/5483768/497e8648-c28d-4466-a996-2b2ac6f14623)
 
-1. '<>Code' 버튼 클릭
-2.  Download ZIP 버튼 클릭 후 압축 해제하시면 됩니다.
+1. ```<> Code``` 버튼 클릭
+2.  ```Download ZIP``` 버튼 클릭 후 압축 해제하시면 됩니다.
 
 ### git clone (git bash 필요)
 프로젝트 폴더 만든후 해당 폴더에서 터미널 실행 -> 터미널 프롬프트에서 아래 명령 입력
