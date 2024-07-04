@@ -150,7 +150,7 @@ if __name__ == "__main__":
 
 ## 실습 3
 
-**server_forever** 파일을 실행해봅니다.
+**server_forever_async** 파일을 실행해봅니다.
 ```bash
 python lecture1_server_forever_async.py
 ```
