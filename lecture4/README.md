@@ -1,17 +1,41 @@
 # Lecture 4
-### Goal1: get URCaps headers from the robot
+## 강의 목표
+- URCaps 헤더를 로봇으로부터 가져오기
+- URCaps 함수 변경해보기
 
-- Create a new program in the polyscope
+## URCaps
+URCaps는 Universal Robots의 협동 로봇(UR 로봇) 시리즈를 위한 확장 가능한 소프트웨어 프레임워크입니다. URCaps는 플러그인과 같은 역할을 하며, 사용자가 로봇의 기능을 확장하고 사용자 정의할 수 있도록 돕습니다. 이를 통해 다양한 기능을 추가하거나 기존 기능을 개선할 수 있습니다. URCaps의 주요 특징과 기능은 다음과 같습니다:
 
-- Add URCaps-related nodes to the program
+### 확장 가능한 아키텍처
 
-- Save the program
+URCaps는 모듈식 구조를 가지고 있어 사용자가 필요한 기능만 선택하여 추가할 수 있습니다. 이를 통해 특정 작업이나 애플리케이션에 맞춤형 솔루션을 구현할 수 있습니다.
 
-- Transfer the program(.script, not .urp) to the computer using a USB drive
+### 사용자 정의 인터페이스
 
-- Open the program in the editor(VScode)
+URCaps는 Polyscope라는 UR 로봇의 사용자 인터페이스에 통합됩니다. 이를 통해 사용자 정의 인터페이스를 쉽게 만들 수 있으며, 사용자는 직관적으로 로봇을 제어하고 모니터링할 수 있습니다.
 
-- For example, compare 'example_pristine.script' and 'example_urcaps_robotiq.script'
+### 프로그래밍 인터페이스
+
+URCaps는 Java로 작성되며, URCaps API를 통해 로봇의 다양한 기능에 접근할 수 있습니다. 이를 통해 로봇의 동작을 제어하고, 외부 장치와 통신하며, 데이터를 처리하는 등 다양한 작업을 수행할 수 있습니다.
+
+### 기존 기능 확장
+
+URCaps를 사용하면 기존 UR 로봇의 기능을 확장하거나 개선할 수 있습니다. 예를 들어, 특정 센서나 그리퍼와 같은 외부 장치를 통합하거나, 로봇의 동작을 더욱 정밀하게 제어할 수 있는 기능을 추가할 수 있습니다.
+
+## URCaps 헤더를 로봇에서 가져오기
+
+1. Polyscope에서 새 프로그램을 생성합니다.
+
+2. 프로그램에 URCaps 관련 노드를 추가합니다.
+
+3. 프로그램을 저장합니다.
+
+4. 프로그램(.script 파일, .urp 파일 아님)을 USB 드라이브를 사용하여 컴퓨터로 전송합니다.
+
+5. 에디터(VScode)에서 프로그램을 엽니다.
+
+6. 'example_pristine.script'와 'example_urcaps_robotiq.script'을 비교합니다.
+
 
 ### Goal2: manipulate the URCaps functions
 
