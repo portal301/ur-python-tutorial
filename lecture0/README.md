@@ -119,10 +119,86 @@ say_hello()  # Hello!
 
 ## 3. 시스템 최적화
 
-비동기프로그래밍(asyncio), 예외처리(try/except/else/finally), 큐(queue)
+로봇과 주변기기들 간의 통신 시스템을 구축할 때, 각 기기의 독립적인 동작 과정에서 비동기성이 발생할 수 있습니다. 이를 처리하기 위해 비동기 프로그래밍을 적용하고, 발생할 수 있는 다양한 오류를 예외처리로 다루며, 프로세스 병목현상을 줄이기 위해 큐(queue)를 사용할 수 있습니다.
 
-로봇과 주변기기들 간의 통신 시스템을 구축할 경우 각 기기의 독립적인 동작과정에서 비동기성이 발생할 수 있습니다.
+### 비동기 프로그래밍 (asyncio)
+Python의 asyncio 모듈을 사용하면 비동기 I/O 작업을 효율적으로 처리할 수 있습니다. 이는 특히 소켓 통신과 같은 I/O 바운드 작업에 유용합니다.
 
-여기서 이런저런 오류가 발생하거나, 프로세스 병목현상이 발생할 수 있기 때문에 이를 처리하기 위한 다양한 기법이 필요할 수 있습니다.
+```python
+import asyncio
 
-트레이닝 세션에서는 컴퓨터와 로봇간의 소켓통신에 비동기 프로그래밍을 적용하여 연습해볼 거예요.
+async def handle_robot(reader, writer):
+    data = await reader.read(100)
+    message = data.decode()
+    print(f"Received: {message}")
+
+    response = "Message received"
+    writer.write(response.encode())
+    await writer.drain()
+
+    print("Closing the connection")
+    writer.close()
+    await writer.wait_closed()
+
+async def main():
+    server = await asyncio.start_server(handle_robot, '127.0.0.1', 8888)
+    async with server:
+        await server.serve_forever()
+
+asyncio.run(main())
+```
+
+### 예외처리 (try/except/else/finally)
+비동기 프로그래밍에서는 다양한 오류가 발생할 수 있으므로, 이를 적절히 처리하여 시스템의 안정성을 유지하는 것이 중요합니다.
+
+```python
+import asyncio
+
+async def risky_operation():
+    try:
+        # 위험한 작업 수행
+        result = 1 / 0
+    except ZeroDivisionError as e:
+        print(f"Error occurred: {e}")
+    else:
+        print("Operation succeeded")
+    finally:
+        print("Cleaning up resources")
+
+asyncio.run(risky_operation())
+```
+
+### 큐 (queue)
+큐를 사용하면 여러 프로세스 간의 작업을 효율적으로 관리할 수 있습니다. 비동기 큐를 사용하여 작업 간 병목 현상을 줄일 수 있습니다.
+
+```python
+import asyncio
+
+async def producer(queue):
+    for i in range(5):
+        await asyncio.sleep(1)
+        item = f"item {i}"
+        await queue.put(item)
+        print(f"Produced {item}")
+
+async def consumer(queue):
+    while True:
+        item = await queue.get()
+        if item is None:
+            break
+        print(f"Consumed {item}")
+        queue.task_done()
+
+async def main():
+    queue = asyncio.Queue()
+    
+    producer_task = asyncio.create_task(producer(queue))
+    consumer_task = asyncio.create_task(consumer(queue))
+    
+    await producer_task
+    await queue.put(None)  # 소비자에게 작업 종료를 알림
+    await consumer_task
+
+asyncio.run(main())
+```
+위의 예시에서는 비동기 프로그래밍을 통해 로봇과 컴퓨터 간의 통신을 처리하고, 발생할 수 있는 오류를 예외처리로 다루며, 큐를 사용하여 작업을 효율적으로 관리하는 방법을 보여줍니다. 이를 통해 독립적인 동작 과정에서 발생할 수 있는 비동기성과 오류를 효과적으로 처리할 수 있습니다.
