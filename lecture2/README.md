@@ -1,6 +1,6 @@
 # Lecture 2 
 ## 강의 목표
-- Lecture1을 통해 배운 tcp socket에 대한 이해를 바탕으로, 실제 스크립트를 로봇에 전송하는 방식에 대해 알아봅니다. 
+- Lecture1을 통해 배운 tcp socket에 대한 이해를 바탕으로, 스크립트를 로봇에 전송해봅니다. 
 - UR 로봇에 사용되는 스크립트에 대한 이해를 얻습니다.
 
 ## 실습 1
@@ -12,7 +12,7 @@ robot_url = "192.168.0.5"
 socketPrimaryClient.connect((robot_url, 30001)) # 30001 --> Primary interface
 ```
 
-해당 라인을 보시면, Lecture 1과 다르게 루프백IP(127.0.0.1 - 자기 자신의 아이피)가 아닌, `robot_url` 변수에 로봇의 IP를 바인딩 후 ```30001```번 소켓에 전송하는것을 볼 수 있습니다.
+위 코드를 보시면, 소켓의 타겟 url에 Lecture 1과 다르게 루프백IP(127.0.0.1 - 자기 자신의 아이피)가 아닌, `robot_url` 변수에 로봇의 IP를 바인딩 후 ```30001```번 소켓에 전송하는것을 볼 수 있습니다.
 
 ```30001```번 포트는 UR 내부에서 사용되는 포트 규약으로서, ***Primary Interface***를 나타냅니다.
 
@@ -59,7 +59,7 @@ def sendScriptViaSecondaryClient(robot_url, script):
 
 
 ## 실습 2
-이번 실습에서는 스크립트를 변수에 직접 작성하는 방식이 아닌, 파일로부터 동적으로(Dynamically) 불러오는 방식에 대해 알아보겠습니다.
+이번 실습에서는 스크립트를 변수에 직접 작성하는 방식이 아닌, 파일에 저장된채로 불러오는 방식에 대해 알아보겠습니다.
 
 코드 전문은 `scriptfile.py`를 참고하시기 바랍니다.
 
@@ -95,7 +95,7 @@ def getScriptFromPath(script_path):
 
 이때 실무에 적용하기 위해서는 파일의 경로가 잘못되었을 경우를 상정하여 `try-except`를 통한 예외처리를 해주시는게 안전하게 파일을 불러올 수 있습니다.
 
-`sendScript()`의 구조는 **실습1**에서 진행한 내용과 동일하므로 생략하겠습니다.
+`sendScript()`의 구조는 [실습1](https://github.com/portal301/ur-python-tutorial/tree/main/lecture2#%EC%8B%A4%EC%8A%B5-1)에서 진행한 내용과 동일하므로 생략하겠습니다.
 
 ### 실제 사용 예시
 
