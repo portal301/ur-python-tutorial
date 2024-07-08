@@ -80,12 +80,13 @@ VScode에서 python extension을 설치하세요.
   cd .. 
   ```
 - 폴더 내용 확인
-  **Windows**
+
+  ### Windows CMD
   ```bash
   dir
   ```
   
-  **Linux/Mac**
+  ### Linux/Mac
   ```bash
   ls
   ```
