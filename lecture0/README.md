@@ -117,6 +117,24 @@ say_hello()  # Hello!
 
 트레이닝 세션에서는 간단한 코드위주로 class를 비중있게 다루진 않기 때문에 이런게 있구나 정도만 알면 돼요.
 
+### Class 예시
+```python
+# Person Class 생성 
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def greet(self):
+        print(f"Hello, my name is {self.name} and I am {self.age} years old.")
+
+# Person class의 객체 생성 및 메서드 호출 예시
+person1 = Person("Alice", 30)
+person1.greet()
+
+person2 = Person("Bob", 25)
+person2.greet()
+```
 
 ## 3. 시스템 최적화
 
