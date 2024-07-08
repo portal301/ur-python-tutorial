@@ -82,8 +82,9 @@ count = 0
 while count < 5:
     print(count)
     count += 1
-for 문 예시:
-python
+```
+### for 문 예시:
+```python
 코드 복사
 fruits = ["apple", "banana", "cherry"]
 
