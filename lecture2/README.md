@@ -3,6 +3,20 @@
 - Lecture1을 통해 배운 tcp socket에 대한 이해를 바탕으로, 스크립트를 로봇에 전송해봅니다. 
 - UR 로봇에 사용되는 스크립트에 대한 이해를 얻습니다.
 
+## 실습전에
+<div align="center">
+  <img src="./readmeImages/network_setting.jpg" alt="image" style="width:100%;">
+</div>
+
+우측상단 메뉴(햄버거) 버튼 클릭 후 "설정>시스템>네트워크" 탭에서 '비활성화 네트워크' 선택 후 바로 'DHCP'를 선택해주세요. 정상적인 경우, 잠시 기다리면 IP주소가 표시 됩니다.
+<div align="center">
+  <img src="./readmeImages/remote_setting.jpg" alt="image" style="width:100%;">
+</div>
+"시스템>원격제어" 탭에서 원격제어를 활성화 해주세요.
+
+
+
+
 ## 실습 1
 
 ### 파이썬 파일 실행하기
