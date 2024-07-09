@@ -1,6 +1,10 @@
 # Universal Robots Quick Tutorial - External Control with Python
+<div align="center">
+  <img src="./readmeImages/affinerobotics_logo_black_horizontal.png" alt="image" style="width:100%;">
+</div>
 
 ### Introduction
+
 
 파이썬을 이용하여 유니버셜로봇을 외부 컴퓨터로 제어하는 방법을 학습하기 위한 프로젝트 페이지입니다.
 

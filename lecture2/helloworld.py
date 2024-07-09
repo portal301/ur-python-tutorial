@@ -1,6 +1,6 @@
 import socket
 
-robot_url = "192.168.0.5"
+robot_url = "192.168.0.15"
 script = """
 def helloworld():
     popup("Happy learning!")
@@ -30,3 +30,5 @@ socketPrimaryClient.close()
 #     socketSecondaryClient.connect((robot_url, PORT_SECONDARY_CLIENT))
 #     socketSecondaryClient.send((script + "\n").encode())
 #     socketSecondaryClient.close()
+
+# sendScriptViaPrimaryClient(robot_url=robot_url, script=script)
