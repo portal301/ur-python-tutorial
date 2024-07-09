@@ -8,20 +8,23 @@ URCaps는 UR 로봇 시리즈를 위한 소프트웨어 프레임워크입니다
 ## URCaps 파일을 로봇에서 불러오는 방법
 0. URCaps 기능이 정상적으로 동작하는지 확인합니다.
 <div align="center">
-  <img src="./readmeImages/urcaps_robotiq.jpg" alt="image" style="width:100%;">
+  <img src="./readmeImages/urcaps_robotiq.jpg" alt="image" style="width:90%;">
 </div>
+
 1. Polyscope에서 새 프로그램을 생성합니다.
 
 2. 프로그램에 URCaps 관련 노드를 추가합니다.
 <div align="center">
-  <img src="./readmeImages/urcaps_robotiq2.jpg" alt="image" style="width:100%;">
+  <img src="./readmeImages/urcaps_robotiq2.jpg" alt="image" style="width:90%;">
 </div>
+
 3. 프로그램을 저장합니다.
 
 4. 프로그램(**.script 파일**, .urp 파일 아님)을 USB 드라이브를 사용하여 컴퓨터로 전송합니다.
 <div align="center">
-  <img src="./readmeImages/urcaps_robotiq3.jpg" alt="image" style="width:100%;">
+  <img src="./readmeImages/urcaps_robotiq3.jpg" alt="image" style="width:90%;">
 </div>
+
 5. 에디터(VScode)에서 프로그램을 엽니다.
 
 ### 실습
