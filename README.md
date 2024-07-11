@@ -10,7 +10,7 @@
 
 유니버설 로봇 지정 트레이닝센터에서 오프라인 트레이닝 세션이 정기적으로 진행되며, 트레이닝센터의 로봇 시스템 구성은 아래와 같습니다.
 
-- 파이썬 python version: 3.11.x 
+- 파이썬 python version: 3.11.x ~ 3.12.x
 
 - 로봇 모델 Robot model: UR3e
 
@@ -46,15 +46,40 @@ git clone git@github.com:portal301/ur-python-tutorial.git
 
 ## 개발 환경 설정하기
 
-### python 설치
-  [Python](https://www.python.org/downloads/)
-  
-  **3.11.x 버전 설치를 권장합니다.**
-
 ### VScode 설치
    [VSCode](https://code.visualstudio.com/download)
 
-VScode에서 python extension을 설치하세요.
+VScode에서 python extension과 ur script extension을 설치하세요.
+
+### python 설치
+  [Python](https://www.python.org/downloads/)
+  
+  **3.11.x - 3.12.x 버전 설치를 권장합니다.**
+
+
+
+  - (주의) 설치 시 옵션에서 Add python to PATH(파이썬을 환경변수에 추가) 항목을 선택해주세요.
+
+<div align="center">
+  <img src="./readmeImages/python_installation_option.jpg" alt="image" style="width:100%;">
+</div>
+
+- 설치 완료 후, Disable path length limit을 클릭해주세요. 경로이름이 너무 길어질 경우 파이썬이 인식되지 않는 경우가 있어 이를 해제해주는 것입니다.
+
+<div align="center">
+  <img src="./readmeImages/python_installation_disable_length_limit.jpg" alt="image" style="width:100%;">
+</div>
+
+- VScode에서 파이썬을 제대로 인식한다면, 커맨드창에서 아래 명령 입력시 "python 3.x.x"가 출력됩니다. "python"만 출력된다면 인식이 되지 않은 상태입니다.
+
+
+    python --version
+
+
+- VScode에서 파이썬이 인식되지 않는다면 컴퓨터를 재부팅해보시기 바랍니다. 
+
+
+
 
 ### (optional) 파이썬 가상환경 설정하기
   아나콘다 설치하러가기

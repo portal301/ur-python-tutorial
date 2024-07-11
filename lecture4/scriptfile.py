@@ -7,7 +7,8 @@ PORT_SECONDARY_CLIENT = 30002
 ## Phase2: elaborate the functions
 def getScriptFromPath(script_path):
     # Open the file in read mode
-    with open(script_path, 'r') as file:
+    with open(script_path, 'r', encoding='utf-8') as file:
+    # with open(script_path, 'r') as file:
         # Read the contents of the file
         script = file.read()
         # print(script)
@@ -24,10 +25,10 @@ def sendScriptFile(robot_url, script_path, port=PORT_PRIMARY_CLIENT):
     sendScript(robot_url, script, port)
 
 if __name__ == "__main__":
-    robot_url = "192.168.0.5"
-    script_path = "scripts/helloworld.script"
+    robot_url = "192.168.0.15"
     # script_path = "scripts/example_urcaps_schunk.script"
     # script_path = "scripts/example_urcaps_onrobot.script"
+    script_path = "scripts/example_urcaps_robotiq_2.script"
     sendScriptFile(robot_url, script_path, PORT_PRIMARY_CLIENT)
 
 

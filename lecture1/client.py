@@ -8,4 +8,4 @@ def start_client(host='127.0.0.1', port=65432, message="Hello, Server!"):
         print(f"Received from server: {data.decode()}")
 
 if __name__ == "__main__":
-    start_client()
+    start_client(message="UR hello")

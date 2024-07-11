@@ -45,9 +45,9 @@ async def handle_client(reader, writer):
                 print2(f"q_: {q_}", Color.GREEN)
             elif message == "req_data":
                 print("Received data request")
-                p_goal = [0.2736, -0.0613, 0.1736, -2.0354, 2.3635, 0.0333]
+                p_goal = [0.321, -0.008, 0.164, -0.3705, 3.1108, 0.038]
                 p_rel = [0.0, 0.0, -0.10, 0.0, 0.0, 0.0]
-                q_ref = [1.7522, -1.2297, -2.1526, -1.177, 1.5949, 0.4069]
+                q_ref = [-2.1141, -1.6613, 1.5368, -1.4413, -1.563, -4.7265]
                 arr = p_goal + p_rel + q_ref # 18 floats
                 float_string = "({})\n".format(','.join(map(str, arr)))
                 writer.write(float_string.encode())
