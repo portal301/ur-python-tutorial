@@ -20,10 +20,31 @@ URCaps는 UR 로봇 시리즈를 위한 소프트웨어 프레임워크입니다
 
 3. 프로그램을 저장합니다.
 
-4. 프로그램(**.script 파일**, .urp 파일 아님)을 USB 드라이브를 사용하여 컴퓨터로 전송합니다.
+4. 프로그램(**.script 파일**, .urp 파일 아님)을 컴퓨터로 전송합니다. 두가지 방법을 소개드립니다.
+
+    Method #1: FileZilla 이용
+    
+      FileZilla Client를 설치해주세요. (다운로드 링크: https://filezilla-project.org/)
+
+      [호스트/사용자명/비밀전호/포트]를 각각 [로봇IP/root/easybot/22] 으로 입력해주세요.
+
+      "/programs" 경로로 이동 후 방금 작성한 프로그램의 .script 파일을 복사해주세요.
+
+
+<div align="center">
+  <img src="./readmeImages/FileZilla.jpg" alt="image" style="width:90%;">
+</div>
+
+ 
+  Method #2: USB Memory 이용
+
+  필터를 모든프로그램으로 변경후 .script파일을 복사해주세요.
+
+
 <div align="center">
   <img src="./readmeImages/urcaps_robotiq3.jpg" alt="image" style="width:90%;">
 </div>
+
 
 5. 에디터(VScode)에서 프로그램을 엽니다.
 

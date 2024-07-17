@@ -1,0 +1,2122 @@
+def urcaps_test():
+  global _hidden_verificationVariable=0
+  step_count_fddbc932_e2c6_4118_b192_20b2c954d644 = 0.0
+  thread Step_Counter_Thread_6ab61b99_d5d2_4500_a353_9b28d4c00301():
+    while (True):
+      step_count_fddbc932_e2c6_4118_b192_20b2c954d644 = step_count_fddbc932_e2c6_4118_b192_20b2c954d644 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_6ab61b99_d5d2_4500_a353_9b28d4c00301()
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 1)
+  set_analog_outputdomain(1, 1)
+  set_input_actions_to_default()
+  set_tool_communication(True, 1000000, 2, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(24)
+  set_gravity([0.0, 0.0, 9.82])
+  set_safety_mode_transition_hardness(1)
+  set_target_payload(1.180000, [0.000000, -0.002000, 0.055000], [0.002028, 0.002028, 0.002028, 0.000000, 0.000000, 0.000000])
+  set_tcp(p[0.0,0.0,0.135,0.0,0.0,0.0])
+  global u54252u51064u53944_1=p[-0.007917359963222154,-0.2847037283066797,0.2377565005516022,2.207294803544219,-0.044648377854314227,-2.1819764778445845]
+  global u54540u47112u51064_1=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  # begin: URCap Installation Node
+  #   Source: OnRobot, 6.0.0, OnRobot A/S
+  #   Type: OnRobot 설정
+  if (False):
+    global twofg_Busy = 0
+    global twofg_Force = 0
+    global twofg_Grip_detected = 0
+    global twofg_Width_ext = 0
+    global twofg_Width_int = 0
+  end
+  ON_CONN_SHIFT_BOOL = 64
+  ON_CONN_SHIFT_INT = 24
+  ON_CONN_SHIFT_FLOAT = 24
+  ON_CONN_REG_SUM_BOOL = 4
+  ON_CONN_REG_SUM_INT = 5
+  ON_CONN_REG_SUM_FLOAT = 2
+  ON_TOOL_SHIFT_BOOL = 64
+  ON_TOOL_SHIFT_INT = 25
+  ON_TOOL_SHIFT_FLOAT = 24
+  ON_TOOL_SHIFT_BOOL_ARR = [64, 68, 68]
+  ON_TOOL_SHIFT_INT_ARR = [25, 29, 29]
+  ON_TOOL_SHIFT_FLOAT_ARR = [24, 26, 26]
+  ON_TOOL_REG_SUM_BOOL = 4
+  ON_TOOL_REG_SUM_INT = 4
+  ON_TOOL_REG_SUM_FLOAT = 2
+  ON_REGISTERS_SPEEDL_FLOAT = 0
+  ON_REG_USE_TOOL = False
+  ON_DI_SINGLE = 0
+  ON_DI_PRIMARY = 1
+  ON_DI_SECONDARY = 2
+  ON_DI_DUAL = 3
+  on_robot_type = 3
+  on_robot_cycle = 2.0
+  on_conn_ip = "localhost"
+  on_tool_ip = "localhost"
+  on_device_socket_port = 51234
+  on_conn_xmlrpc = rpc_factory("xmlrpc", "http://localhost:41414")
+  on_tool_xmlrpc = rpc_factory("xmlrpc", "http://localhost:41414")
+  on_RPC = rpc_factory("xmlrpc", "http://127.0.0.1:31416")
+  ON_DEBUG_LOG = False
+  on_isMetric = True
+  on_toolConnector = True
+  on_ioqc = False
+  on_dual = False
+  on_computebox = False
+  on_devices = 1
+  on_gripper = [False, False, False]
+  on_custom_tcp_id = "none"
+  on_custom_tcp_enabled = False
+  on_ft = False
+  twofg_index = 0
+  on_gripper[twofg_index] = True
+  #======    OnRobot Globals    ======#
+  
+  ON_MATH_PI=3.141593
+  ON_ZEROPOSE=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZEROFRAME=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZERO3D=[0.0,0.0,0.0]
+  ON_ZERO6D=[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZERO8D=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_FALSE3D=[False,False,False]
+  ON_FALSE6D=[False,False,False,False,False,False]
+  ON_FALSE8D=[False,False,False,False,False,False,False,False]
+  global on_return=0
+  on_speedL=ON_ZERO6D
+  on_speedBase=ON_ZERO6D
+  on_speedVect=ON_ZERO6D
+  on_speedExtra=ON_ZERO6D
+  on_speedCB=ON_ZERO6D
+  on_speedGecko=ON_ZERO6D
+  on_RTDE_error=0
+  on_RTDE_tool_error=0
+  on_dataProcess_thrd=0
+  ON_DEVICE_ID_MISSING=0
+  ON_INIT_WATCHDOG_HZ=5
+  ON_INIT_TIMEOUT=2000
+  on_robot_TCP_offset=ON_ZEROFRAME
+  on_tcp_offset_actual=ON_ZEROFRAME
+  on_cog_actual=ON_ZEROFRAME
+  on_mass_actual=0.0
+  on_robot_mount=[0.0,0.0]
+  
+  #======    End of OnRobot Globals    ======#
+  #======    OnRobot twofg Globals    ======#
+  
+  twofg_DEVICE_ID_twofg7=192
+  if ON_DEBUG_LOG:
+  textmsg("twofg Dual: False, Index: ",twofg_index)
+  if False:
+  twofg_index=-1
+  end 
+  end 
+  twofg_Width_ext_arr=[0,0,0]
+  twofg_Width_int_arr=[0,0,0]
+  twofg_Force_arr=[0,0,0]
+  twofg_device_id_arr=[0,0,0]
+  twofg_product_code_arr=[0,0,0]
+  twofg_Status_arr=[0,0,0]
+  twofg_Grip_detected_arr=[False,False,False]
+  twofg_Busy_arr=[False,False,False]
+  twofg_data_error_arr=[0,0,0]
+  twofg_fingertip_arr=[0,0,0]
+  twofg_Grip_guard_arr=[False,False,False]
+  
+  twofg_Width_ext=0
+  twofg_Width_int=0
+  twofg_Force=0
+  twofg_Busy=False
+  twofg_Grip_detected=False
+  def get_twofg_Busy():
+  return twofg_Busy
+  end 
+  def get_twofg_Width_ext():
+  return twofg_Width_ext
+  end 
+  def get_twofg_Width_int():
+  return twofg_Width_int
+  end 
+  def get_twofg_Grip_detected():
+  return twofg_Grip_detected
+  end 
+  def get_twofg_Force():
+  return twofg_Force
+  end 
+  
+  
+  #======    End of OnRobot twofg Globals    ======#
+  #======    OnRobot Interface Messages    ======#
+  
+  on_devices_primary_log="OnRobot 장치"
+  on_devices_secondary_log="OnRobot 보조 장치"
+  on_program_halted="<br>프로그램이 중지되었습니다."
+  on_device_error_title="OnRobot - 장치 오류"
+  on_install_error="OnRobot 설정이 올바르지 않습니다.<br>설치 탭의 OnRobot 설정 페이지에서 상태를 확인하십시오.<br>프로그램이 중지되었습니다."
+  on_device_missing="연결된 장치가 없습니다.<br>프로그램이 중지되었습니다."
+  cb_device_missing="연결된 OnRobot Compute Box가 없습니다.<br>프로그램이 중지되었습니다."
+  ft_device_missing="감지된 OnRobot FT 서버 또는 사이센스가 없습니다. <br>프로그램이 중지되었습니다."
+  hex_device_missing="연결된 HEX 센서가 없습니다.<br>프로그램이 중지되었습니다."
+  rg2ft_device_missing="연결된 RG2-FT Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  rg_device_missing="연결된 RG Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  vg_device_missing="연결된 VG Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  gg_device_missing="연결된 Gecko Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  sg_device_missing="연결된 Soft Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  tfg_device_missing="연결된 3FG Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  sdr_device_missing="연결된 OnRobot Sander가 없습니다.<br>프로그램이 중지되었습니다."
+  twofg_device_missing="연결된 2FG Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  vgp_device_missing="연결된 VGP Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  mg_device_missing="연결된 Magnetic Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+  fgp_device_missing="연결된 2FGP20 그리퍼가 없습니다.<br>프로그램이 중지되었습니다."
+  eyes_device_missing="No OnRobot Eyes connected.<br>Program halted."
+  on_xmlrpc_start_ip="OnRobot XML-RPC 서버에 연결 중:"
+  on_java_comm_error_textmsg_title="OnRobot - 통신 오류:"
+  on_java_comm_controlsocket_open_error="’javaSocket’ 소켓 열기에 실패했습니다."
+  on_java_comm_error_title="OnRobot - 통신 오류"
+  on_java_comm_socket_open_error="URCap과의 연결 시간을 초과했습니다.<br>설치 탭의 OnRobot 설정 페이지에서 상태를 확인하십시오.<br>프로그램이 중지되었습니다."
+  on_rtde_feed_error_textmsg_title="OnRobot - RTDE 오류:"
+  on_rtde_feed_error="RTDE 피드 오류입니다. OnRobot 장치 수가 일치하지 않습니다.<br>프로그램이 중지되었습니다."
+  on_rtde_feed_tool_error="도구 RTDE 피드 오류입니다. OnRobot 장치 수가 일치하지 않습니다.<br>프로그램이 중지되었습니다."
+  on_rtde_feed_open_error_textmsg="’rtdeFeed’ 소켓 열기에 실패했습니다."
+  on_rtde_feed_error_title="OnRobot - RTDE 오류"
+  on_rtde_feed_count_error="유효하지 않은 RTDE 오프셋 설정이 감지되었습니다. 설정 탭의 OnRobot 설정 페이지에서 RTDE 오프셋을 확인하십시오.<br>프로그램이 중지되었습니다."
+  on_rtde_feed_open_error="장치와의 연결 시간을 초과했습니다.<br>OnRobot 장치가 작동 중인지 점검하고 설치 탭의 OnRobot 설정 페이지에서 상태를 확인하십시오."
+  
+  #======    End of OnRobot Interface Messages    ======#
+  #======    OnRobot Interface    ======#
+  
+  on_portopened_javaSocket=False
+  on_rtde_feed_opened=False
+  on_dataProcess_running=False
+  def on_missing():
+  popup(on_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def cb_missing():
+  popup(cb_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def ft_missing():
+  popup(ft_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def hex_missing():
+  popup(hex_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def rg2ft_missing():
+  popup(rg2ft_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def rg_missing():
+  popup(rg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def vg_missing():
+  popup(vg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def gg_missing():
+  popup(gg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def sg_missing():
+  popup(sg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def tfg_missing():
+  popup(tfg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def sdr_missing():
+  popup(sdr_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def twofg_missing():
+  popup(twofg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def vgp_missing():
+  popup(vgp_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def mg_missing():
+  popup(mg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def fgp_missing():
+  popup(fgp_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def eyes_missing():
+  popup(eyes_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def on_portclose_javaSocket():
+  socket_close("javaSocket")
+  on_portopened_javaSocket=False
+  end 
+  def on_portopen_javaSocket():
+  on_portclose_javaSocket()
+  on_portopened_javaSocket=socket_open("127.0.0.1",44005,"javaSocket")
+  if not on_portopened_javaSocket:
+  textmsg(on_java_comm_error_textmsg_title,on_java_comm_controlsocket_open_error)
+  popup(on_java_comm_socket_open_error,title=on_java_comm_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  on_conn_rtde_feed_name="rtdeFeedConn"
+  on_tool_rtde_feed_name="rtdeFeedTool"
+  def on_rtde_feed_close(rtdeFeedName):
+  socket_close(rtdeFeedName)
+  on_rtde_feed_opened=False
+  end 
+  def on_rtde_feed_open(deviceIP,rtdeFeedName,regStart,regSum,regSpeedl):
+  on_rtde_feed_close(rtdeFeedName)
+  if((regStart[0]+regSum[0])>128)or((regStart[1]+regSum[1])>48)or((regStart[2]+regSum[2])>48):
+  popup(on_rtde_feed_count_error,title=on_rtde_feed_error_title,error=True,blocking=False)
+  textmsg(str_cat("RegStart: ",regStart),str_cat("  -  RegSum: ",regSum))
+  halt
+  end 
+  on_rtde_feed_opened=socket_open(deviceIP,on_device_socket_port,rtdeFeedName)
+  if not on_rtde_feed_opened:
+  on_rtde_feed_opened=socket_open(deviceIP,on_device_socket_port,rtdeFeedName)
+  end 
+  if not on_rtde_feed_opened:
+  textmsg(on_rtde_feed_error_textmsg_title,on_rtde_feed_open_error_textmsg)
+  popup(on_rtde_feed_open_error,title=on_rtde_feed_error_title,error=True,blocking=False)
+  halt
+  end 
+  socket_send_int(regStart[0],rtdeFeedName)
+  socket_send_int(regSum[0],rtdeFeedName)
+  socket_send_int(regStart[1],rtdeFeedName)
+  socket_send_int(regSum[1],rtdeFeedName)
+  socket_send_int(regStart[2],rtdeFeedName)
+  socket_send_int(regSum[2],rtdeFeedName)
+  socket_send_int(regSpeedl,rtdeFeedName)
+  socket_send_int(on_devices,rtdeFeedName)
+  end 
+  def on_dataRead():
+  enter_critical
+  on_RTDE_error=read_input_integer_register(ON_CONN_SHIFT_INT)
+  if(ON_REG_USE_TOOL):
+  on_RTDE_tool_error=read_input_integer_register(ON_TOOL_SHIFT_INT_ARR[0])
+  end
+  exit_critical
+  end 
+  def on_set_rtde_watchdog(updateHz=ON_INIT_WATCHDOG_HZ):
+  local effect="stop"
+  if(updateHz<1):
+  effect="ignore"
+  end 
+  watchdog_conn_reg_str=str_cat("input_int_register_",ON_CONN_SHIFT_INT)
+  rtde_set_watchdog(watchdog_conn_reg_str,updateHz,effect)
+  if(ON_REG_USE_TOOL):
+  watchdog_tool_reg_str=str_cat("input_int_register_",ON_TOOL_SHIFT_INT_ARR[0])
+  rtde_set_watchdog(watchdog_tool_reg_str,updateHz,effect)
+  end 
+  if ON_DEBUG_LOG:
+  local update_str=str_cat(" "+effect+" watchdog set to [Hz]: ",updateHz)
+  textmsg(watchdog_conn_reg_str,update_str)
+  if(ON_REG_USE_TOOL):
+  local update_str=str_cat(" "+effect+" watchdog set to [Hz]: ",updateHz)
+  textmsg(watchdog_tool_reg_str,update_str)
+  end 
+  end 
+  end 
+  def on_speedCB_get():
+  return[on_speedCB[0],on_speedCB[1],on_speedCB[2],on_speedCB[3],on_speedCB[4],on_speedCB[5]]
+  end 
+  def on_speedGecko_get():
+  local speedExtra=ON_ZERO6D
+  if on_speedl_for_gecko:
+  speedExtra=[on_speedGecko[0],on_speedGecko[1],on_speedGecko[2],on_speedGecko[3],on_speedGecko[4],on_speedGecko[5]]
+  end 
+  return speedExtra
+  end 
+  def on_speedGecko_set(speedGecko):
+  on_speedGecko=[speedGecko[0],speedGecko[1],speedGecko[2],speedGecko[3],speedGecko[4],speedGecko[5]]
+  end 
+  thread on_dataProcess_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting on_dataRead thread")
+  end 
+  local error=False
+  on_dataProcess_running=True
+  sync()
+  while on_dataProcess_running:
+  sync()
+  on_dataRead()
+  error=on_error((on_RTDE_error<0),on_rtde_feed_error,on_rtde_feed_error_title,error)
+  error=on_error((ON_REG_USE_TOOL and(on_RTDE_tool_error<0)),on_rtde_feed_tool_error,on_rtde_feed_error_title,error)
+  on_dataProcess_running=not error
+  end 
+  if error:
+  halt
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping on_dataRead thread")
+  end 
+  end 
+  thread on_set_watchdog_thread():
+  sleep(2)
+  on_set_rtde_watchdog(updateHz=ON_INIT_WATCHDOG_HZ)
+  sleep(1/ON_INIT_WATCHDOG_HZ)
+  on_dataProcess_running=False
+  kill on_dataProcess_thrd
+  end 
+  
+  #======    End of OnRobot Interface    ======#
+  #======    OnRobot QC Setup Tool Connector    ======#
+  
+  def tc_setup_tool():
+  if ON_DEBUG_LOG:
+  textmsg("QC Setup Tool Connector start...")
+  end 
+  set_tool_voltage(24)
+  
+  set_tool_communication(True,1000000,2,1,1.5,3.5)
+  
+  if ON_DEBUG_LOG:
+  textmsg("QC Setup Tool Connector end.")
+  end 
+  end 
+  
+  #======    End of OnRobot QC Setup Tool Connector    ======#
+  #======    OnRobot twofg Interface    ======#
+  
+  twofg_dataRead_running=False
+  def twofg_dataRead_RTDE(tool_index):
+  local reg_offset_bool=ON_TOOL_SHIFT_BOOL_ARR[tool_index]
+  local reg_offset_int=ON_TOOL_SHIFT_INT_ARR[tool_index]
+  local reg_offset_float=ON_TOOL_SHIFT_FLOAT_ARR[tool_index]
+  enter_critical
+  floatRegDummy=read_input_float_register(reg_offset_float+0)
+  twofg_Width_ext_arr[tool_index]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+1)
+  twofg_Width_int_arr[tool_index]=floatRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+0)
+  twofg_device_id_arr[tool_index]=intRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+1)
+  twofg_product_code_arr[tool_index]=intRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+2)
+  twofg_Status_arr[tool_index]=intRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+3)
+  twofg_Force_arr[tool_index]=intRegDummy
+  boolRegDummy=read_input_boolean_register(reg_offset_bool+0)
+  twofg_Busy_arr[tool_index]=boolRegDummy
+  boolRegDummy=read_input_boolean_register(reg_offset_bool+1)
+  twofg_Grip_detected_arr[tool_index]=boolRegDummy
+  exit_critical
+  end 
+  thread twofg_dataRead_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting twofg_dataRead thread")
+  end 
+  while twofg_dataRead_running:
+  sync()
+  if(twofg_index==ON_DI_DUAL):
+  twofg_dataRead_RTDE(ON_DI_PRIMARY)
+  twofg_dataRead_RTDE(ON_DI_SECONDARY)
+  else:
+  twofg_dataRead_RTDE(twofg_index)
+  end 
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping twofg_dataRead thread")
+  end 
+  end 
+  
+  #======    End of OnRobot twofg Interface    ======#
+  #======    OnRobot TCP Messages    ======#
+  
+  on_tcp_log_msg_default="OnRobot: 로봇 TCP 오프셋 설정:"
+  on_tcp_log_msg_primary="OnRobot: 로봇 TCP 오프셋 주 설정:"
+  on_tcp_log_msg_secondary="OnRobot: 로봇 TCP 오프셋 보조 설정:"
+  
+  #======    End of OnRobot TCP Messages    ======#
+  #======    OnRobot TCP    ======#
+  
+  on_tcp_offset_actual=ON_ZEROFRAME
+  on_tcp_offset_primary=ON_ZEROFRAME
+  on_tcp_static_primary=ON_ZEROFRAME
+  on_tcp_dynamic_primary=ON_ZEROFRAME
+  on_tcp_adapters=ON_ZEROFRAME
+  on_tcp_qc_primary=ON_ZEROFRAME
+  on_tcp_base_primary=ON_ZEROFRAME
+  on_tcp_gripper_static_primary=ON_ZEROFRAME
+  on_tcp_workpiece_primary=ON_ZEROFRAME
+  on_tcp_gripper_dynamic_primary=ON_ZEROFRAME
+  on_tcp_gripper_primary=ON_ZEROFRAME
+  on_tcp_offset_secondary=ON_ZEROFRAME
+  on_tcp_static_secondary=ON_ZEROFRAME
+  on_tcp_dynamic_secondary=ON_ZEROFRAME
+  on_tcp_qc_secondary=ON_ZEROFRAME
+  on_tcp_base_secondary=ON_ZEROFRAME
+  on_tcp_gripper_static_secondary=ON_ZEROFRAME
+  on_tcp_workpiece_secondary=ON_ZEROFRAME
+  on_tcp_gripper_dynamic_secondary=ON_ZEROFRAME
+  on_tcp_gripper_secondary=ON_ZEROFRAME
+  on_tcp_custom_preset_assigned=False
+  on_tcp_custom_preset=ON_ZEROFRAME
+  def on_tcp_init_adapters():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Adapters start..")
+  end 
+  enter_critical
+  on_tcp_adapters=ON_ZEROFRAME
+  local adapterCount=length(on_tcp_adapters_array)
+  local i=0
+  while(i<adapterCount):
+  on_tcp_adapters=pose_trans(on_tcp_adapters,on_tcp_adapters_array[i])
+  i=i+1
+  end
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Adapters end.")
+  end 
+  end 
+  def on_tcp_update_primary():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Primary start..")
+  end 
+  on_tcp_gripper_dynamic_primary=p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  enter_critical
+  on_tcp_dynamic_primary=pose_trans(on_tcp_static_primary,on_tcp_gripper_dynamic_primary)
+  on_tcp_offset_primary=pose_trans(on_tcp_dynamic_primary,on_tcp_workpiece_primary)
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Primary end.")
+  end 
+  end 
+  def on_tcp_init_primary():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Primary start..")
+  end 
+  enter_critical
+  on_tcp_base_primary=pose_trans(on_tcp_adapters,on_tcp_qc_primary)
+  on_tcp_static_primary=pose_trans(on_tcp_base_primary,on_tcp_gripper_static_primary)
+  exit_critical
+  on_tcp_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Primary end.")
+  end 
+  end 
+  def on_tcp_offset_set(TCP_offset):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset set started!")
+  end 
+  on_tcp_offset_send(TCP_offset)
+  if(on_follow_tcp):
+  set_tcp(TCP_offset)
+  end 
+  on_robot_TCP_offset=TCP_offset
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset set to: ",on_robot_TCP_offset)
+  end 
+  end 
+  def on_tcp_offset_forced_set_actual(isPrimary=True):
+  if(not on_follow_tcp):
+  
+  local tcp_log_msg=on_tcp_log_msg_default
+  
+  textmsg(tcp_log_msg,on_tcp_offset_actual)
+  set_tcp(on_tcp_offset_actual)
+  end 
+  end 
+  def on_tcp_update(isPrimary=True):
+  on_tcp_update_primary()
+  
+  on_tcp_set_actual_to(isPrimary)
+  end 
+  def on_tcp_set_actual_to(isPrimary=True):
+  
+  on_tcp_offset_actual=on_tcp_offset_primary
+  if(on_follow_tcp):
+  textmsg(on_tcp_log_msg_default,on_tcp_offset_actual)
+  end 
+  
+  on_tcp_active_is_primary=isPrimary
+  on_tcp_offset_set(on_tcp_offset_actual)
+  end 
+  def on_tcp_update_workpiece_primary(workpiece_offset):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool Primary start..")
+  end 
+  on_tcp_workpiece_primary=workpiece_offset
+  on_tcp_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool Primary end.")
+  end 
+  end 
+  def on_tcp_workpiece_rpy_get(xyz=[0.0,0.0,0.0],rpy=[0.0,0.0,0.0]):
+  local rotvec=rpy2rotvec(rpy)
+  local workpiece_offset=p[xyz[0],xyz[1],xyz[2],rotvec[0],rotvec[1],rotvec[2]]
+  return workpiece_offset
+  end 
+  
+  def on_tcp_update_workpiece(workpiece_offset,tool_index=0):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool start..")
+  end 
+  if(tool_index!=ON_DI_SECONDARY):
+  on_tcp_update_workpiece_primary(workpiece_offset)
+  local isPrimary=True
+  
+  end 
+  on_tcp_set_actual_to(isPrimary)
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool end.")
+  end 
+  end 
+  def on_get_tcp_for(tool_index):
+  if tool_index==ON_DI_SECONDARY:
+  local actual_tcp=on_tcp_static_secondary
+  else:
+  local actual_tcp=on_tcp_static_primary
+  end 
+  return actual_tcp
+  end 
+  def on_tcp_custom_unused():
+  return ON_ZEROFRAME
+  end 
+  def on_tcp_update_custom():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Custom start..")
+  end 
+  if(on_custom_tcp_enabled):
+  on_tcp_custom_unused()
+  on_tcp_custom_unused()
+  on_tcp_custom_unused()
+  on_tcp_custom_unused()
+  
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Custom end.")
+  end 
+  end 
+  
+  #======    End of OnRobot TCP    ======#
+  #======    OnRobot Payload Messages    ======#
+  
+  on_mass_log_msg="OnRobot: 로봇 유효 하중 크기 설정:"
+  on_cog_log_msg="OnRobot: 로봇 유효 하중 무게 중심 설정:"
+  
+  #======    End of OnRobot Payload Messages    ======#
+  #======    OnRobot Payload    ======#
+  
+  on_cog_actual=ON_ZEROFRAME
+  on_mass_actual=0.0
+  on_cog_primary=ON_ZEROFRAME
+  on_cog_L1L2_primary=ON_ZEROFRAME
+  on_mass_primary=0.0
+  on_mass_L1L2_primary=0.0
+  on_cog_adapters=ON_ZEROFRAME
+  on_cog_qc_primary=ON_ZEROFRAME
+  on_cog_base_primary=ON_ZEROFRAME
+  on_cog_gripper_primary=ON_ZEROFRAME
+  on_cog_workpiece_primary=ON_ZEROFRAME
+  on_mass_adapters=0.0
+  on_mass_qc_primary=0.0
+  on_mass_base_primary=0.0
+  on_mass_gripper_primary=0.0
+  on_mass_workpiece_primary=0.0
+  on_cog_secondary=ON_ZEROFRAME
+  on_mass_secondary=0.0
+  on_cog_gripper_secondary=ON_ZEROFRAME
+  on_mass_gripper_secondary=0.0
+  on_cog_workpiece_secondary=ON_ZEROFRAME
+  on_mass_workpiece_secondary=0.0
+  ON_LB2KG001=0.45359237/100
+  def on_payload_init_adapters():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Adapters start..")
+  end 
+  enter_critical
+  on_cog_adapters=ON_ZEROFRAME
+  on_mass_adapters=0.0
+  local massLAL0Ratio=0
+  local adapterAbsCOG=ON_ZEROFRAME
+  local tcp_adapter_offset=ON_ZEROFRAME
+  local adapterCount=length(on_tcp_adapters_array)
+  local i=0
+  while(i<adapterCount):
+  on_mass_adapters=on_mass_adapters+on_mass_adapters_array[i]
+  if(on_mass_adapters<=0):
+  massLAL0Ratio=0
+  else:
+  massLAL0Ratio=on_mass_adapters_array[i]/on_mass_adapters
+  end
+  adapterAbsCOG=pose_trans(tcp_adapter_offset,on_tcp_adapters_array[i])
+  adapterAbsCOG=p[adapterAbsCOG[0],adapterAbsCOG[1],adapterAbsCOG[2],0.0,0.0,0.0]
+  on_cog_adapters=interpolate_pose(on_cog_adapters,adapterAbsCOG,massLAL0Ratio)
+  on_cog_adapters=p[on_cog_adapters[0],on_cog_adapters[1],on_cog_adapters[2],0.0,0.0,0.0]
+  tcp_adapter_offset=pose_trans(tcp_adapter_offset,on_tcp_adapters_array[i])
+  i=i+1
+  sync()
+  end
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Adapters end.")
+  end 
+  end 
+  def on_payload_update_primary():
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Primary start..")
+  end 
+  enter_critical
+  on_mass_primary=on_mass_L1L2_primary+on_mass_workpiece_primary
+  local massL1L2L3Ratio=on_mass_workpiece_primary/on_mass_primary
+  local workpieceAbsCOG=pose_trans(on_tcp_dynamic_primary,on_cog_workpiece_primary)
+  workpieceAbsCOG=p[workpieceAbsCOG[0],workpieceAbsCOG[1],workpieceAbsCOG[2],0.0,0.0,0.0]
+  on_cog_primary=interpolate_pose(on_cog_L1L2_primary,workpieceAbsCOG,massL1L2L3Ratio)
+  on_cog_primary=p[on_cog_primary[0],on_cog_primary[1],on_cog_primary[2],0.0,0.0,0.0]
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Primary end.")
+  end 
+  end 
+  def on_payload_init_primary():
+  if ON_DEBUG_LOG:
+  textmsg("Payload Init Primary start..")
+  end 
+  enter_critical
+  on_mass_base_primary=on_mass_adapters+on_mass_qc_primary
+  local massL0L1Ratio=on_mass_qc_primary/on_mass_base_primary
+  on_mass_L1L2_primary=on_mass_base_primary+on_mass_gripper_primary
+  local massL1L2Ratio=on_mass_gripper_primary/on_mass_L1L2_primary
+  local qcAbsCOG=pose_trans(on_tcp_adapters,on_cog_qc_primary)
+  qcAbsCOG=p[qcAbsCOG[0],qcAbsCOG[1],qcAbsCOG[2],0.0,0.0,0.0]
+  on_cog_base_primary=interpolate_pose(on_cog_adapters,qcAbsCOG,massL0L1Ratio)
+  on_cog_base_primary=p[on_cog_base_primary[0],on_cog_base_primary[1],on_cog_base_primary[2],0.0,0.0,0.0]
+  local gripperAbsCOG=pose_trans(on_tcp_base_primary,on_cog_gripper_primary)
+  gripperAbsCOG=p[gripperAbsCOG[0],gripperAbsCOG[1],gripperAbsCOG[2],0.0,0.0,0.0]
+  on_cog_L1L2_primary=interpolate_pose(on_cog_base_primary,gripperAbsCOG,massL1L2Ratio)
+  on_cog_L1L2_primary=p[on_cog_L1L2_primary[0],on_cog_L1L2_primary[1],on_cog_L1L2_primary[2],0.0,0.0,0.0]
+  exit_critical
+  on_payload_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Init Primary end.")
+  end 
+  end 
+  def on_payload_update():
+  on_payload_update_primary()
+  
+  on_mass_actual =on_mass_primary
+  on_cog_actual=on_cog_primary
+  
+  on_payload_set_actual()
+  end 
+  def on_payload_set_actual():
+  
+  on_mass_actual =on_mass_primary
+  on_cog_actual=on_cog_primary
+  
+  local CoG=[on_cog_actual[0],on_cog_actual[1],on_cog_actual[2]]
+  on_payload_set(on_mass_actual,CoG)
+  end 
+  def on_payload_update_workpiece_primary(workpiece_mass=0,workpiece_cog=[0.0,0.0,0.0]):
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Workpiece Primary start..")
+  end 
+  on_cog_workpiece_primary=p[workpiece_cog[0],workpiece_cog[1],workpiece_cog[2],0.0,0.0,0.0]
+  on_mass_workpiece_primary=workpiece_mass
+  on_payload_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Workpiece Primary end.")
+  end 
+  end 
+  def on_payload_set(mass,CoG):
+  if ON_DEBUG_LOG:
+  textmsg("Payload set started!")
+  end 
+  local center_of_gravity=[CoG[0],CoG[1],CoG[2]]
+  on_payload_send(center_of_gravity,mass)
+  if(on_isMetric):
+  local roundedMass=floor(mass*100+0.5)/100
+  else:
+  local roundedMass=floor(mass/ON_LB2KG001+0.5)*ON_LB2KG001
+  end 
+  set_payload(roundedMass,center_of_gravity)
+  on_mass_actual=roundedMass
+  on_cog_actual=p[CoG[0],CoG[1],CoG[2],0.0,0.0,0.0]
+  if ON_DEBUG_LOG:
+  textmsg("Payload mass, CoG set to: ",str_cat(str_cat(mass,", "),CoG))
+  end 
+  end 
+  
+  def on_payload_update_secondary():
+  end 
+  def on_payload_init_secondary():
+  end 
+  
+  def on_payload_update_workpiece(workpiece_mass,workpiece_cog=[0.0,0.0,0.0],tool_index=0):
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Workpiece start..")
+  end 
+  if(tool_index!=ON_DI_SECONDARY):
+  on_cog_workpiece_primary=p[workpiece_cog[0],workpiece_cog[1],workpiece_cog[2],0.0,0.0,0.0]
+  on_mass_workpiece_primary=workpiece_mass
+  else:
+  on_cog_workpiece_secondary=p[workpiece_cog[0],workpiece_cog[1],workpiece_cog[2],0.0,0.0,0.0]
+  on_mass_workpiece_secondary=workpiece_mass
+  end 
+  on_payload_update()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Workpiece end.")
+  end 
+  end 
+  def on_payload_get_cog2tcp_workpiece(tool_index=0):
+  if(tool_index!=ON_DI_SECONDARY):
+  local cog_tool=[on_tcp_workpiece_primary[0],on_tcp_workpiece_primary[1],on_tcp_workpiece_primary[2]]
+  else:
+  local cog_tool=[on_tcp_workpiece_secondary[0],on_tcp_workpiece_secondary[1],on_tcp_workpiece_secondary[2]]
+  end 
+  return cog_tool
+  end 
+  
+  #======    End of OnRobot Payload    ======#
+  #======    OnRobot QC TCP    ======#
+  
+  onrobotmini=0
+  
+  def on_tcp_offset_send(TCP_offset):
+  on_robot_TCP_offset=TCP_offset
+  end 
+  def on_payload_send(CoG,mass):
+  on_robot_payload_cog=CoG
+  on_robot_payload_mass=mass
+  end 
+  
+  
+  #======    End of OnRobot QC TCP    ======#
+  #======    OnRobot twofg TCP    ======#
+  
+  def twofg_payload_set(mass,tool_index=0,use_guard=False):
+  if ON_DEBUG_LOG:
+  textmsg("twofg Payload mass command starting..")
+  end 
+  if(tool_index==ON_DI_SECONDARY):
+  local cogTool=[on_cog_workpiece_secondary[0],on_cog_workpiece_secondary[1],on_cog_workpiece_secondary[2]]
+  else:
+  local cogTool=[on_cog_workpiece_primary[0],on_cog_workpiece_primary[1],on_cog_workpiece_primary[2]]
+  end 
+  if(twofg_Grip_detected_arr[tool_index]):
+  local mass2set=mass
+  twofg_Grip_guard_arr[tool_index]=use_guard and not on_ioqc
+  else:
+  local mass2set=0.0
+  twofg_Grip_guard_arr[tool_index]=False
+  end 
+  on_payload_update_workpiece(mass2set,cogTool,tool_index)
+  if ON_DEBUG_LOG:
+  textmsg("2FG Payload mass command ended.")
+  end 
+  end 
+  
+  #======    End of OnRobot twofg TCP    ======#
+  #======    OnRobot  Speedl    ======#
+  
+  on_speedl_thread_handler=0
+  on_speedl_is_enabled=False
+  on_speedl_is_running=False
+  on_speedl_acc=0.0
+  ft_speedl_hg_caranteen_reached=False
+  ft_speedl_hg_caranteen_safemode=False
+  on_speedl_for_ftcontrol=False
+  on_speedl_for_move=False
+  on_speedl_for_handguide=False
+  on_speedl_for_insertpart=False
+  on_speedl_for_depthcompensation=False
+  on_speedl_for_center=False
+  on_speedl_for_gecko=False
+  on_speedl_acc=10000.0 
+  on_speedl_acc_to_zero=3.0 
+  ON_SPEEDL_FTCONTROL=1
+  ON_SPEEDL_HANDGUIDE=2
+  ON_SPEEDL_TRAJECTORY=3
+  ON_SPEEDL_MOVE=ON_SPEEDL_TRAJECTORY
+  ON_SPEEDL_INSERTPART=4
+  ON_SPEEDL_DEPTHCOMP=5
+  ON_SPEEDL_CENTER=6
+  ON_SPEEDL_GECKO=7
+  def on_wait_ms(time_ms):
+  local sync_time=ceil(norm(time_ms/2.0))
+  while(sync_time>0):
+  sync_time=sync_time-1
+  sync()
+  end
+  end 
+  def on_error(status_flag,message,title,stop_var=False):
+  if(status_flag):
+  popup(message,title=title,error=True,blocking=False)
+  stop_var=True
+  end 
+  return stop_var
+  end 
+  def on_warning(status_flag,message,title,isPopupNeeded=False,is_shown=False):
+  if(status_flag):
+  if(not is_shown):
+  if(isPopupNeeded):
+  popup(message,title=title,warning=True,blocking=False)
+  else:
+  textmsg(title+": ",message)
+  end 
+  is_shown=True
+  end 
+  else:
+  is_shown=False
+  end 
+  return is_shown
+  end 
+  def on_speedl_add_extra(speedBase,speedExtra):
+  speedSum=ON_ZERO6D
+  speedBaseP=p[speedBase[0],speedBase[1],speedBase[2],speedBase[3],speedBase[4],speedBase[5]]
+  speedExtraP=p[speedExtra[0],speedExtra[1],speedExtra[2],speedExtra[3],speedExtra[4],speedExtra[5]]
+  speedSumP=pose_add(speedExtraP,speedBaseP)
+  speedSum=[speedSumP[0],speedSumP[1],speedSumP[2],speedSumP[3],speedSumP[4],speedSumP[5]]
+  return speedSum
+  end 
+  
+  thread on_speedl_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread started..")
+  end 
+  enter_critical
+  on_speedl_is_running=True
+  on_speedl_is_enabled=True
+  exit_critical
+  on_speedL=ON_ZERO6D
+  on_speedL_last=ON_ZERO6D
+  
+  while on_speedl_is_running:
+  on_speedBase=on_speedCB_get()
+  on_speedL=on_speedBase
+  
+  
+  if on_speedl_is_enabled:
+  if(on_speedL==ON_ZERO6D):
+  on_speedL=[on_speedL_last[0]/100,on_speedL_last[1]/100,on_speedL_last[2]/100,on_speedL_last[3]/100,on_speedL_last[4]/100,on_speedL_last[5]/100]
+  end
+  speedl(on_speedL,a=on_speedl_acc,t=0.001)
+  else:
+  speedl(ON_ZERO6D,a=on_speedl_acc_to_zero,t=0.001)
+  end 
+  on_speedL_last=on_speedL
+  end 
+  
+  on_speedL=ON_ZERO6D
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread ended.")
+  end 
+  end 
+  def on_speedl_integer_get():
+  local speedl_integer=binary_list_to_integer([on_speedl_for_ftcontrol,on_speedl_for_handguide,on_speedl_for_move,on_speedl_for_insertpart,on_speedl_for_depthcompensation,on_speedl_for_center,on_speedl_for_gecko])
+  return speedl_integer
+  end 
+  def on_speedl_start_for(speedl_id):
+  if(speedl_id==ON_SPEEDL_FTCONTROL):
+  on_speedl_for_ftcontrol=True
+  elif(speedl_id==ON_SPEEDL_HANDGUIDE):
+  on_speedl_for_handguide=True
+  elif(speedl_id==ON_SPEEDL_TRAJECTORY):
+  on_speedl_for_move=True
+  elif(speedl_id==ON_SPEEDL_INSERTPART):
+  on_speedl_for_insertpart=True
+  elif(speedl_id==ON_SPEEDL_DEPTHCOMP):
+  on_speedl_for_depthcompensation=True
+  elif(speedl_id==ON_SPEEDL_CENTER):
+  on_speedl_for_center=True
+  elif(speedl_id==ON_SPEEDL_GECKO):
+  on_speedl_for_gecko=True
+  else:
+  textmsg("Unknown Start speedl ID received: ",speedl_id)
+  end 
+  local speedl_integer=on_speedl_integer_get()
+  if not(speedl_integer==0):
+  if not on_speedl_is_running:
+  on_speedl_thread_handler=run on_speedl_thread()
+  end 
+  end 
+  return on_speedl_is_running
+  end 
+  def on_speedl_stop_for(speedl_id,brake=10,brakeRot=10):
+  if(speedl_id==ON_SPEEDL_FTCONTROL):
+  on_speedl_for_ftcontrol=False
+  elif(speedl_id==ON_SPEEDL_HANDGUIDE):
+  on_speedl_for_handguide=False
+  elif(speedl_id==ON_SPEEDL_TRAJECTORY):
+  on_speedl_for_move=False
+  elif(speedl_id==ON_SPEEDL_INSERTPART):
+  on_speedl_for_insertpart=False
+  elif(speedl_id==ON_SPEEDL_DEPTHCOMP):
+  on_speedl_for_depthcompensation=False
+  elif(speedl_id==ON_SPEEDL_CENTER):
+  on_speedl_for_center=False
+  elif(speedl_id==ON_SPEEDL_GECKO):
+  on_speedl_for_gecko=False
+  on_speedGecko_set(ON_ZERO6D)
+  else:
+  textmsg("Unknown Stop speedl ID received: ",speedl_id)
+  end 
+  local speedl_integer=on_speedl_integer_get()
+  if(speedl_integer==0):
+  if(on_speedl_is_running):
+  kill on_speedl_thread_handler
+  enter_critical
+  on_speedl_is_running=False
+  exit_critical
+  
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread stopped")
+  end 
+  stopl(brake,brakeRot)
+  end 
+  return on_speedl_is_running
+  end 
+  def on_speedl_pause():
+  on_speedl_is_enabled=False
+  return on_speedl_integer_get()
+  end 
+  def on_speedl_resume():
+  on_speedl_is_enabled=True
+  return on_speedl_integer_get()
+  end 
+  
+  #======    End of OnRobot  Speedl    ======#
+  #======    OnRobot TwoFG Engine Messages    ======#
+  
+  twofg_error_title="OnRobot - 2FG 오류"
+  twofg_device_id_waiting="유효한 OnRobot 2FG ID를 기다리는 중..."
+  twofg_device_id_timeout="유효한 OnRobot 2FG ID를 기다리는 동안 시간이 초과되었습니다.<br>프로그램이 중지되었습니다."
+  twofg_data_error_title="OnRobot - 2FG 데이터 오류"
+  twofg_data_error_type="Gripper가 연결되지 않았거나 알 수 없는 Gripper가 연결되었습니다."
+  twofg_data_warning_title="OnRobot - 2FG 데이터 경고:"
+  twofg_status_error_title="OnRobot - 2FG 상태 오류"
+  twofg_status_error_missing="2FG Gripper와의 통신 문제 장치를 확인하십시오.<br>프로그램이 중지되었습니다."
+  twofg_else_error="알 수 없는 오류 코드:"
+  twofg_status_msg_single="2FG 상태:"
+  twofg_data_error_bit0_single="잘못된 부동 소수 데이터 크기 수신."
+  twofg_data_error_bit1_single="잘못된 정수 데이터 크기 수신."
+  twofg_data_error_bit2_single="잘못된 boolean 데이터 크기 수신."
+  twofg_status_msg_primary="2FG 메인 상태:"
+  twofg_data_error_bit0_primary="메인 2FG에 잘못된 부동 소수 데이터 크기 수신."
+  twofg_data_error_bit1_primary="메인 2FG에 잘못된 정수 데이터 크기 수신."
+  twofg_data_error_bit2_primary="메인 2FG에 잘못된 boolean 데이터 크기 수신."
+  twofg_status_msg_secondary="2FG 보조 상태:"
+  twofg_data_error_bit0_secondary="보조 2FG에 잘못된 부동 소수 데이터 크기 수신."
+  twofg_data_error_bit1_secondary="보조 2FG에 잘못된 정수 데이터 크기 수신."
+  twofg_data_error_bit2_secondary="보조 2FG에 잘못된 boolean 데이터 크기 수신."
+  
+  #======    End of OnRobot TwoFG Engine Messages    ======#
+  #======    OnRobot TwoFG Engine    ======#
+  
+  twofg_dataProcess_running=False
+  twofg_start_flange=ON_ZEROPOSE
+  twofg_start_pose=ON_ZEROPOSE
+  twofg_status_warning_title=str_cat(twofg_status_error_title,": ")
+  def twofg_dataProcess_status_errors(twofg_stop=False):
+  enter_critical
+  local tool_index=twofg_index
+  if(tool_index==ON_DI_DUAL):
+  tool_index=ON_DI_SECONDARY
+  twofg_stop=on_error((twofg_device_id_arr[tool_index]!=tool_index),twofg_status_error_missing,twofg_status_error_title,twofg_stop)
+  twofg_stop=on_error((twofg_product_code_arr[tool_index]==ON_DEVICE_ID_MISSING),twofg_status_error_missing,twofg_status_error_title,twofg_stop)
+  tool_index=ON_DI_PRIMARY
+  end 
+  twofg_stop=on_error((twofg_device_id_arr[tool_index]!=tool_index),twofg_status_error_missing,twofg_status_error_title,twofg_stop)
+  twofg_stop=on_error((twofg_product_code_arr[tool_index]==ON_DEVICE_ID_MISSING),twofg_status_error_missing,twofg_status_error_title,twofg_stop)
+  
+  
+  exit_critical
+  return twofg_stop
+  end 
+  def twofg_dataProcess():
+  enter_critical
+  local tool_index=twofg_index
+  if tool_index==ON_DI_DUAL:
+  twofg_Width_ext_primary=twofg_Width_ext_arr[ON_DI_PRIMARY]
+  twofg_Width_int_primary=twofg_Width_int_arr[ON_DI_PRIMARY]
+  twofg_Force_primary =twofg_Force_arr[ON_DI_PRIMARY]
+  twofg_Busy_primary=twofg_Busy_arr[ON_DI_PRIMARY]
+  twofg_Grip_detected_primary=twofg_Grip_detected_arr[ON_DI_PRIMARY]
+  twofg_Width_ext_secondary=twofg_Width_ext_arr[ON_DI_SECONDARY]
+  twofg_Width_int_secondary=twofg_Width_int_arr[ON_DI_SECONDARY]
+  twofg_Force_secondary =twofg_Force_arr[ON_DI_SECONDARY]
+  twofg_Busy_secondary=twofg_Busy_arr[ON_DI_SECONDARY]
+  twofg_Grip_detected_secondary=twofg_Grip_detected_arr[ON_DI_SECONDARY]
+  else:
+  twofg_Width_ext=twofg_Width_ext_arr[tool_index]
+  twofg_Width_int=twofg_Width_int_arr[tool_index]
+  twofg_Force =twofg_Force_arr[tool_index]
+  twofg_Busy=twofg_Busy_arr[tool_index]
+  twofg_Grip_detected=twofg_Grip_detected_arr[tool_index]
+  end 
+  exit_critical
+  end 
+  thread twofg_dataProcess_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting twofg_dataProcess thread")
+  end 
+  while twofg_dataProcess_running:
+  sync()
+  local twofg_stop=False
+  twofg_stop=twofg_dataProcess_status_errors(twofg_stop)
+  if twofg_stop:
+  halt
+  end 
+  twofg_dataProcess()
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping twofg_dataProcess thread")
+  end 
+  end 
+  def twofg_index_get():
+  return twofg_index
+  end 
+  
+  #======    End of OnRobot TwoFG Engine    ======#
+  textmsg(on_devices_primary_log, ": Quick Changer + 2FG7 + [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]")
+  on_follow_tcp = False
+  on_tcp_active_is_primary = True
+  on_tcp_adapters_array = []
+  on_cog_adapters_array = []
+  on_mass_adapters_array = []
+  on_tcp_qc_primary = p[0.0, 0.0, 0.0136, 0.0, 0.0, 0.0]
+  on_cog_qc_primary = p[0.0, 0.0, 0.004, 0.0, 0.0, 0.0]
+  on_mass_qc_primary = 0.06
+  on_tcp_gripper_static_primary = p[0.0, 0.0, 0.125, 0.0, 0.0, 0.0]
+  on_cog_gripper_primary = p[0.000, 0.000, 0.052, 0.0, 0.0, 0.0]
+  on_mass_gripper_primary = 1.14
+  on_tcp_workpiece_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  on_cog_workpiece_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  on_mass_workpiece_primary = 0.0
+  #======    OnRobot TwoFG Width Messages    ======#
+  
+  twofg_grip_title="OnRobot - 2FG 그립"
+  twofg_grip_return_error_n1="twofg 명령이 오류와 함께 반환되었습니다.<br>필요한 너비가 제한 사이에 있는지 확인하십시오.<br>프로그램이 중지되었습니다."
+  twofg_grip_return_error_n2="twofg 그립 명령이 마지막에 포스를 적용하지 않았습니다.<br>프로그램이 중지되었습니다."
+  
+  #======    End of OnRobot TwoFG Width Messages    ======#
+  #======    OnRobot twofg Width command twofg_grip    ======#
+  
+  twofg__grip_param_warning_width="The parameter 'diameter' is out of the limits. Limited value sent: "
+  twofg__grip_param_warning_force="The parameter 'force' is out of the limits. Limited value sent: "
+  def twofg_grip(width,force,speed,external_grip=True,tool_index=0,blocking=True):
+  if ON_DEBUG_LOG:
+  textmsg("twofg Grip start..")
+  end 
+  local retVal=0
+  twofg_Grip_guard_arr[tool_index]=False
+  sync()
+  if(tool_index==ON_DI_SECONDARY):
+  local isPrimary=False
+  else:
+  local isPrimary=True
+  end 
+  if(on_follow_tcp):
+  on_tcp_set_actual_to(isPrimary)
+  end 
+  sync()
+  if external_grip:
+  retVal=on_tool_xmlrpc.twofg_grip_external(tool_index,width+0.0,force,speed)
+  else:
+  retVal=on_tool_xmlrpc.twofg_grip_internal(tool_index,width+0.0,force,speed)
+  end 
+  if(retVal!=0):
+  popup(twofg_grip_return_error_n1,twofg_grip_title,error=True,blocking=False)
+  halt
+  end 
+  if blocking:
+  local timeout=0
+  while not twofg_Busy_arr[tool_index]:
+  sleep(0.008)
+  timeout=timeout+1
+  if timeout>20:
+  break
+  end 
+  end 
+  while(twofg_Busy_arr[tool_index]==True):
+  sync()
+  end 
+  end 
+  if(on_follow_tcp):
+  on_tcp_update(isPrimary)
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("2FG Grip ended.")
+  end 
+  return retVal
+  end 
+  twofg_release_force=80
+  def twofg_release(width,speed,external_release=True,tool_index=0,blocking=True):
+  local retVal=0
+  retVal=twofg_grip(width,twofg_release_force,speed,external_release,tool_index,blocking)
+  return retVal
+  end 
+  def twofg_grip_ext(width,force,speed,tool_index=0):
+  local retVal=twofg_grip(width,force,speed,True,tool_index,True)
+  return retVal
+  end 
+  def twofg_grip_int(width,force,speed,tool_index=0):
+  local retVal=twofg_grip(width,force,speed,False,tool_index,True)
+  return retVal
+  end 
+  def twofg_release_ext(width,speed,tool_index=0):
+  local retVal=twofg_release(width,speed,True,tool_index,True)
+  return retVal
+  end 
+  def twofg_release_int(width,speed,tool_index=0):
+  local retVal=twofg_release(width,speed,False,tool_index,True)
+  return retVal
+  end 
+  
+  #======    End of OnRobot twofg Width command twofg_grip    ======#
+  #======    OnRobot VG Monitor Messages    ======#
+  
+  twofg_monitor_error_title="OnRobot - 2FG 그립 손실"
+  twofg_monitor_grip_lost_error="그립 손실이 감지되었습니다.<br>프로그램이 중지되었습니다."
+  
+  #======    End of OnRobot VG Monitor Messages    ======#
+  #======    OnRobot twofg Monitor    ======#
+  
+  thread twofg_monitor_thread():
+  while True:
+  sync()
+  local twofg_error=False
+  if(twofg_index==ON_DI_DUAL):
+  local tool_index=ON_DI_SECONDARY
+  twofg_error=twofg_monitor_check(tool_index)
+  local tool_index=ON_DI_PRIMARY
+  else:
+  local tool_index=twofg_index
+  end 
+  twofg_error=twofg_error or twofg_monitor_check(tool_index)
+  if twofg_error:
+  halt
+  end 
+  end 
+  end 
+  def twofg_monitor_check(tool_index=0):
+  local error=False
+  if twofg_Grip_guard_arr[tool_index]and not twofg_Grip_detected_arr[tool_index]:
+  popup(twofg_monitor_grip_lost_error,title=twofg_monitor_error_title,error=True,blocking=False)
+  twofg_payload_set(0,tool_index=tool_index)
+  error=True
+  end 
+  return error
+  end 
+  
+  #======    End of OnRobot twofg Monitor    ======#
+  #======    OnRobot Run    ======#
+  
+  on_portopen_javaSocket()
+  sync()
+  textmsg(on_xmlrpc_start_ip,on_conn_ip)
+  if(ON_REG_USE_TOOL):
+  on_regStart_conn=[ON_CONN_SHIFT_BOOL,ON_CONN_SHIFT_INT,ON_CONN_SHIFT_FLOAT]
+  on_regSum_conn=[ON_CONN_REG_SUM_BOOL,ON_CONN_REG_SUM_INT,ON_CONN_REG_SUM_FLOAT]
+  on_rtde_feed_open(on_conn_ip,on_conn_rtde_feed_name,on_regStart_conn,on_regSum_conn,ON_REGISTERS_SPEEDL_FLOAT)
+  sync()
+  textmsg(on_xmlrpc_start_ip,on_tool_ip)
+  on_regStart_tool=[ON_TOOL_SHIFT_BOOL,ON_TOOL_SHIFT_INT,ON_TOOL_SHIFT_FLOAT]
+  on_regSum_tool=[ON_TOOL_REG_SUM_BOOL,ON_TOOL_REG_SUM_INT,ON_TOOL_REG_SUM_FLOAT]
+  on_rtde_feed_open(on_tool_ip,on_tool_rtde_feed_name,on_regStart_tool,on_regSum_tool,0)
+  sync()
+  else:
+  on_regStart_conn=[ON_CONN_SHIFT_BOOL,ON_CONN_SHIFT_INT,ON_CONN_SHIFT_FLOAT]
+  on_regSum_conn=[ON_CONN_REG_SUM_BOOL,ON_CONN_REG_SUM_INT,ON_CONN_REG_SUM_FLOAT]
+  on_rtde_feed_open(on_conn_ip,on_conn_rtde_feed_name,on_regStart_conn,on_regSum_conn,ON_REGISTERS_SPEEDL_FLOAT)
+  sync()
+  end
+  on_set_rtde_watchdog(updateHz=0.2)
+  sync()
+  on_dataProcess_thrd=run on_dataProcess_thread()
+  sync()
+  on_tcp_init_adapters()
+  on_payload_init_adapters()
+  on_tcp_init_primary()
+  on_payload_init_primary()
+  
+  on_tcp_update_custom()
+  on_tcp_set_actual_to(on_tcp_active_is_primary)
+  if(on_follow_tcp):
+  on_payload_set_actual()
+  end 
+  on_watchdog_thrd=run on_set_watchdog_thread()
+  sync()
+  
+  #======    End of OnRobot Run    ======#
+  #======    OnRobot QC Start    ======#
+  
+  if(on_toolConnector):
+  tc_setup_tool()
+  end 
+  sync()
+  
+  #======    End of OnRobot QC Start    ======#
+  #======    OnRobot twofg Run    ======#
+  
+  twofg_dataRead_running=True
+  sync()
+  twofg_dataRead_thrd=run twofg_dataRead_thread()
+  sync()
+  textmsg(twofg_device_id_waiting)
+  if(twofg_index==ON_DI_DUAL):
+  local twofg_timeout=0
+  while not(twofg_product_code_arr[ON_DI_PRIMARY]==twofg_DEVICE_ID_twofg7):
+  sync()
+  twofg_timeout=twofg_timeout+1
+  if(twofg_timeout>ON_INIT_TIMEOUT):
+  popup(twofg_device_id_timeout,twofg_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Primary twofg: ",twofg_product_code_arr[ON_DI_PRIMARY])
+  end 
+  local twofg_timeout=0
+  while not(twofg_product_code_arr[ON_DI_SECONDARY]==twofg_DEVICE_ID_twofg7):
+  sync()
+  if(twofg_timeout>ON_INIT_TIMEOUT):
+  popup(twofg_device_id_timeout,twofg_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Secondary twofg: ",twofg_product_code_arr[ON_DI_SECONDARY])
+  end 
+  else:
+  local twofg_timeout=0
+  while not(twofg_product_code_arr[twofg_index]==twofg_DEVICE_ID_twofg7):
+  sync()
+  if(twofg_timeout>ON_INIT_TIMEOUT):
+  popup(twofg_device_id_timeout,twofg_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Single twofg: ",twofg_product_code_arr[twofg_index])
+  end 
+  end 
+  sync()
+  twofg_dataProcess_running=True
+  sync()
+  twofg_dataProcess_thrd=run twofg_dataProcess_thread()
+  sync()
+  twofg_monitor_thread_handle=run twofg_monitor_thread()
+  sync()
+  
+  #======    End of OnRobot twofg Run    ======#
+  # end: URCap Installation Node
+  # begin: URCap Installation Node
+  #   Source: Spin Robotics - URCap, 1.1.0, Spin Robotics
+  #   Type: Spin Robotics
+  def spin_check_and_reset_tool():
+    local bridgeErrorLength = rpc.ModbusHandler.getBridgeErrorLength()
+    if (0 < bridgeErrorLength):
+      popup("Tool is in error state. Press Continue to reset errors and resume program.", title = "Stop or reset/resume", error = True, blocking = True)
+      spin_reset_errors()
+      local error = True
+      local i = 0
+      while i < 100:
+        sleep(0.01)
+        bridgeErrorLength = rpc.ModbusHandler.getBridgeErrorLength()
+        if (bridgeErrorLength == 0):
+          error = False
+          break
+        end
+        i = i + 1
+      end
+      if (error):
+        popup("Tool still in error state. Stopping program!", title="Stopping program", error = True, blocking = False)
+        halt
+      end
+    end
+  end
+  
+  # spin_check_tool(True) must be followed by
+  # spin_check_tool(False) before exiting program node
+  def spin_check_tool(enable):
+    global keep_checking = True
+  
+    # stop thread
+    if (enable == False):
+      if (thread_handle_check_tool != None):
+        keep_checking = False
+        join thread_handle_check_tool
+      end
+      return None
+    end
+  
+    # define thread
+    thread check_tool_thread():
+      while (keep_checking):
+        bridgeErrorLength = rpc.ModbusHandler.getBridgeErrorLength()
+  
+        if (0 < bridgeErrorLength):
+          sleep(0.01)
+          bridgeErrorString = rpc.ModbusHandler.getBridgeErrorStringConcatenated()
+  
+          if (bridgeErrorString == "No errors!"): #TODO: is this really possible ?
+            textmsg("Tool is in error state. Stopping program! Error Code: " + bridgeErrorString)
+            #popup("Tool is in error state. Stopping program! Error Code: " + bridgeErrorString, error=True, blocking=False)
+          else:
+            textmsg("Tool is in error state. Stopping program! Error Code: " + bridgeErrorString)
+            popup("Tool is in error state. Stopping program! Error Code: " + bridgeErrorString, error = True, blocking = False)
+            halt
+          end
+        end
+  
+        sleep(0.01)
+        bridgeRobotInterfaceConnection = rpc.ModbusHandler.getBridgeRobotInterfaceConnection()
+  
+        if (bridgeRobotInterfaceConnection == False):
+          textmsg("Bridge not connected to robot interface. Stopping program!")
+          popup("Bridge not connected to robot interface. Stopping program!", error = True, blocking = False)
+          halt
+        end
+        sleep(0.01)
+        toolConnection = rpc.ModbusHandler.getToolConnection()
+  
+        if (toolConnection == False):
+          textmsg("Not connected to tool. Stopping program!")
+          popup("Not connected to tool. Stopping program!", error = True, blocking = False)
+          halt
+        end
+  
+        sleep(0.1)
+      end
+    end
+  
+    # run thread
+    global thread_handle_check_tool = run check_tool_thread()
+  end
+  
+  def wait_for_is_steady():
+    while not is_steady():
+      sleep(0.02)
+    end
+  end
+  
+  # AdvancedScrewdriver functions
+  def isScrewNotOkay():
+    local bridgeErrorLength = rpc.ModbusHandler.getBridgeErrorLength()
+    local isBridgeRobotInterfaceConnected = rpc.ModbusHandler.getBridgeRobotInterfaceConnection()
+    local isToolConnected = rpc.ModbusHandler.getToolConnection()
+    return 0 < bridgeErrorLength or isBridgeRobotInterfaceConnected == False or isToolConnected == False
+  end
+  
+  def handleErrorsAfterStop():
+    local bridgeErrorLength = rpc.ModbusHandler.getBridgeErrorLength()
+    local isBridgeRobotInterfaceConnected = rpc.ModbusHandler.getBridgeRobotInterfaceConnection()
+    local isToolConnected = rpc.ModbusHandler.getToolConnection()
+  
+    if (isToolConnected == False):
+      textmsg("Not connected to tool. Stopping program!")
+      popup("Not connected to tool. Stopping program!", title = "Connection Error", error = True, blocking = False)
+      halt
+    elif (isBridgeRobotInterfaceConnected == False):
+      textmsg("Bridge not connected to robot interface. Stopping program!")
+      popup("Bridge not connected to robot interface. Stopping program!", title = "Connection Error", error = True, blocking = False)
+      halt
+    elif (0 < bridgeErrorLength):
+      bridgeErrorString = rpc.ModbusHandler.getBridgeErrorStringConcatenated()
+      textmsg("Tool error state. Stopping program: " + bridgeErrorString)
+      popup(bridgeErrorString, title="Screw Program Error", error=True, blocking= False)
+    end
+  end
+  
+  def move_with_force_check_back_to_origin(pose, origin, velocity, force):
+    wait_for_is_steady()
+    zero_ftsensor()
+  
+    global max_force = force
+    global vel = velocity
+  
+    global pick_pose = pose
+    global origin_pose = origin
+    global thread_flag_pick = 0
+  
+    thread Thread_if_pick():
+      movel(pick_pose, a = 0.6, v = vel)
+      thread_flag_pick = 1
+    end
+  
+    if (force() < max_force):
+      global thread_handle_pick = run Thread_if_pick()
+      while (thread_flag_pick == 0):
+        if not(force() < max_force):
+          kill thread_handle_pick
+          thread_flag_pick = 2
+        else:
+          sync()
+        end
+      end
+    else:
+      thread_flag_pick = 2
+    end
+  
+    if (thread_flag_pick == 1):
+      return True
+    end
+  
+    if (thread_flag_pick == 2):
+      movel(origin_pose, a = 0.6, v = vel)
+      stopl(100)
+      return False
+    end
+  
+    return False
+  end
+  
+  def insert_bit_in_screw_head(target_distance, screw_direction, max_force = 6, velocity = 0.025, distance_threshold = 0.001):
+    local controlRate = 500 # Hz
+    local controlPeriod = 1 / controlRate
+    local numSteps = target_distance / velocity * controlRate
+    local stepSize = 1 / numSteps
+    local progressRatio = 0
+    local idleIterationLimit = 1.2 * controlRate
+  
+    stopl(100)
+    wait_for_is_steady()
+    zero_ftsensor()
+    spin_ss_robot_follow()
+    spin_motor_start_min_speed_scaled(screw_direction, 1.0)
+    spin_motor_wait_for_ramp()
+  
+    local startPose = get_actual_tcp_pose()
+    local startPoseInverse = pose_inv(startPose)
+    local targetPose = pose_trans(startPose, p[0, 0, target_distance, 0, 0, 0])
+  
+    # Insert bit into screw head
+    local highForceCount = 0
+    local offsetStep = 0
+    while (True):
+      local currentPose = get_actual_tcp_pose()
+      local currentPoseOffset = pose_trans(startPoseInverse, currentPose)
+      local distanceToTarget = target_distance - currentPoseOffset[2]
+  
+      # Stop when close to target (i.e. bit is inserted)
+      if (distanceToTarget < distance_threshold / 2):
+        spin_motor_stop()
+        break
+      end
+  
+      # Check if position should be progressed
+      local currentForce = get_tcp_force()
+      if (currentForce[2] < max_force):
+        progressRatio = progressRatio + stepSize
+      else:
+        highForceCount = highForceCount + 1
+      end
+  
+      # Abort if unable to progress
+      if (highForceCount == idleIterationLimit):
+        spin_motor_stop()
+        spin_ss_stop()
+        stopl(100)
+        return False
+      end
+  
+      # Servo to next position
+      local nextPose = interpolate_pose(startPose, targetPose, progressRatio)
+      local nextQ = get_inverse_kin(nextPose)
+      servoj(nextQ)
+      sleep(0.001)
+    end
+  
+    # Adjust position to ensure that force is neutral
+    local lowForceCount = 0
+    while (True):
+      local currentForce = get_tcp_force()
+      textmsg(currentForce[2])
+  
+      # Check if position should be progressed
+      if (currentForce[2] > max_force / 3):
+        lowForceCount = 0
+        progressRatio = progressRatio - stepSize / 5
+      else:
+        lowForceCount = lowForceCount + 1
+      end
+  
+      # Stop when force is neutral
+      if (lowForceCount == 10):
+        break
+      end
+  
+      # Servo to next position
+      local nextPose = interpolate_pose(startPose, targetPose, progressRatio)
+      local nextQ = get_inverse_kin(nextPose)
+      servoj(nextQ)
+      sleep(0.001)
+    end
+  
+    # Verify that bit was correctly inserted
+    stopl(100)
+    wait_for_is_steady()
+    local currentPose = get_actual_tcp_pose()
+    local currentPoseOffset = pose_trans(startPoseInverse, currentPose)
+    local distanceToTarget = target_distance - currentPoseOffset[2]
+    if (distanceToTarget > distance_threshold):
+      return False
+    end
+  
+    return True
+  end
+  
+  def spin_pick_bit(bit_nr, app_offset, std_vel, fixture, force, safety):
+    spin_check_and_reset_tool()
+    spin_check_tool(True)
+  
+    # Specify x and y coordinates based on bit number in bit changer station
+    x_off = 0
+    y_off = 0
+    if (bit_nr == 1):
+      x_off = -0.0295
+      y_off = 0.0195
+    elif (bit_nr == 2):
+      x_off = -0.065
+      y_off = 0.0195
+    elif (bit_nr == 3):
+      x_off = -0.1005
+      y_off = 0.0195
+    else:
+      popup("Invalid bit number!", error = True, blocking = True)
+      halt
+    end
+  
+    # How high above the table the bit detaching will start
+    local z_off = -app_offset
+    if (z_off > -0.055):
+      z_off = -0.055 # Start at minimum 54 mm offset
+    end
+  
+    local p_app_off = p[x_off, y_off, z_off, 0, 0, 0] # Offset from where bit changing will start
+    local p_before_bit_off = p[x_off, y_off, -0.0375, 0, 0, 0] # Offset from where the robot is just above the bit
+    local p_bit_off = p[x_off, y_off, -0.0075, 0, 0, 0] # Offset from where bit is caught by robot
+    local p_bit_press_off = p[x_off, y_off, -0.0055, 0, 0, 0] # Offset from where bit presses on changing station
+    local p_mid_off = p[x_off, y_off, -0.012, 0, 0, 0] # Offset from where screwdriver will stop turning to catch bit
+    local p_remove_off = p[x_off, y_off - 0.025, -0.0075, 0, 0, 0] # Offset from where screwdriver is removed from bit changer
+    local p_return_off = p[x_off, y_off - 0.025, z_off, 0, 0, 0] # Offset from where the control is returned to the robot
+    local p_above_bit = pose_trans(fixture, p_app_off)
+    local p_before_bit = pose_trans(fixture, p_before_bit_off)
+    local p_at_bit = pose_trans(fixture, p_bit_off)
+    local p_press_bit = pose_trans(fixture, p_bit_press_off)
+    local p_mid_bit = pose_trans(fixture, p_mid_off)
+    local p_remove_bit = pose_trans(fixture, p_remove_off)
+    local p_return = pose_trans(fixture, p_return_off)
+  
+    movej(p_above_bit)
+    spin_ss_move_bit_release()
+    spin_safety_shield_await_command()
+  
+    # Move down until just above bit
+    if (safety):
+      local attempt = 0
+      local max_tries = 3
+      while (True):
+        local success = move_with_force_check_back_to_origin(p_before_bit, p_above_bit, std_vel, force)
+        if (success):
+          break
+        end
+  
+        attempt = attempt + 1
+        if (attempt == max_tries):
+          # Offset from where the robot is just above the bit
+          p_before_bit_off = p[x_off, y_off, -0.0355, 0, 0, 0]
+  
+          # Offset from where bit is caught by robot
+          p_bit_off = p[x_off, y_off, -0.0065, 0, 0, 0]
+  
+          # Offset from where bit presses on changing station
+          p_bit_press_off = p[x_off, y_off, -0.0045, 0, 0, 0]
+  
+          # Offset from where screwdriver will stop turning to catch bit
+          p_mid_off = p[x_off, y_off, -0.01, 0, 0, 0]
+  
+          # Offset from where screwdriver is removed from bit changer
+          p_remove_off = p[x_off, y_off - 0.025, -0.0065, 0, 0, 0]
+  
+          # Offset from where the control is returned to the robot
+          p_return_off = p[x_off, y_off - 0.025, z_off, 0, 0, 0]
+  
+          p_above_bit = pose_trans(fixture, p_app_off)
+          p_before_bit = pose_trans(fixture, p_before_bit_off)
+          p_at_bit = pose_trans(fixture, p_bit_off)
+          p_press_bit = pose_trans(fixture, p_bit_press_off)
+          p_mid_bit = pose_trans(fixture, p_mid_off)
+          p_remove_bit = pose_trans(fixture, p_remove_off)
+          p_return = pose_trans(fixture, p_return_off)
+  
+          movej(p_above_bit)
+          spin_ss_move_bit_release()
+          spin_safety_shield_await_command()
+  
+          i = 0
+          isGood = True
+          while (i < 3):
+            if (safety):
+              isGood = move_with_force_check_back_to_origin(p_before_bit, p_above_bit, std_vel, force)
+            else:
+              movel(p_before_bit, 1.2, std_vel, 0, 0)
+              isGood = True
+            end
+            if (isGood):
+              break
+            end
+            i = i + 1
+          end
+          if (isGood == False):
+            spin_motor_stop()
+            popup("Could not attach bit! Continue to try again.", warning = True, blocking = True)
+            attempt = 0
+          end
+        end
+      end
+    else:
+      movel(p_before_bit, 1.2, std_vel, 0, 0)
+    end
+  
+    # Move down until engaged with bit
+    local attempt = 0
+    local max_tries = 10
+    local velocity = 0.03
+    local force = 35
+    spin_motor_start(0, 100)
+    spin_motor_wait_for_ramp()
+    while (True):
+      attempt = attempt + 1
+      if (attempt == max_tries):
+        # For the final retry the screw direction and speed changes
+        spin_motor_start(1, 100)
+        spin_motor_wait_for_ramp()
+      end
+  
+      local success = move_with_force_check_back_to_origin(p_mid_bit, p_before_bit, velocity, force)
+      if (success):
+        break
+      end
+  
+      if (attempt == max_tries):
+        spin_motor_stop()
+        popup("Could not attach bit! Continue to try again.", warning = True, blocking = True)
+        attempt = 0
+        spin_motor_start_min_speed_scaled(0, 1.0)
+        spin_motor_wait_for_ramp()
+      end
+    end
+  
+    # Complete bit attachment
+    spin_motor_stop()
+    movel(p_press_bit, std_vel) # Press extra far down on bit
+    movel(p_at_bit, std_vel) # Back off a little
+    movel(p_remove_bit, std_vel)
+    spin_ss_move_bit_cover()
+    movel(p_return, std_vel)
+  
+    spin_check_tool(False)
+  end
+  
+  def spin_place_bit(bit_nr, app_offset, vel, fixture, force, safety):
+    spin_check_and_reset_tool()
+    spin_check_tool(True)
+  
+    # Specify x and y coordinates based on bit number in bit changer station
+    local x_off = 0
+    local y_off = 0
+    if (bit_nr == 1):
+      x_off = -0.0295
+      y_off = -0.0055
+    elif (bit_nr == 2):
+      x_off = -0.065
+      y_off = -0.0055
+    elif (bit_nr == 3):
+      x_off = -0.1005
+      y_off = -0.0055
+    else:
+      popup("Invalid bit number!", warning = True, blocking = True)
+      halt
+    end
+  
+    # How high above the table the bit attaching will start
+    local z_off = -app_offset
+    if (z_off > -0.055):
+      z_off = -0.055 # Start at minimum 55 mm offset
+    end
+  
+    local p_app_off = p[x_off, y_off, z_off, 0, 0, 0] # Offset from where bit changing will start
+    local p_bit_off = p[x_off, y_off, -0.0075, 0, 0, 0] # Offset from where bit is in front of bit changer
+    local p_insert_off = p[x_off, y_off + 0.025, -0.0075, 0, 0, 0] # Offset from where screwdriver is inserted into bit changer
+    local p_return_off = p[x_off, y_off + 0.025, z_off, 0, 0, 0] # Offset from where the control is returned to the robot
+    local p_above_bit = pose_trans(fixture, p_app_off)
+    local p_at_bit = pose_trans(fixture, p_bit_off)
+    local p_insert_bit = pose_trans(fixture, p_insert_off)
+    local p_return = pose_trans(fixture, p_return_off)
+  
+    spin_ss_move_bit_cover()
+    spin_safety_shield_await_command()
+    movej(p_above_bit)
+  
+    if (safety):
+      local attempt = 0
+      local maxTries = 3
+      while (True):
+        local success = move_with_force_check_back_to_origin(p_at_bit, p_above_bit, vel, force)
+        if (success):
+          break
+        end
+  
+        attempt = attempt + 1
+        if (attempt == maxTries):
+          # Offset from where bit is in front of bit changer
+          p_bit_off = p[x_off, y_off, -0.0070, 0, 0, 0]
+  
+          # Offset from where screwdriver is inserted into bit changer
+          p_insert_off = p[x_off, y_off + 0.025, -0.0070, 0, 0, 0]
+  
+          # Offset from where the control is returned to the robot
+          p_return_off = p[x_off, y_off + 0.025, z_off, 0, 0, 0]
+  
+          p_above_bit = pose_trans(fixture, p_app_off)
+          p_at_bit = pose_trans(fixture, p_bit_off)
+          p_insert_bit = pose_trans(fixture, p_insert_off)
+          p_return = pose_trans(fixture, p_return_off)
+  
+          movej(p_above_bit)
+  
+          spin_ss_move_bit_cover()
+          spin_safety_shield_await_command()
+  
+          i = 0
+          isGood = True
+  
+          while (i < 3):
+            if (safety):
+              isGood = move_with_force_check_back_to_origin(p_at_bit, p_above_bit, vel, force)
+            else:
+              movel(p_at_bit, 1.2, vel, 0, 0)
+              isGood = True
+            end
+            if (isGood):
+              break
+            end
+            i = i + 1
+          end
+  
+          if (isGood == False):
+            spin_motor_stop()
+            popup("Could not detach bit! Continue to try again.", warning = True, blocking = True)
+            attempt = 0
+          end
+        end
+      end
+    else:
+      movel(p_at_bit, 1.2, vel, 0, 0)
+    end
+  
+    spin_ss_move_bit_release()
+    spin_safety_shield_await_command()
+  
+    movel(p_insert_bit, vel)
+    movel(p_return, vel)
+  
+    spin_check_tool(False)
+  end
+  
+  def spin_pick_up_screw(p, name, nrOfRetries, velZ, screwLength, offsetS, force, safety):
+    spin_check_and_reset_tool()
+    spin_check_tool(True)
+  
+    local targetPos = p
+    local targetPosOffS = p[0, 0, -offsetS, 0, 0, 0] # Offset where node takes control
+    local targetPosOffS1 = p[0, 0, -0.006, 0, 0, 0] # Offset above screw where bit is exposed
+    local targetPosOffS15 = p[0, 0, -screwLength - 0.015, 0, 0, 0] # Offset where safety shield stops robot follow and moves to cover screw
+    local targetPosOffS2 = p[0, 0, -screwLength - offsetS, 0, 0, 0] # Offset where screw is attached and removed from feeder
+    targetPosOffS = pose_trans(targetPos, targetPosOffS)
+    targetPosOffS1 = pose_trans(targetPos, targetPosOffS1)
+    targetPosOffS15 = pose_trans(targetPos, targetPosOffS15)
+    targetPosOffS2 = pose_trans(targetPos, targetPosOffS2)
+  
+    local pickupVel = 0.005
+  
+    spin_ss_move_bit_cover()
+    spin_safety_shield_await_command()
+  
+    movej(targetPosOffS)
+  
+    if (safety):
+      local attempt = 0
+      while (True):
+        local success = move_with_force_check_back_to_origin(targetPosOffS1, targetPosOffS, velZ, force)
+        if (success):
+          break
+        end
+  
+        attempt = attempt + 1
+        if (attempt == nrOfRetries):
+          spin_motor_stop()
+          popup("Could not pick up screw! Continue to try again.", warning = True, blocking = True)
+          attempt = 0
+        end
+      end
+    else:
+      movel(targetPosOffS1, 1.2, velZ, 0, 0)
+    end
+  
+    spin_motor_start_min_speed_scaled(0, 1.5)
+    spin_ss_robot_follow()
+    spin_motor_wait_for_ramp()
+    sleep(0.05)
+  
+    movel(targetPos, 1.2, pickupVel, 0, 0)
+    spin_motor_stop()
+    sleep(0.05)
+  
+    movel(targetPosOffS15, 1.2, velZ, 0, 0)
+    spin_ss_move_screw_cover(screwLength)
+    movel(targetPosOffS2, 1.2, velZ, 0, 0)
+  
+    spin_check_tool(False)
+  end
+  
+  def spin_approach_screw_insertion(p, offsetS1, offsetS2, velZ, screwLength, force, safety, direction):
+    local targetPos = p
+    local targetPosOffsetS1 = p[0, 0, -offsetS1 - screwLength, 0, 0, 0]
+    local targetPosOffsetS2 = p[0, 0, -offsetS2 - screwLength, 0, 0, 0]
+    local targetPosOffsetS1 = pose_trans(targetPos, targetPosOffsetS1)
+    local targetPosOffsetS2 = pose_trans(targetPos, targetPosOffsetS2)
+  
+    # Move to S2
+    movej(targetPosOffsetS2)
+  
+    # Move to S1
+    if (safety):
+      local attempt = 0
+      local maxTries = 3
+      while (True):
+        local s1WasReached = move_with_force_check_back_to_origin(targetPosOffsetS1, targetPosOffsetS2, velZ, force)
+        if (s1WasReached):
+          break
+        end
+  
+        attempt = attempt + 1
+        if (attempt == maxTries):
+          spin_motor_stop()
+          popup("Could not approach screw insertion location! Continue to try again.", warning = True, blocking = True)
+          attempt = 0
+        end
+      end
+    else:
+      movel(targetPosOffsetS1, 1.2, velZ, 0, 0)
+    end
+  end
+  
+  def spin_approach_screw_extraction(p, offsetS1, offsetS2, velZ, screwLength, force, safety, direction):
+    local targetPos = p
+    local targetPosOffsetS1 = pose_trans(p, p[0, 0, -offsetS1, 0, 0, 0])
+    local targetPosOffsetS2 = pose_trans(p, p[0, 0, -offsetS2, 0, 0, 0])
+  
+    # Move to S2
+    spin_ss_move_bit_cover()
+    movej(targetPosOffsetS2)
+  
+    # Move to S1
+    if (safety):
+      local attempt = 0
+      local maxTries = 3
+      while (True):
+        local s1WasReached = move_with_force_check_back_to_origin(targetPosOffsetS1, targetPosOffsetS2, velZ, force)
+        if (s1WasReached):
+          break
+        end
+  
+        attempt = attempt + 1
+        if (attempt == maxTries):
+          spin_motor_stop()
+          popup("Could not approach screw extraction location! Continue to try again.", warning = True, blocking = True)
+          attempt = 0
+        end
+      end
+    else:
+      movel(targetPosOffsetS1, 1.2, velZ, 0, 0)
+    end
+  
+    # Engage bit in screw head
+    local attempt = 0
+    local maxTries = 5
+    while (True):
+      local bitWasEngaged = insert_bit_in_screw_head(offsetS1, direction)
+      if (bitWasEngaged):
+        break
+      end
+  
+      attempt = attempt + 1
+      movel(targetPosOffsetS1, 1.2, velZ, 0, 0)
+      if (attempt == maxTries):
+        popup("Could not engage bit in screw head! Continue to try again.", warning = True, blocking = True)
+        attempt = 0
+      end
+    end
+  end
+  
+  ########### Low level script functions ################
+  def spin_reset_errors():
+    rpc.ModbusHandler.setResetErrors()
+  end
+  
+  def spin_motor_start(direction, speed):
+    rpc.ModbusHandler.setScrewCommand(1, direction, speed)
+  end
+  
+  def spin_motor_start_min_speed_scaled(direction, scale):
+    rpc.ModbusHandler.setScrewCommandMinSpeedScaled(1, direction, scale)
+  end
+  
+  def spin_motor_stop():
+    rpc.ModbusHandler.setScrewCommand(0, 0, 0)
+  end
+  
+  def spin_motor_wait_for_ramp():
+    # Wait for modbus flag
+    sleep(0.2)
+  
+    # Timer counter
+    timer = 0
+  
+    # Loop
+    while (True):
+      toolScrewState = rpc.ModbusHandler.getToolScrewState()
+  
+      if (2 < toolScrewState):
+        break
+      end
+  
+      sleep(0.01)
+  
+      timer = timer + 0.01
+  
+      if (timer > 2.5):
+        popup("Screwdriver has not ramped up motor! Stopping program!", error = True, blocking = False)
+        halt
+        break
+      end
+    end
+  end
+  
+  def spin_safety_shield_await_command():
+    # Variables
+    timer = 0
+    safetyShieldState = 0
+  
+    # Loop
+    while (True):
+      safetyShieldState = rpc.ModbusHandler.getToolSafetyShieldState()
+  
+      if (safetyShieldState != 1):
+        break
+      end
+  
+      sleep(0.01)
+  
+      timer = timer + 0.05
+      if (timer > 1.5):
+        break
+      end
+    end
+  
+    # Clear
+    timer = 0
+  
+    # Loop
+    while (True):
+      safetyShieldState = rpc.ModbusHandler.getToolSafetyShieldState()
+  
+      if (safetyShieldState == 1):
+        break
+      end
+  
+      sleep(0.01)
+  
+      timer = timer + 0.05
+      if (timer > 1.5):
+        break
+      end
+    end
+  end
+  
+  def spin_ss_stop():
+    rpc.ModbusHandler.setSafetyShieldCommand(0, 0.0, 0.0)
+  end
+  
+  def spin_ss_command(command, position):
+    rpc.ModbusHandler.setSafetyShieldCommandMaxSped(command, position)
+  end
+  
+  def spin_ss_home():
+    rpc.ModbusHandler.setSafetyShieldCommandMaxSped(5, 0.0)
+  end
+  
+  def spin_ss_move_home():
+    rpc.ModbusHandler.setSafetyShieldCommandMaxSped(10, 0.0)
+  end
+  
+  def spin_ss_move_bit_release():
+    rpc.ModbusHandler.setSafetyShieldCommandMaxSped(11, 0.0)
+  end
+  
+  def spin_ss_move_bit_cover():
+    rpc.ModbusHandler.setSafetyShieldCommandMaxSped(12, 0.0)
+  end
+  
+  def spin_ss_move_screw_cover(screwLength):
+    rpc.ModbusHandler.setSafetyShieldCommandMaxSped(13, screwLength)
+  end
+  
+  def spin_ss_robot_follow():
+    rpc.ModbusHandler.setSafetyShieldCommand(40, 0.0, 0.0)
+  end
+  
+  def spin_led_intensity(intensity):
+    rpc.ModbusHandler.setToolLedIntensity(intensity)
+  end
+  global rpc = rpc_factory("xmlrpc", "http://127.0.0.1:40722/RPC2")
+  # end: URCap Installation Node
+  $ 2 "로봇 프로그램"
+  # begin: URCap Program Node
+  #   Source: OnRobot, 6.0.0, OnRobot A/S
+  #   Type: TCP
+  $ 3 "TCP"
+  on_tcp_set_actual_to(isPrimary = True)
+  on_tcp_offset_forced_set_actual(isPrimary = 0)
+  # end: URCap Program Node
+  # begin: URCap Program Node
+  #   Source: OnRobot, 6.0.0, OnRobot A/S
+  #   Type: 2FG 그립
+  $ 4 "2FG 그립 (39)"
+on_return = twofg_grip(width=39.0, force=64, speed=100, external_grip=True, tool_index=0)
+twofg_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
+  # end: URCap Program Node
+  # begin: URCap Program Node
+  #   Source: OnRobot, 6.0.0, OnRobot A/S
+  #   Type: 2FG 그립
+  $ 5 "2FG 그립 (10)"
+on_return = twofg_grip(width=10.0, force=58, speed=100, external_grip=True, tool_index=0)
+twofg_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
+  # end: URCap Program Node
+  # begin: URCap Program Node
+  #   Source: OnRobot, 6.0.0, OnRobot A/S
+  #   Type: 2FG 놓기
+  $ 6 "2FG 놓기 (20)"
+on_return = twofg_release(width=20.0, speed=100, external_release=True, tool_index=0 )
+twofg_payload_set(mass = 0.0, tool_index = 0, use_guard = False)
+  # end: URCap Program Node
+end
