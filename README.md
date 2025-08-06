@@ -1,6 +1,5 @@
 # Universal Robots Quick Tutorial - External Control with Python
 <div align="center">
-  <img src="./readmeImages/affinerobotics_logo_black_horizontal.png" alt="image" style="width:100%;">
 </div>
 
 ## Introduction
