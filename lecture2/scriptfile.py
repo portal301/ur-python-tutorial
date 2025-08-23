@@ -25,9 +25,9 @@ def sendScriptFile(robot_url, script_path, port=PORT_PRIMARY_CLIENT):
     sendScript(robot_url, script, port)
 
 if __name__ == "__main__":
-    robot_url = "192.168.0.15"
-    # script_path = "scripts/helloworld.script"
-    script_path = "scripts/slowmove.script"
+    robot_url = "192.168.0.31"
+    script_path = "scripts/helloworld.script"
+    # script_path = "scripts/slowmove.script"
     # script_path = "scripts/freedrive.script"
     # script_path = "scripts/io_control.script"
     sendScriptFile(robot_url, script_path, PORT_PRIMARY_CLIENT)

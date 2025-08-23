@@ -1,5 +1,5 @@
 def socket_set_position2():
-    server_ip = "192.168.0.18"
+    server_ip = "192.168.0.77"
     port = 12345
     socket_open(server_ip,port,"socket_0")
 

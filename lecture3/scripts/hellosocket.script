@@ -1,5 +1,5 @@
 def hellosocket():
-    server_ip = "192.168.0.18"
+    server_ip = __SERVER_IP__
     port=12345
     socket_open(server_ip,port,"socket_0")
     socket_send_line("hello socket from robot","socket_0")

@@ -20,8 +20,8 @@ def print2(str, color=Color.YELLOW):
 PORT_PRIMARY_CLIENT = 30001
 PORT_SECONDARY_CLIENT = 30002
 
-server_ip = "192.168.0.18"
-robot_ip = "192.168.0.15"
+server_ip = "192.168.0.77"
+robot_ip = "192.168.0.31"
 script_path = "scripts/socket_set_position2.script"
 
 async def handle_client(reader, writer):
@@ -45,9 +45,9 @@ async def handle_client(reader, writer):
                 print2(f"q_: {q_}", Color.GREEN)
             elif message == "req_data":
                 print("Received data request")
-                p_goal = [0.321, -0.008, 0.164, -0.3705, 3.1108, 0.038]
+                p_goal = [0.2626, -0.1777, 0.3691, 2.1936, 2.2199, -0.0141]
                 p_rel = [0.0, 0.0, -0.10, 0.0, 0.0, 0.0]
-                q_ref = [-2.1141, -1.6613, 1.5368, -1.4413, -1.563, -4.7265]
+                q_ref = [0.1232, -1.516, -1.6844, -1.4973, 1.5504, 3.2482]
                 arr = p_goal + p_rel + q_ref # 18 floats
                 float_string = "({})\n".format(','.join(map(str, arr)))
                 writer.write(float_string.encode())

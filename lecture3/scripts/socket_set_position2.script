@@ -1,5 +1,7 @@
 def socket_set_position2():
-    server_ip = "192.168.0.18"
+
+    __HEADER___
+    server_ip = "192.168.0.77"
     port = 12345
     socket_open(server_ip,port,"socket_0")
 
@@ -19,8 +21,8 @@ def socket_set_position2():
     p_ready = get_forward_kin(q=q_goal,tcp=p_rel)
     q_ready = get_inverse_kin(p_ready,q_ref)
 
-    movej(q_ref, a=1.2, v=0.1, t=0, r=0)
+    movej(q_ref, a=1.2, v=0.3, t=0, r=0)
     sleep(1)
-    movej(q_ready, a=1.2, v=0.1, t=0, r=0.01)
-    movel(q_goal, a=1.2, v=0.1, t=0, r=0)
+    movej(q_ready, a=1.2, v=0.3, t=0, r=0.01)
+    movel(q_goal, a=1.2, v=0.3, t=0, r=0)
 end

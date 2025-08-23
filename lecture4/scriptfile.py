@@ -25,10 +25,10 @@ def sendScriptFile(robot_url, script_path, port=PORT_PRIMARY_CLIENT):
     sendScript(robot_url, script, port)
 
 if __name__ == "__main__":
-    robot_url = "192.168.0.15"
+    robot_url = "192.168.0.31"
     # script_path = "scripts/example_urcaps_schunk.script"
     # script_path = "scripts/example_urcaps_onrobot.script"
-    script_path = "scripts/example_urcaps_robotiq_2.script"
+    script_path = "scripts/urcaps_copy5.script"
     sendScriptFile(robot_url, script_path, PORT_PRIMARY_CLIENT)
 
 
