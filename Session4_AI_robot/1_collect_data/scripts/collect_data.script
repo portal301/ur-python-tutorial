@@ -1,0 +1,29 @@
+def collect_data():
+    server_ip = "192.168.0.87"
+    port = 12345
+    socket_open(server_ip, port, "socket_0")
+
+    socket_send_line("req_data","socket_0")
+    sleep(0.1)
+
+    set_tcp(p[0, 0, 0, 0, 0, 0])
+
+    p_init = get_actual_tcp_pose()
+
+    i = 0
+    while i < 7:
+        buf = socket_read_ascii_float(6, socket_name="socket_0", timeout = 0)
+        p_rel = p[buf[1], buf[2], buf[3], buf[4], buf[5], buf[6]]
+        p_target = pose_trans(p_init, p_rel)
+
+        textmsg("Moving to:", p_target)
+        movej(p_target, a=1.2, v=0.1)
+
+        socket_send_line("reached","socket_0")
+        sleep(0.5)
+        i = i + 1
+    end
+
+    socket_close("socket_0")
+    sleep(0.1)
+end

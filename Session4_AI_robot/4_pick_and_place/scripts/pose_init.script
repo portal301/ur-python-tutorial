@@ -1,0 +1,16 @@
+def pose_init():
+    server_ip = "192.168.0.87"
+    port = 12345
+    socket_open(server_ip,port,"socket_0")
+    socket_send_line("initialize","socket_0")
+    sleep(0.1)
+
+    buf=socket_read_ascii_float(6,socket_name="socket_0", timeout=2)
+    p_init = [buf[1],buf[2],buf[3],buf[4],buf[5],buf[6]]
+    # p_init_ = [1.57, -1.57, 1.57, -1.57, -1.57, 0.0]  # [rad]
+    # # textmsg(p_init_)
+    movej(p_init, a=1.2, v=0.3, t=0, r=0)
+    
+    socket_close("socket_0")
+    sleep(0.1)
+end

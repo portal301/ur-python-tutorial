@@ -1,0 +1,2034 @@
+def pickup():
+    ###################
+    # gripper setup
+    ###################
+    global _hidden_verificationVariable = 0
+    set_target_payload(0.480000, [-0.010000, 0.010000, 0.021000], [0.000453, 0.000453, 0.000453, 0.000000, 0.000000, 0.000000])
+    set_safety_mode_transition_hardness(1)
+    set_standard_analog_input_domain(0, 1)
+    set_standard_analog_input_domain(1, 1)
+    set_tool_analog_input_domain(0, 1)
+    set_tool_analog_input_domain(1, 1)
+    set_analog_outputdomain(0, 0)
+    set_analog_outputdomain(1, 0)
+    set_input_actions_to_default()
+    set_runstate_standard_digital_outputs([3])
+    set_runstate_standard_digital_output_to_value(3, 4)
+    modbus_add_signal("127.0.0.1", 255, 128, 3, "MODBUS_1", False)
+    modbus_set_signal_update_frequency("MODBUS_1", 10)
+    modbus_add_signal("127.0.0.1", 255, 129, 3, "MODBUS_2", False)
+    modbus_set_signal_update_frequency("MODBUS_2", 10)
+    modbus_add_signal("127.0.0.1", 255, 130, 3, "MODBUS_3", False)
+    modbus_set_signal_update_frequency("MODBUS_3", 10)
+    modbus_add_signal("127.0.0.1", 255, 131, 3, "MODBUS_4", False)
+    modbus_set_signal_update_frequency("MODBUS_4", 10)
+    modbus_add_signal("127.0.0.1", 255, 129, 2, "MODBUS_5", False)
+    modbus_set_signal_update_frequency("MODBUS_5", 10)
+    modbus_add_signal("127.0.0.1", 255, 130, 2, "MODBUS_6", False)
+    modbus_set_signal_update_frequency("MODBUS_6", 10)
+    modbus_add_signal("127.0.0.1", 255, 167, 3, "MODBUS_8", False)
+    modbus_set_signal_update_frequency("MODBUS_8", 10)
+    modbus_add_signal("127.0.0.1", 255, 167, 3, "MODBUS_7", False)
+    modbus_set_signal_update_frequency("MODBUS_7", 10)
+    modbus_set_runstate_dependent_choice("MODBUS_1", 0)
+    modbus_set_runstate_dependent_choice("MODBUS_2", 0)
+    modbus_set_runstate_dependent_choice("MODBUS_3", 0)
+    modbus_set_runstate_dependent_choice("MODBUS_4", 0)
+    modbus_set_runstate_dependent_choice("MODBUS_8", 0)
+    modbus_set_runstate_dependent_choice("MODBUS_7", 0)
+    set_tcp(p[0.02, 0.0, 0.175, 0.0, 0.0, 0.0])
+    set_tool_communication(True, 1000000, 2, 1, 1.5, 3.5)
+    set_tool_output_mode(0)
+    set_tool_digital_output_mode(0, 1)
+    set_tool_digital_output_mode(1, 1)
+    set_tool_voltage(24)
+    set_gravity([0.0, 0.0, 9.82])
+    global g_check_pose = p[-0.12793, 0.05753, 0.64268, -0.51535, 0.52907, -0.77557]
+    global Calib_1 = p[0.7338725600185715, -0.12131853532755997, 0.08865559592153008, 3.1302993534318384, -0.02914410615271171, -0.012279125789529593]
+    global grip_goal = p[0.6895275516442622, -0.2658020403035599, 0.0966981179679818, -0.10931571326581313, 3.1322657688152464, 0.022986202972039096]
+    global vacum_goal = p[0.7002370498832811, -0.2624679585595177, 0.09645619817623781, 0.0538099161354147, -3.0595304626263737, -0.021380103579936624]
+    global vacum_test = p[0.7189175041238032, -0.001787731042048165, 0.08587779351380732, 3.1264524009005634, 0.054332184687293436, -0.01231986436859732]
+    # begin: URCap Installation Node
+    #   Source: esaDrive, 1.1.35.F, ECOSPHERE Automation GmbH
+    #   Type: Drives
+    esaDrive = rpc_factory("xmlrpc", "http://127.0.0.1:44332/RPC2")
+    # Check esaDrive XMLRPC-connection
+    if esaDrive.isXmlrpcServerReachable() == False:
+        popup("[esaDrive] ERROR: The connection to the XMLRPC server could not be established.", title = "ERROR", error = True, blocking = True)
+        halt
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function creates a blocking popup and then ends the robot program.
+    # INPUTS:
+    #     esa_errorCode      -> int:             error code number                   (-n .. n)
+    #     esa_drivePlcNr     -> int:             Number of the drivePlc              ( 0 .. n)
+    #     esa_driveNr        -> int:             Number of the drive                 ( 0 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_popupErrorCodeAndHalt(esa_errorCode, esa_drivePlcNr, esa_driveNr):
+        local esa_drivePlcName = ""
+        local esa_driveName = ""
+        if esa_errorCode == -20:
+            esa_drivePlcName = esaDrive_getDrivePlcName(esa_drivePlcNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: No connection to Drive-Plc (", esa_drivePlcName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -21:
+            esa_drivePlcName = esaDrive_getDrivePlcName(esa_drivePlcNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: Syntax error in communication between XmlrpcServer and DrivePlc (", esa_drivePlcName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -25:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: Connection error between robot and drive. Drive not responding. Check cable between robot and drive controller (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -29:
+            popup(str_cat(str_cat("[esaDrive] ERROR: Invalid drivePlc number (", esa_drivePlcNr), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -31:
+            popup(str_cat(str_cat("[esaDrive] ERROR: Invalid drive number (", esa_driveNr), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -40:
+            popup(str_cat(str_cat("[esaDrive] ERROR: Error reading a parameter from the drive controller (", esa_driveNr), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -50:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: The settings in the drive do not match the installation settings. Check the drive settings in the installation tab (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -60:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: A synchronization error has occurred. Please restart the robot controller and the drive (", esa_driveNr), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -80:
+            popup("[esaDrive] ERROR: The robot is not fully turned on. The robot must be turned on to move the drive.", title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -99:
+            popup("[esaDrive] ERROR: No valid license for the URCap esaDrive was found. A trial license is active. With the trial license, the URCap can be tried out.", title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -150:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: The target position of the drive is out of limit (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -300:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: The RTE selector switches on the drive controller housing are not set correctly. Must be set to SW1=1, SW2=1, SW3=0 (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -305:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: The Modbus telegram in the drive controller is set incorrectly. Must be set to Telegram=111. Can be changed in the FESTO AUTOMATION SUITE (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -310:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: An invalid UserUnit is set in the drive controller. Currently only the units of measurement Metric [m, m/s, ...] and Degree [°, °/s, ...] are supported. Can be changed in the FESTO AUTOMATION SUITE (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -315:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: The FactorGroup is set incorrectly in the drive controller. Currently only (Position=-6 , Velocity=-3) is supported. Can be changed in the FESTO AUTOMATION SUITE (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -400:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: The drive controller parameter ENCODER_INCREMENTS is invalid (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -401:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: The drive controller parameter GEAR_DENOMINATOR is invalid (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        elif esa_errorCode == -500:
+            esa_driveName = esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)
+            popup(str_cat(str_cat("[esaDrive] ERROR: Error when reading out the fault buffer of the drive (", esa_driveName), ")."), title = "ERROR", error = True, blocking = True)
+        else:
+            popup(str_cat(str_cat("[esaDrive] ERROR: Unknown error number (", esa_errorCode), ")."), title = "ERROR", error = True, blocking = True)
+        end
+        halt
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns the name of the drivePlc.
+    # INPUTS:
+    #     esa_drivePlcNr      -> int:           Number of the drivePlc                (0 .. n)
+    # OUTPUT:
+    #     return              -> string:        Name of the drivePlc
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getDrivePlcName(esa_drivePlcNr):
+        if esa_drivePlcNr == 0:
+            return "VirtualPLC"
+        else:
+            esaDrive_popupErrorCodeAndHalt(-29, esa_drivePlcNr, -1)
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns IP adress of the drivePlc.
+    # INPUTS:
+    #     esa_drivePlcNr   -> int:     Number of the drivePlc                         (0 .. n)
+    # OUTPUT:
+    #     return           -> string:  IP adress of the drivePlc ("" = error)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getDrivePlcIp(esa_drivePlcNr):
+        if esa_drivePlcNr == 0:
+            return "127.0.0.1"
+        else:
+            esaDrive_popupErrorCodeAndHalt(-29, esa_drivePlcNr, -1)
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns the name of the drive.
+    # INPUTS:
+    #     esa_drivePlcNr     -> int:             Number of the drivePlc               (0 .. n)
+    #     esa_driveNr        -> int:             Number of the drive                  (0 .. n)
+    # OUTPUT:
+    #     return             -> string:          Name of the drive
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr):
+        if esa_drivePlcNr == 0:
+            if esa_driveNr == 0:
+                return "FestoDrive"
+            end
+        end
+        return ""
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns the drivePlcNumber and the driveNumber.
+    # INPUTS:
+    #     esa_driveName   -> string:         Name of the drive
+    # OUTPUT:
+    #     return          -> int-Array[0]:   drivePlcNumber (-1 = error)             (-1 .. n)
+    #                     -> int-Array[1]:   driveNumber (-1 = error)                (-1 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getPlcAndDriveNr(esa_driveName):
+        local esa_drivePlcNr = -1
+        local esa_driveNr = -1
+        if esa_driveName == "FestoDrive":
+            esa_drivePlcNr = 0
+            esa_driveNr = 0
+        end
+        if esa_drivePlcNr == -1:
+            popup(str_cat(str_cat("[esaDrive] ERROR: There is no drive with the name ", esa_driveName), "."), title = "Referenzierung", blocking = True)
+            halt
+        end
+        return [esa_drivePlcNr, esa_driveNr]
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns the homing parameters (params1).
+    # INPUTS:
+    #     esa_drivePlcNr  -> int:            Number of the drivePlc                   ( 0 .. n)
+    #     esa_driveNr     -> int:            Number of the drive                      ( 0 .. n)
+    # OUTPUT:
+    #     return          -> int-Array[0]:   Homing mode                              (0 .. n)
+    #                     -> int-Array[1]:   Approach direction                       (0 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getHomingParams1(esa_drivePlcNr, esa_driveNr):
+        local esa_homingMode = -1
+        local esa_approachDirection = -1
+        if esa_drivePlcNr == 0:
+            if esa_driveNr == 0:
+                esa_homingMode = 0
+                esa_approachDirection = 0
+            end
+        end
+        return [esa_homingMode, esa_approachDirection]
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns the homing parameters (params2).
+    # INPUTS:
+    #     esa_drivePlcNr  -> int:            Number of the drivePlc                  ( 0 .. n)
+    #     esa_driveNr     -> int:            Number of the drive                     ( 0 .. n)
+    # OUTPUT:
+    #     return          -> float-Array[0]: Homing position                         (m)
+    #                     -> float-Array[1]: Homing acceleration                     (m/s2)
+    #                     -> float-Array[2]: Homing deceleration                     (m/s2)
+    #                     -> float-Array[3]: Approache velocity                      (m/s)
+    #                     -> float-Array[4]: Referencing velocity                    (m/s)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getHomingParams2(esa_drivePlcNr, esa_driveNr):
+        local esa_homingPosition = 0.0
+        local esa_homingAcceleration = 0.0
+        local esa_homingDeceleration = 0.0
+        local esa_approacheVelocity = 0.0
+        local esa_referencingVelocity = 0.0
+        if esa_drivePlcNr == 0:
+            if esa_driveNr == 0:
+                esa_homingPosition = 0.0
+                esa_homingAcceleration = 0.4
+                esa_homingDeceleration = 0.4
+                esa_approacheVelocity = 0.1
+                esa_referencingVelocity = 0.001
+            end
+        end
+        return [esa_homingPosition, esa_homingAcceleration, esa_homingDeceleration, esa_approacheVelocity, esa_referencingVelocity]
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns the application resolution of the drive.
+    # INPUTS:
+    #     esa_drivePlcNr  -> int:            Number of the drivePlc                  ( 0 .. n)
+    #     esa_driveNr     -> int:            Number of the drive                     ( 0 .. n)
+    # OUTPUT:
+    #     return          -> float:          Application resolution                  (m)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getAppResolution(esa_drivePlcNr, esa_driveNr):
+        local esa_appResolution = 0.0
+        if esa_drivePlcNr == 0:
+            if esa_driveNr == 0:
+                esa_appResolution = 1.0E-5
+            end
+        end
+        return esa_appResolution
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns the maximum and minimum position (software limit switches) of the drive.
+    # INPUTS:
+    #     esa_drivePlcNr  -> int:            Number of the drivePlc                  ( 0 .. n)
+    #     esa_driveNr     -> int:            Number of the drive                     ( 0 .. n)
+    # OUTPUT:
+    #     return          -> float-Array[0]: Max position                            (m)
+    #                     -> float-Array[1]: Min acceleration                        (m)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getMaxAndMinPosition(esa_drivePlcNr, esa_driveNr):
+        local esa_maxPosition = 0.0
+        local esa_minPosition = 0.0
+        if esa_drivePlcNr == 0:
+            if esa_driveNr == 0:
+                esa_maxPosition = 0.797
+                esa_minPosition = -0.003
+            end
+        end
+        return [esa_maxPosition, esa_minPosition]
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function connects the drivePlc to the robot if the connection does not already exist.
+    # INPUTS:
+    #     esa_drivePlcNr  -> int:           Number of the drivePlc                    (1 .. n)
+    # OUTPUT:
+    #     return          -> int:           Error number (0 = no error)              (-1 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_connectDrivePlc(esa_drivePlcNr):
+        local esa_drivePlcIp = ""
+        local esa_ret = 0
+        esa_ret = esaDrive.isDrivePlcConnected(esa_drivePlcNr)
+        if esa_ret == 1:
+            return 0
+        else:
+            esa_drivePlcIp = esaDrive_getDrivePlcIp(esa_drivePlcNr)
+            esa_ret = esaDrive.connectDrivePlc(esa_drivePlcIp, 44331, esa_drivePlcNr)
+            if esa_ret == 0:
+                return 0
+            else:
+                esaDrive_popupErrorCodeAndHalt(esa_ret, esa_drivePlcNr, -1)
+            end
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function connects drive to the drivePlc if the connection does not already exist.
+    # INPUTS:
+    #     esa_drivePlcNr  -> int:           Number of the drivePlc                   ( 1 .. n)
+    #     esa_driveNr     -> int:           Number of the drive                      ( 0 .. n)
+    # OUTPUT:
+    #     return          -> int:           Error number (0 = no error)              (-1 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_connectDrive(esa_drivePlcNr, esa_driveNr):
+        local esa_drivePlcIp = ""
+        local esa_ret = 0
+        local esa_waitCounter = 0
+        while 1:
+            esa_ret = esaDrive.drive_GetFaultStatus(esa_drivePlcNr, esa_driveNr)
+            if esa_ret >= 0:
+                return 0
+            elif esa_waitCounter >= 30:
+                esaDrive_popupErrorCodeAndHalt(esa_ret, esa_drivePlcNr, esa_driveNr)
+            end
+            sleep(0.1)
+            esa_waitCounter = esa_waitCounter + 1
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function resets the drive.
+    # INPUTS:
+    #     esa_drivePlcNr  -> int:            Number of the drivePlc                  ( 0 .. n)
+    #     esa_driveNr     -> int:            Number of the drive                     ( 0 .. n)
+    # OUTPUT:
+    #     return           -> int:           Error number (0 = no error)             (-1 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_reset(esa_drivePlcNr, esa_driveNr):
+        local esa_ret = -1
+        local esa_waitCounter = 0
+        while 1:
+            esa_ret = esaDrive.drive_SetResetTrigger(esa_drivePlcNr, esa_driveNr)
+            esa_ret = esaDrive.drive_GetFaultStatus(esa_drivePlcNr, esa_driveNr)
+            if esa_ret == 0:
+                return 0
+            end
+            esa_waitCounter = esa_waitCounter + 1
+            if esa_waitCounter > 10:
+                esaDrive_popupErrorCodeAndHalt(esa_ret, esa_drivePlcNr, esa_driveNr)
+            end
+            sleep(0.1)
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function turns on the power of the drive.
+    # INPUTS:
+    #     esa_drivePlcNr  -> int:            Number of the drivePlc                  ( 0 .. n)
+    #     esa_driveNr     -> int:            Number of the drive                     ( 0 .. n)
+    # OUTPUT:
+    #     return           -> int:           Error number (0 = no error)             (-1 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_powerOn(esa_drivePlcNr, esa_driveNr):
+        local esa_ret = -1
+        local esa_waitCounter = 0
+        esa_ret = esaDrive.drive_GetPowerStatus(esa_drivePlcNr, esa_driveNr)
+        if esa_ret == 1:
+            return 0
+        elif esa_ret == 0:
+            esa_ret = esaDrive.drivePlc_CompareInstClonesWithDrive(esa_drivePlcNr, esa_driveNr)
+            if esa_ret < 1:
+                if esa_ret == 0:
+                    esa_ret = -50
+                end
+                esaDrive_popupErrorCodeAndHalt(esa_ret, esa_drivePlcNr, esa_driveNr)
+            end
+            esa_waitCounter = 0
+            while 1:
+                if esa_waitCounter == 0:
+                    esaDrive.drive_SetPowerOff(esa_drivePlcNr, esa_driveNr)
+                    esaDrive.drive_SetPowerOn(esa_drivePlcNr, esa_driveNr)
+                end
+                if 1 == esaDrive.drive_GetPowerStatus(esa_drivePlcNr, esa_driveNr):
+                    return 0
+                end
+                esa_waitCounter = esa_waitCounter + 1
+                if esa_waitCounter > 40:
+                    popup(str_cat(str_cat("[esaDrive] ERROR: The drive ", esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)), " could not be switched to power on state."), title = "ERROR", warning = False, error = True, blocking = True)
+                    esa_waitCounter = 0
+                end
+                sleep(0.1)
+            end
+        else:
+            esaDrive_popupErrorCodeAndHalt(esa_ret, esa_drivePlcNr, esa_driveNr)
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function execute the reference run (homing of the drive).
+    # INPUTS:
+    #     esa_driveName    -> string:         Name of the drive
+    #     esa_conditions   -> int:            Homing conditions                      ( 0 .. n)
+    #     esa_askUser      -> int:            Ask user before start homing           ( 0 .. n)
+    # OUTPUT:
+    #     return           -> int-Array[0]:   Error number (0 = no error)            (-1 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_homing(esa_driveName, esa_conditions, esa_askUser):
+        local esa_ret = -1
+        local esa_plcAndDriveNr = [-1, -1]
+        local esa_drivePlcNr = -1
+        local esa_driveNr = -1
+        local esa_counter = 0
+
+        esa_plcAndDriveNr = esaDrive_getPlcAndDriveNr(esa_driveName)
+        esa_drivePlcNr = esa_plcAndDriveNr[0]
+        esa_driveNr = esa_plcAndDriveNr[1]
+        esa_ret = esaDrive.drive_GetHomingStatus(esa_drivePlcNr, esa_driveNr)
+        if esa_ret == 1 and esa_conditions == 1:
+            return 0
+        else:
+            esaDrive_connectDrivePlc(esa_drivePlcNr)
+            esaDrive_connectDrive(esa_drivePlcNr, esa_driveNr)
+            esaDrive_reset(esa_drivePlcNr, esa_driveNr)
+            esaDrive_powerOn(esa_drivePlcNr, esa_driveNr)
+            esa_ret = esaDrive.drive_GetHomingStatus(esa_drivePlcNr, esa_driveNr)
+            if esa_ret == 1 and esa_conditions == 1:
+                return 0
+            else:
+                local esa_homingParams1 = esaDrive_getHomingParams1(esa_drivePlcNr, esa_driveNr)
+                local esa_homingMode = esa_homingParams1[0]
+                local esa_approachDirection = esa_homingParams1[1]
+                local esa_homingParams2 = esaDrive_getHomingParams2(esa_drivePlcNr, esa_driveNr)
+                local esa_homingPosition = esa_homingParams2[0]
+                local esa_homingAcceleration = esa_homingParams2[1]
+                local esa_homingDeceleration = esa_homingParams2[2]
+                local esa_approacheVelocity = esa_homingParams2[3]
+                local esa_referencingVelocity = esa_homingParams2[4]
+                if esa_askUser == 1:
+                    popup(str_cat(str_cat("[esaDrive] The drive ", esaDrive_getDriveName(esa_drivePlcNr, esa_driveNr)), " is not referenced (homed). Press Continue to start the reference movement now."), title = "Homing", blocking = True)
+                end
+                esaDrive.drive_ExecuteHoming(esa_drivePlcNr, esa_driveNr, esa_homingMode, esa_homingPosition, esa_homingAcceleration, esa_homingDeceleration, esa_approachDirection, esa_approacheVelocity, esa_referencingVelocity)
+                sleep(1.0)
+                esa_counter = 0
+                while 1:
+                    esa_ret = esaDrive.drive_GetHomingStatus(esa_drivePlcNr, esa_driveNr)
+                    if (esa_ret == 1):
+                        break
+                    end
+                    if (esa_ret < 0):
+                        esaDrive_popupErrorCodeAndHalt(esa_ret, esa_drivePlcNr, esa_driveNr)
+                    end
+                    sleep(0.1)
+                end
+            end
+        end
+        return 0
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function moves the selected drive to the target position (absolute positioning).
+    # This Function is for internal purposes only.
+    # Do not call this function from the user program.
+    # INPUTS:
+    #     esa_driveName   -> string:         Name of the drive
+    #     pos_vel_acc_dec -> float-Array[0]: Target position                         (m)
+    #                     -> float-Array[1]: Velocity                                (m/s)
+    #                     -> float-Array[2]: Acceleration                            (m/s2)
+    #                     -> float-Array[3]: Deceleration                            (m/s2)
+    #     esa_seq         -> bool-Array[0]:  Wait until position is reached = 0      (0 .. 1)
+    # OUTPUT:
+    #     return          -> int-Array[0]:   Error number (0 = no error)             (-1 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_moveAbsolute_internal(esa_driveName, pos_vel_acc_dec, esa_seq):
+        local esa_targetPosition = pos_vel_acc_dec[0]
+        local esa_velocity = pos_vel_acc_dec[1]
+        local esa_acceleration = pos_vel_acc_dec[2]
+        local esa_deceleration = pos_vel_acc_dec[3]
+        local esa_sequenceMode = esa_seq[0]
+        local esa_plcAndDriveNr = [-1, -1]
+        local esa_drivePlcNr = -1
+        local esa_driveNr = -1
+        local esa_maxAndMinPosition = [0.0, 0.0]
+        local esa_maxPosition = 0.0
+        local esa_minPosition = 0.0
+        local esa_moveRet = 0
+        local esa_getPositionRet = [0.0, 0.0]
+        local esa_appResolution = 0.0
+        local esa_positionWindowMax = 0.0
+        local esa_positionWindowMin = 0.0
+        local esa_driveCurrentPosition = 0.0
+        local esa_driveStatusBits = [0, 0, 0, 0, 0, 0]
+        local esa_firstFaultCheck = True
+        local esa_drivePowerStatus = False
+        local esa_driveFaultStatus = False
+        local esa_driveInPosition = False
+        local esa_driveStationary = False
+        local esa_homingStatus = False
+        local esa_driveInPositionWindow = False
+
+        esa_plcAndDriveNr = esaDrive_getPlcAndDriveNr(esa_driveName)
+        esa_drivePlcNr = esa_plcAndDriveNr[0]
+        esa_driveNr = esa_plcAndDriveNr[1]
+
+        esa_maxAndMinPosition = esaDrive_getMaxAndMinPosition(esa_drivePlcNr, esa_driveNr)
+        esa_maxPosition = esa_maxAndMinPosition[0]
+        esa_minPosition = esa_maxAndMinPosition[1]
+        if (esa_targetPosition > esa_maxPosition) or (esa_targetPosition < esa_minPosition):
+            esaDrive_popupErrorCodeAndHalt(-150, esa_drivePlcNr, esa_driveNr)
+        end
+
+        esa_appResolution = esaDrive_getAppResolution(esa_drivePlcNr, esa_driveNr)
+        esa_positionWindowMax = esa_targetPosition + esa_appResolution
+        esa_positionWindowMin = esa_targetPosition - esa_appResolution
+
+        # Loop until the command is executed
+        while 1:
+            esa_driveStatusBits = esaDrive.drive_GetStatusBits(esa_drivePlcNr, esa_driveNr)
+            esa_drivePowerStatus = 0 < esa_driveStatusBits[1]
+            esa_driveFaultStatus = 0 < esa_driveStatusBits[2]
+            esa_driveInPosition = 0 < esa_driveStatusBits[3]
+            esa_driveStationary = 0 < esa_driveStatusBits[4]
+            esa_homingStatus = 0 < esa_driveStatusBits[5]
+            if esa_drivePowerStatus == False or esa_driveFaultStatus == True or esa_homingStatus == False:
+                if esa_firstFaultCheck == False and esa_driveFaultStatus == True:
+                    popup(str_cat(str_cat("[esaDrive] Drive error (", esa_driveNr), ")."), title = "ERROR", error = True, blocking = True)
+                end
+                esaDrive_connectDrivePlc(esa_drivePlcNr)
+                esaDrive_connectDrive(esa_drivePlcNr, esa_driveNr)
+                esaDrive_reset(esa_drivePlcNr, esa_driveNr)
+                esaDrive_powerOn(esa_drivePlcNr, esa_driveNr)
+                esaDrive_homing(esa_driveName, 1, 1)
+            else:
+                esa_getPositionRet = esaDrive.drive_GetPosition(esa_drivePlcNr, esa_driveNr)
+                esa_driveCurrentPosition = esa_getPositionRet[1]
+                if  esa_driveStationary == True and esa_driveInPosition == True and esa_driveCurrentPosition <= esa_positionWindowMax and esa_driveCurrentPosition >= esa_positionWindowMin:
+                    return 0
+                end
+            end
+            esa_firstFaultCheck = False
+
+            esa_moveRet = esaDrive.drive_MoveAbsolute(esa_drivePlcNr, esa_driveNr, esa_targetPosition, esa_velocity, esa_acceleration, esa_deceleration)
+            if esa_moveRet < 0:
+                esaDrive_popupErrorCodeAndHalt(esa_moveRet, esa_drivePlcNr, esa_driveNr)
+            end
+            if esa_sequenceMode == 1:
+                return 0
+            end
+            while 1:
+                esa_driveStatusBits = esaDrive.drive_GetStatusBits(esa_drivePlcNr, esa_driveNr)
+                esa_drivePowerStatus = 0 < esa_driveStatusBits[1]
+                esa_driveFaultStatus = 0 < esa_driveStatusBits[2]
+                esa_driveInPosition = 0 < esa_driveStatusBits[3]
+                esa_driveStationary = 0 < esa_driveStatusBits[4]
+                esa_getPositionRet = esaDrive.drive_GetPosition(esa_drivePlcNr, esa_driveNr)
+                esa_driveCurrentPosition = esa_getPositionRet[1]
+                esa_driveInPositionWindow = esa_driveCurrentPosition <= esa_positionWindowMax and esa_driveCurrentPosition >= esa_positionWindowMin
+                if esa_driveStationary == True and esa_driveInPosition == True and esa_driveInPositionWindow == True:
+                    return 0
+                elif esa_driveStationary == True and esa_driveInPosition == True and esa_driveInPositionWindow == False:
+                    break
+                elif esa_driveStatusBits[0] < 0 or esa_drivePowerStatus == False or esa_driveFaultStatus == True:
+                    break
+                end
+                if True == esaDrive_checkThreadMoveAbsolute_quite(esa_drivePlcNr, esa_driveNr):
+                    return 0
+                end
+                sync()
+            end
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function checks whether the threadMoveAbsolute should be terminated.
+    # INPUTS:
+    #     esa_drivePlcNr     -> int:             Number of the drivePlc               (0 .. n)
+    #     esa_driveNr        -> int:             Number of the drive                  (0 .. n)
+    # OUTPUT:
+    #     return             -> bool:            false=notQuitThread, true=quitThread
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_checkThreadMoveAbsolute_quite(esa_drivePlcNr, esa_driveNr):
+        if esa_drivePlcNr == 0:
+            if esa_driveNr == 0:
+                return esa_threadMoveAbsolute_quit_0_0
+            end
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Thread moveAbsolute drivePlc_0 drive_0
+    # This thread is for internal purposes only.
+    # Do not call this thread from the user program.
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    local esa_threadMoveAbsolute_driveName_0_0 = ""
+    local esa_threadMoveAbsolute_pos_vel_acc_dec_0_0 = [0.0, 0.0, 0.0, 0.0]
+    local esa_threadMoveAbsolute_quit_0_0 = False
+    local esa_threadMoveAbsolute_running_0_0 = False
+    thread esa_threadMoveAbsolute_0_0():
+        esa_threadMoveAbsolute_quit_0_0 = False
+        esaDrive_moveAbsolute_internal(esa_threadMoveAbsolute_driveName_0_0, esa_threadMoveAbsolute_pos_vel_acc_dec_0_0, [0])
+        enter_critical
+        esa_threadMoveAbsolute_running_0_0 = False
+        esa_threadMoveAbsolute_quit_0_0 = False
+        exit_critical
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function moves the selected drive to the target position (absolute positioning).
+    # INPUTS:
+    #     esa_driveName   -> string:         Name of the drive
+    #     pos_vel_acc_dec -> float-Array[0]: Target position                         (m)
+    #                     -> float-Array[1]: Velocity                                (m/s)
+    #                     -> float-Array[2]: Acceleration                            (m/s2)
+    #                     -> float-Array[3]: Deceleration                            (m/s2)
+    #     esa_seq         -> bool-Array[0]:  Wait until position is reached = 0      (0 .. 1)
+    # OUTPUT:
+    #     return          -> int-Array[0]:   Error number (0 = no error)             (-1 .. n)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_moveAbsolute(esa_driveName, pos_vel_acc_dec, esa_seq):
+        local esa_plcAndDriveNr = [-1, -1]
+        local esa_drivePlcNr = -1
+        local esa_driveNr = -1
+
+        esa_plcAndDriveNr = esaDrive_getPlcAndDriveNr(esa_driveName)
+        esa_drivePlcNr = esa_plcAndDriveNr[0]
+        esa_driveNr = esa_plcAndDriveNr[1]
+        if esa_drivePlcNr == 0:
+            if esa_driveNr == 0:
+                local threadHandle = -1
+                while 1:
+                    enter_critical
+                    if esa_threadMoveAbsolute_running_0_0 == True:
+                        esa_threadMoveAbsolute_quit_0_0 = True
+                    end
+                    exit_critical
+                    enter_critical
+                    if esa_threadMoveAbsolute_running_0_0 == False:
+                        esa_threadMoveAbsolute_driveName_0_0 = esa_driveName
+                        esa_threadMoveAbsolute_pos_vel_acc_dec_0_0 = pos_vel_acc_dec
+                        esa_threadMoveAbsolute_running_0_0 = True
+                        threadHandle = run esa_threadMoveAbsolute_0_0()
+                    end
+                    exit_critical
+                    if threadHandle >= 0:
+                        if esa_seq[0] == 0:
+                            join threadHandle
+                        end
+                        return 0
+                    end
+                    sync()
+                end
+            end
+        end
+    end
+
+    # ++++++++++++++++++++++++++++++esaDrive++++++++++++++++++++++++++++++++++++++++++++++++++
+    # Function returns the current position value of the drive.
+    # INPUTS:
+    #     esa_driveName   -> string:         Name of the drive
+    # OUTPUT:
+    #     return          -> float:          Current position of the drive              (m)
+    # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def esaDrive_getPosition(esa_driveName):
+        local esa_plcAndDriveNr = [-1, -1]
+        local esa_drivePlcNr = -1
+        local esa_driveNr = -1
+        local esa_getPositionRet = [0.0, 0.0]
+        local esa_status = 0.0
+        local esa_driveCurrentPosition = 0.0
+
+        esa_plcAndDriveNr = esaDrive_getPlcAndDriveNr(esa_driveName)
+        esa_drivePlcNr = esa_plcAndDriveNr[0]
+        esa_driveNr = esa_plcAndDriveNr[1]
+
+        # Loop until the command is executed
+        while 1:
+            esa_getPositionRet = esaDrive.drive_GetPosition(esa_drivePlcNr, esa_driveNr)
+            esa_status = esa_getPositionRet[0]
+            esa_driveCurrentPosition = esa_getPositionRet[1]
+            if esa_status == 0.0:
+                return esa_driveCurrentPosition
+            end
+            esaDrive_connectDrivePlc(esa_drivePlcNr)
+            esaDrive_connectDrive(esa_drivePlcNr, esa_driveNr)
+            sync()
+        end
+    end
+
+    # end: URCap Installation Node
+    # begin: URCap Installation Node
+    #   Source: OnRobot, 5.14.3, OnRobot A/S
+    #   Type: OnRobot 설정
+    if (False):
+        global twofg_Busy = 0
+        global twofg_Force = 0
+        global twofg_Grip_detected = 0
+        global twofg_Width_ext = 0
+        global twofg_Width_int = 0
+    end
+    ON_CONN_SHIFT_BOOL = 64
+    ON_CONN_SHIFT_INT = 24
+    ON_CONN_SHIFT_FLOAT = 24
+    ON_CONN_REG_SUM_BOOL = 4
+    ON_CONN_REG_SUM_INT = 5
+    ON_CONN_REG_SUM_FLOAT = 2
+    ON_TOOL_SHIFT_BOOL = 64
+    ON_TOOL_SHIFT_INT = 25
+    ON_TOOL_SHIFT_FLOAT = 24
+    ON_TOOL_SHIFT_BOOL_ARR = [64, 68, 68]
+    ON_TOOL_SHIFT_INT_ARR = [25, 29, 29]
+    ON_TOOL_SHIFT_FLOAT_ARR = [24, 26, 26]
+    ON_TOOL_REG_SUM_BOOL = 4
+    ON_TOOL_REG_SUM_INT = 4
+    ON_TOOL_REG_SUM_FLOAT = 2
+    ON_REGISTERS_SPEEDL_FLOAT = 0
+    ON_REG_USE_TOOL = False
+    ON_DI_SINGLE = 0
+    ON_DI_PRIMARY = 1
+    ON_DI_SECONDARY = 2
+    ON_DI_DUAL = 3
+    on_robot_type = 10
+    on_robot_cycle = 2.0
+    on_conn_ip = "localhost"
+    on_tool_ip = "localhost"
+    on_device_socket_port = 51234
+    on_conn_xmlrpc = rpc_factory("xmlrpc", "http://localhost:41414")
+    on_tool_xmlrpc = rpc_factory("xmlrpc", "http://localhost:41414")
+    on_RPC = rpc_factory("xmlrpc", "http://127.0.0.1:31416")
+    ON_DEBUG_LOG = False
+    on_isMetric = True
+    on_toolConnector = True
+    on_ioqc = False
+    on_dual = False
+    on_computebox = False
+    on_devices = 1
+    on_gripper = [False, False, False]
+    on_custom_tcp_id = "none"
+    on_custom_tcp_enabled = False
+    on_ft = False
+    twofg_index = 0
+    on_gripper[twofg_index] = True
+    #======    OnRobot Globals    ======#
+
+    ON_MATH_PI = 3.141593
+    ON_ZEROPOSE = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    ON_ZEROFRAME = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    ON_ZERO3D = [0.0, 0.0, 0.0]
+    ON_ZERO6D = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    ON_ZERO8D = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    ON_FALSE3D = [False, False, False]
+    ON_FALSE6D = [False, False, False, False, False, False]
+    ON_FALSE8D = [False, False, False, False, False, False, False, False]
+    global on_return = 0
+    on_speedL = ON_ZERO6D
+    on_speedBase = ON_ZERO6D
+    on_speedVect = ON_ZERO6D
+    on_speedExtra = ON_ZERO6D
+    on_speedCB = ON_ZERO6D
+    on_speedGecko = ON_ZERO6D
+    on_RTDE_error = 0
+    on_RTDE_tool_error = 0
+    on_dataProcess_thrd = 0
+    ON_DEVICE_ID_MISSING = 0
+    ON_INIT_WATCHDOG_HZ = 5
+    ON_INIT_TIMEOUT = 500
+    on_robot_TCP_offset = ON_ZEROFRAME
+    on_tcp_offset_actual = ON_ZEROFRAME
+    on_cog_actual = ON_ZEROFRAME
+    on_mass_actual = 0.0
+    on_robot_mount = [0.0, 0.0]
+
+    #======    End of OnRobot Globals    ======#
+    #======    OnRobot twofg Globals    ======#
+
+    twofg_DEVICE_ID_twofg7 = 192
+    if ON_DEBUG_LOG:
+        textmsg("twofg Dual: False, Index: ", twofg_index)
+        if False:
+            twofg_index = -1
+        end
+    end
+    twofg_Width_ext_arr = [0, 0, 0]
+    twofg_Width_int_arr = [0, 0, 0]
+    twofg_Force_arr = [0, 0, 0]
+    twofg_device_id_arr = [0, 0, 0]
+    twofg_product_code_arr = [0, 0, 0]
+    twofg_Status_arr = [0, 0, 0]
+    twofg_Grip_detected_arr = [False, False, False]
+    twofg_Busy_arr = [False, False, False]
+    twofg_data_error_arr = [0, 0, 0]
+    twofg_fingertip_arr = [0, 0, 0]
+    twofg_Grip_guard_arr = [False, False, False]
+
+    twofg_Width_ext = 0
+    twofg_Width_int = 0
+    twofg_Force = 0
+    twofg_Busy = False
+    twofg_Grip_detected = False
+    def get_twofg_Busy():
+        return twofg_Busy
+    end
+    def get_twofg_Width_ext():
+        return twofg_Width_ext
+    end
+    def get_twofg_Width_int():
+        return twofg_Width_int
+    end
+    def get_twofg_Grip_detected():
+        return twofg_Grip_detected
+    end
+    def get_twofg_Force():
+        return twofg_Force
+    end
+
+
+    #======    End of OnRobot twofg Globals    ======#
+    #======    OnRobot Interface Messages    ======#
+
+    on_devices_primary_log = "OnRobot 장치"
+    on_devices_secondary_log = "OnRobot 보조 장치"
+    on_program_halted = "<br>프로그램이 중지되었습니다."
+    on_device_error_title = "OnRobot - 장치 오류"
+    on_install_error = "OnRobot 설정이 올바르지 않습니다.<br>설치 탭의 OnRobot 설정 페이지에서 상태를 확인하십시오.<br>프로그램이 중지되었습니다."
+    on_device_missing = "연결된 장치가 없습니다.<br>프로그램이 중지되었습니다."
+    cb_device_missing = "연결된 OnRobot Compute Box가 없습니다.<br>프로그램이 중지되었습니다."
+    ft_device_missing = "감지된 OnRobot FT 서버 또는 사이센스가 없습니다. <br>프로그램이 중지되었습니다."
+    hex_device_missing = "연결된 HEX 센서가 없습니다.<br>프로그램이 중지되었습니다."
+    rg2ft_device_missing = "연결된 RG2-FT Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    rg_device_missing = "연결된 RG Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    vg_device_missing = "연결된 VG Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    gg_device_missing = "연결된 Gecko Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    sg_device_missing = "연결된 Soft Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    tfg_device_missing = "연결된 3FG Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    sdr_device_missing = "연결된 OnRobot Sander가 없습니다.<br>프로그램이 중지되었습니다."
+    twofg_device_missing = "연결된 2FG Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    vgp_device_missing = "연결된 VGP Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    mg_device_missing = "연결된 Magnetic Gripper가 없습니다.<br>프로그램이 중지되었습니다."
+    fgp_device_missing = "연결된 2FGP20 그리퍼가 없습니다.<br>프로그램이 중지되었습니다."
+    on_xmlrpc_start_ip = "OnRobot XML-RPC 서버에 연결 중:"
+    on_java_comm_error_textmsg_title = "OnRobot - 통신 오류:"
+    on_java_comm_controlsocket_open_error = "’javaSocket’ 소켓 열기에 실패했습니다."
+    on_java_comm_error_title = "OnRobot - 통신 오류"
+    on_java_comm_socket_open_error = "URCap과의 연결 시간을 초과했습니다.<br>설치 탭의 OnRobot 설정 페이지에서 상태를 확인하십시오.<br>프로그램이 중지되었습니다."
+    on_rtde_feed_error_textmsg_title = "OnRobot - RTDE 오류:"
+    on_rtde_feed_error = "RTDE 피드 오류입니다. OnRobot 장치 수가 일치하지 않습니다.<br>프로그램이 중지되었습니다."
+    on_rtde_feed_tool_error = "도구 RTDE 피드 오류입니다. OnRobot 장치 수가 일치하지 않습니다.<br>프로그램이 중지되었습니다."
+    on_rtde_feed_open_error_textmsg = "’rtdeFeed’ 소켓 열기에 실패했습니다."
+    on_rtde_feed_error_title = "OnRobot - RTDE 오류"
+    on_rtde_feed_count_error = "유효하지 않은 RTDE 오프셋 설정이 감지되었습니다. 설정 탭의 OnRobot 설정 페이지에서 RTDE 오프셋을 확인하십시오.<br>프로그램이 중지되었습니다."
+    on_rtde_feed_open_error = "장치와의 연결 시간을 초과했습니다.<br>OnRobot 장치가 작동 중인지 점검하고 설치 탭의 OnRobot 설정 페이지에서 상태를 확인하십시오."
+
+    #======    End of OnRobot Interface Messages    ======#
+    #======    OnRobot Interface    ======#
+
+    on_portopened_javaSocket = False
+    on_rtde_feed_opened = False
+    on_dataProcess_running = False
+    def on_missing():
+        popup(on_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def cb_missing():
+        popup(cb_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def ft_missing():
+        popup(ft_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def hex_missing():
+        popup(hex_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def rg2ft_missing():
+        popup(rg2ft_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def rg_missing():
+        popup(rg_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def vg_missing():
+        popup(vg_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def gg_missing():
+        popup(gg_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def sg_missing():
+        popup(sg_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def tfg_missing():
+        popup(tfg_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def sdr_missing():
+        popup(sdr_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def twofg_missing():
+        popup(twofg_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def vgp_missing():
+        popup(vgp_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def mg_missing():
+        popup(mg_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def fgp_missing():
+        popup(fgp_device_missing, title = on_device_error_title, error = True, blocking = False)
+        halt
+    end
+    def on_portclose_javaSocket():
+        socket_close("javaSocket")
+        on_portopened_javaSocket = False
+    end
+    def on_portopen_javaSocket():
+        on_portclose_javaSocket()
+        on_portopened_javaSocket = socket_open("127.0.0.1", 44005, "javaSocket")
+        if not on_portopened_javaSocket:
+            textmsg(on_java_comm_error_textmsg_title, on_java_comm_controlsocket_open_error)
+            popup(on_java_comm_socket_open_error, title = on_java_comm_error_title, error = True, blocking = False)
+            halt
+        end
+    end
+    on_conn_rtde_feed_name = "rtdeFeedConn"
+    on_tool_rtde_feed_name = "rtdeFeedTool"
+    def on_rtde_feed_close(rtdeFeedName):
+        socket_close(rtdeFeedName)
+        on_rtde_feed_opened = False
+    end
+    def on_rtde_feed_open(deviceIP, rtdeFeedName, regStart, regSum, regSpeedl):
+        on_rtde_feed_close(rtdeFeedName)
+        if ((regStart[0] + regSum[0]) > 128) or ((regStart[1] + regSum[1]) > 48) or ((regStart[2] + regSum[2]) > 48):
+            popup(on_rtde_feed_count_error, title = on_rtde_feed_error_title, error = True, blocking = False)
+            textmsg(str_cat("RegStart: ", regStart), str_cat("  -  RegSum: ", regSum))
+            halt
+        end
+        on_rtde_feed_opened = socket_open(deviceIP, on_device_socket_port, rtdeFeedName)
+        if not on_rtde_feed_opened:
+            on_rtde_feed_opened = socket_open(deviceIP, on_device_socket_port, rtdeFeedName)
+        end
+        if not on_rtde_feed_opened:
+            textmsg(on_rtde_feed_error_textmsg_title, on_rtde_feed_open_error_textmsg)
+            popup(on_rtde_feed_open_error, title = on_rtde_feed_error_title, error = True, blocking = False)
+            halt
+        end
+        socket_send_int(regStart[0], rtdeFeedName)
+        socket_send_int(regSum[0], rtdeFeedName)
+        socket_send_int(regStart[1], rtdeFeedName)
+        socket_send_int(regSum[1], rtdeFeedName)
+        socket_send_int(regStart[2], rtdeFeedName)
+        socket_send_int(regSum[2], rtdeFeedName)
+        socket_send_int(regSpeedl, rtdeFeedName)
+        socket_send_int(on_devices, rtdeFeedName)
+    end
+    def on_dataRead():
+        enter_critical
+        on_RTDE_error = read_input_integer_register(ON_CONN_SHIFT_INT)
+        if (ON_REG_USE_TOOL):
+            on_RTDE_tool_error = read_input_integer_register(ON_TOOL_SHIFT_INT_ARR[0])
+        end
+        exit_critical
+    end
+    def on_set_rtde_watchdog(updateHz = ON_INIT_WATCHDOG_HZ):
+        local effect = "stop"
+        if (updateHz < 1):
+            effect = "ignore"
+        end
+        watchdog_conn_reg_str = str_cat("input_int_register_", ON_CONN_SHIFT_INT)
+        rtde_set_watchdog(watchdog_conn_reg_str, updateHz, effect)
+        if (ON_REG_USE_TOOL):
+            watchdog_tool_reg_str = str_cat("input_int_register_", ON_TOOL_SHIFT_INT_ARR[0])
+            rtde_set_watchdog(watchdog_tool_reg_str, updateHz, effect)
+        end
+        if ON_DEBUG_LOG:
+            local update_str = str_cat(" " + effect + " watchdog set to [Hz]: ", updateHz)
+            textmsg(watchdog_conn_reg_str, update_str)
+            if (ON_REG_USE_TOOL):
+                local update_str = str_cat(" " + effect + " watchdog set to [Hz]: ", updateHz)
+                textmsg(watchdog_tool_reg_str, update_str)
+            end
+        end
+    end
+    def on_speedCB_get():
+        return[on_speedCB[0], on_speedCB[1], on_speedCB[2], on_speedCB[3], on_speedCB[4], on_speedCB[5]]
+    end
+    def on_speedGecko_get():
+        local speedExtra = ON_ZERO6D
+        if on_speedl_for_gecko:
+            speedExtra = [on_speedGecko[0], on_speedGecko[1], on_speedGecko[2], on_speedGecko[3], on_speedGecko[4], on_speedGecko[5]]
+        end
+        return speedExtra
+    end
+    def on_speedGecko_set(speedGecko):
+        on_speedGecko = [speedGecko[0], speedGecko[1], speedGecko[2], speedGecko[3], speedGecko[4], speedGecko[5]]
+    end
+    thread on_dataProcess_thread():
+        if ON_DEBUG_LOG:
+            textmsg("Starting on_dataRead thread")
+        end
+        local error = False
+        on_dataProcess_running = True
+        sync()
+        while on_dataProcess_running:
+            sync()
+            on_dataRead()
+            error = on_error((on_RTDE_error < 0), on_rtde_feed_error, on_rtde_feed_error_title, error)
+            error = on_error((ON_REG_USE_TOOL and (on_RTDE_tool_error < 0)), on_rtde_feed_tool_error, on_rtde_feed_error_title, error)
+            on_dataProcess_running = not error
+        end
+        if error:
+            halt
+        end
+        if ON_DEBUG_LOG:
+            textmsg("Stopping on_dataRead thread")
+        end
+    end
+    thread on_set_watchdog_thread():
+        sleep(2)
+        on_set_rtde_watchdog(updateHz = ON_INIT_WATCHDOG_HZ)
+        sleep(1 / ON_INIT_WATCHDOG_HZ)
+        on_dataProcess_running = False
+        kill on_dataProcess_thrd
+    end
+
+    #======    End of OnRobot Interface    ======#
+    #======    OnRobot QC Setup Tool Connector    ======#
+
+    def tc_setup_tool():
+        if ON_DEBUG_LOG:
+            textmsg("QC Setup Tool Connector start...")
+        end
+        set_tool_voltage(24)
+
+        set_tool_communication(True, 1000000, 2, 1, 1.5, 3.5)
+
+        if ON_DEBUG_LOG:
+            textmsg("QC Setup Tool Connector end.")
+        end
+    end
+
+    #======    End of OnRobot QC Setup Tool Connector    ======#
+    #======    OnRobot twofg Interface    ======#
+
+    twofg_dataRead_running = False
+    def twofg_dataRead_RTDE(tool_index):
+        local reg_offset_bool = ON_TOOL_SHIFT_BOOL_ARR[tool_index]
+        local reg_offset_int = ON_TOOL_SHIFT_INT_ARR[tool_index]
+        local reg_offset_float = ON_TOOL_SHIFT_FLOAT_ARR[tool_index]
+        enter_critical
+        floatRegDummy = read_input_float_register(reg_offset_float + 0)
+        twofg_Width_ext_arr[tool_index] = floatRegDummy
+        floatRegDummy = read_input_float_register(reg_offset_float + 1)
+        twofg_Width_int_arr[tool_index] = floatRegDummy
+        intRegDummy = read_input_integer_register(reg_offset_int + 0)
+        twofg_device_id_arr[tool_index] = intRegDummy
+        intRegDummy = read_input_integer_register(reg_offset_int + 1)
+        twofg_product_code_arr[tool_index] = intRegDummy
+        intRegDummy = read_input_integer_register(reg_offset_int + 2)
+        twofg_Status_arr[tool_index] = intRegDummy
+        intRegDummy = read_input_integer_register(reg_offset_int + 3)
+        twofg_Force_arr[tool_index] = intRegDummy
+        boolRegDummy = read_input_boolean_register(reg_offset_bool + 0)
+        twofg_Busy_arr[tool_index] = boolRegDummy
+        boolRegDummy = read_input_boolean_register(reg_offset_bool + 1)
+        twofg_Grip_detected_arr[tool_index] = boolRegDummy
+        exit_critical
+    end
+    thread twofg_dataRead_thread():
+        if ON_DEBUG_LOG:
+            textmsg("Starting twofg_dataRead thread")
+        end
+        while twofg_dataRead_running:
+            sync()
+            if (twofg_index == ON_DI_DUAL):
+                twofg_dataRead_RTDE(ON_DI_PRIMARY)
+                twofg_dataRead_RTDE(ON_DI_SECONDARY)
+            else:
+                twofg_dataRead_RTDE(twofg_index)
+            end
+        end
+        if ON_DEBUG_LOG:
+            textmsg("Stopping twofg_dataRead thread")
+        end
+    end
+
+    #======    End of OnRobot twofg Interface    ======#
+    #======    OnRobot TCP Messages    ======#
+
+    on_tcp_log_msg_default = "OnRobot: 로봇 TCP 오프셋 설정:"
+    on_tcp_log_msg_primary = "OnRobot: 로봇 TCP 오프셋 주 설정:"
+    on_tcp_log_msg_secondary = "OnRobot: 로봇 TCP 오프셋 보조 설정:"
+
+    #======    End of OnRobot TCP Messages    ======#
+    #======    OnRobot TCP    ======#
+
+    on_tcp_offset_actual = ON_ZEROFRAME
+    on_tcp_offset_primary = ON_ZEROFRAME
+    on_tcp_static_primary = ON_ZEROFRAME
+    on_tcp_dynamic_primary = ON_ZEROFRAME
+    on_tcp_adapters = ON_ZEROFRAME
+    on_tcp_qc_primary = ON_ZEROFRAME
+    on_tcp_base_primary = ON_ZEROFRAME
+    on_tcp_gripper_static_primary = ON_ZEROFRAME
+    on_tcp_workpiece_primary = ON_ZEROFRAME
+    on_tcp_gripper_dynamic_primary = ON_ZEROFRAME
+    on_tcp_gripper_primary = ON_ZEROFRAME
+    on_tcp_offset_secondary = ON_ZEROFRAME
+    on_tcp_static_secondary = ON_ZEROFRAME
+    on_tcp_dynamic_secondary = ON_ZEROFRAME
+    on_tcp_qc_secondary = ON_ZEROFRAME
+    on_tcp_base_secondary = ON_ZEROFRAME
+    on_tcp_gripper_static_secondary = ON_ZEROFRAME
+    on_tcp_workpiece_secondary = ON_ZEROFRAME
+    on_tcp_gripper_dynamic_secondary = ON_ZEROFRAME
+    on_tcp_gripper_secondary = ON_ZEROFRAME
+    on_tcp_custom_preset_assigned = False
+    on_tcp_custom_preset = ON_ZEROFRAME
+    def on_tcp_init_adapters():
+        if ON_DEBUG_LOG:
+            textmsg("TCP Init Adapters start..")
+        end
+        enter_critical
+        on_tcp_adapters = ON_ZEROFRAME
+        local adapterCount = length(on_tcp_adapters_array)
+        local i = 0
+        while (i < adapterCount):
+            on_tcp_adapters = pose_trans(on_tcp_adapters, on_tcp_adapters_array[i])
+            i = i + 1
+        end
+        exit_critical
+        if ON_DEBUG_LOG:
+            textmsg("TCP Init Adapters end.")
+        end
+    end
+    def on_tcp_update_primary():
+        if ON_DEBUG_LOG:
+            textmsg("TCP Update Primary start..")
+        end
+        on_tcp_gripper_dynamic_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        enter_critical
+        on_tcp_dynamic_primary = pose_trans(on_tcp_static_primary, on_tcp_gripper_dynamic_primary)
+        on_tcp_offset_primary = pose_trans(on_tcp_dynamic_primary, on_tcp_workpiece_primary)
+        exit_critical
+        if ON_DEBUG_LOG:
+            textmsg("TCP Update Primary end.")
+        end
+    end
+    def on_tcp_init_primary():
+        if ON_DEBUG_LOG:
+            textmsg("TCP Init Primary start..")
+        end
+        enter_critical
+        on_tcp_base_primary = pose_trans(on_tcp_adapters, on_tcp_qc_primary)
+        on_tcp_static_primary = pose_trans(on_tcp_base_primary, on_tcp_gripper_static_primary)
+        exit_critical
+        on_tcp_update_primary()
+        if ON_DEBUG_LOG:
+            textmsg("TCP Init Primary end.")
+        end
+    end
+    def on_tcp_offset_set(TCP_offset):
+        if ON_DEBUG_LOG:
+            textmsg("TCP Offset set started!")
+        end
+        on_tcp_offset_send(TCP_offset)
+        if (on_follow_tcp):
+            set_tcp(TCP_offset)
+        end
+        on_robot_TCP_offset = TCP_offset
+        if ON_DEBUG_LOG:
+            textmsg("TCP Offset set to: ", on_robot_TCP_offset)
+        end
+    end
+    def on_tcp_offset_forced_set_actual(isPrimary = True):
+        if (not on_follow_tcp):
+
+            local tcp_log_msg = on_tcp_log_msg_default
+
+            textmsg(tcp_log_msg, on_tcp_offset_actual)
+            set_tcp(on_tcp_offset_actual)
+        end
+    end
+    def on_tcp_update(isPrimary = True):
+        on_tcp_update_primary()
+
+        on_tcp_set_actual_to(isPrimary)
+    end
+    def on_tcp_set_actual_to(isPrimary = True):
+
+        on_tcp_offset_actual = on_tcp_offset_primary
+        if (on_follow_tcp):
+            textmsg(on_tcp_log_msg_default, on_tcp_offset_actual)
+        end
+
+        on_tcp_active_is_primary = isPrimary
+        on_tcp_offset_set(on_tcp_offset_actual)
+    end
+    def on_tcp_update_workpiece_primary(workpiece_offset):
+        if ON_DEBUG_LOG:
+            textmsg("TCP Update Tool Primary start..")
+        end
+        on_tcp_workpiece_primary = workpiece_offset
+        on_tcp_update_primary()
+        if ON_DEBUG_LOG:
+            textmsg("TCP Update Tool Primary end.")
+        end
+    end
+    def on_tcp_workpiece_rpy_get(xyz = [0.0, 0.0, 0.0], rpy = [0.0, 0.0, 0.0]):
+        local rotvec = rpy2rotvec(rpy)
+        local workpiece_offset = p[xyz[0], xyz[1], xyz[2], rotvec[0], rotvec[1], rotvec[2]]
+        return workpiece_offset
+    end
+
+    def on_tcp_update_workpiece(workpiece_offset, tool_index = 0):
+        if ON_DEBUG_LOG:
+            textmsg("TCP Update Tool start..")
+        end
+        if (tool_index != ON_DI_SECONDARY):
+            on_tcp_update_workpiece_primary(workpiece_offset)
+            local isPrimary = True
+
+        end
+        on_tcp_set_actual_to(isPrimary)
+        if ON_DEBUG_LOG:
+            textmsg("TCP Update Tool end.")
+        end
+    end
+    def on_get_tcp_for(tool_index):
+        if tool_index == ON_DI_SECONDARY:
+            local actual_tcp = on_tcp_static_secondary
+        else:
+            local actual_tcp = on_tcp_static_primary
+        end
+        return actual_tcp
+    end
+    def on_tcp_custom_unused():
+        return ON_ZEROFRAME
+    end
+    def on_tcp_update_custom():
+        if ON_DEBUG_LOG:
+            textmsg("TCP Update Custom start..")
+        end
+        if (on_custom_tcp_enabled):
+            on_tcp_custom_unused()
+            on_tcp_custom_unused()
+            on_tcp_custom_unused()
+            on_tcp_custom_unused()
+
+        end
+        if ON_DEBUG_LOG:
+            textmsg("TCP Update Custom end.")
+        end
+    end
+
+    #======    End of OnRobot TCP    ======#
+    #======    OnRobot Payload Messages    ======#
+
+    on_mass_log_msg = "OnRobot: 로봇 유효 하중 크기 설정:"
+    on_cog_log_msg = "OnRobot: 로봇 유효 하중 무게 중심 설정:"
+
+    #======    End of OnRobot Payload Messages    ======#
+    #======    OnRobot Payload    ======#
+
+    on_cog_actual = ON_ZEROFRAME
+    on_mass_actual = 0.0
+    on_cog_primary = ON_ZEROFRAME
+    on_cog_L1L2_primary = ON_ZEROFRAME
+    on_mass_primary = 0.0
+    on_mass_L1L2_primary = 0.0
+    on_cog_adapters = ON_ZEROFRAME
+    on_cog_qc_primary = ON_ZEROFRAME
+    on_cog_base_primary = ON_ZEROFRAME
+    on_cog_gripper_primary = ON_ZEROFRAME
+    on_cog_workpiece_primary = ON_ZEROFRAME
+    on_mass_adapters = 0.0
+    on_mass_qc_primary = 0.0
+    on_mass_base_primary = 0.0
+    on_mass_gripper_primary = 0.0
+    on_mass_workpiece_primary = 0.0
+    on_cog_secondary = ON_ZEROFRAME
+    on_mass_secondary = 0.0
+    on_cog_gripper_secondary = ON_ZEROFRAME
+    on_mass_gripper_secondary = 0.0
+    on_cog_workpiece_secondary = ON_ZEROFRAME
+    on_mass_workpiece_secondary = 0.0
+    ON_LB2KG001 = 0.45359237 / 100
+    def on_payload_init_adapters():
+        if ON_DEBUG_LOG:
+            textmsg("TCP Init Adapters start..")
+        end
+        enter_critical
+        on_cog_adapters = ON_ZEROFRAME
+        on_mass_adapters = 0.0
+        local massLAL0Ratio = 0
+        local adapterAbsCOG = ON_ZEROFRAME
+        local tcp_adapter_offset = ON_ZEROFRAME
+        local adapterCount = length(on_tcp_adapters_array)
+        local i = 0
+        while (i < adapterCount):
+            on_mass_adapters = on_mass_adapters + on_mass_adapters_array[i]
+            if (on_mass_adapters <= 0):
+                massLAL0Ratio = 0
+            else:
+                massLAL0Ratio = on_mass_adapters_array[i] / on_mass_adapters
+            end
+            adapterAbsCOG = pose_trans(tcp_adapter_offset, on_tcp_adapters_array[i])
+            adapterAbsCOG = p[adapterAbsCOG[0], adapterAbsCOG[1], adapterAbsCOG[2], 0.0, 0.0, 0.0]
+            on_cog_adapters = interpolate_pose(on_cog_adapters, adapterAbsCOG, massLAL0Ratio)
+            on_cog_adapters = p[on_cog_adapters[0], on_cog_adapters[1], on_cog_adapters[2], 0.0, 0.0, 0.0]
+            tcp_adapter_offset = pose_trans(tcp_adapter_offset, on_tcp_adapters_array[i])
+            i = i + 1
+            sync()
+        end
+        exit_critical
+        if ON_DEBUG_LOG:
+            textmsg("TCP Init Adapters end.")
+        end
+    end
+    def on_payload_update_primary():
+        if ON_DEBUG_LOG:
+            textmsg("Payload Update Primary start..")
+        end
+        enter_critical
+        on_mass_primary = on_mass_L1L2_primary + on_mass_workpiece_primary
+        local massL1L2L3Ratio = on_mass_workpiece_primary / on_mass_primary
+        local workpieceAbsCOG = pose_trans(on_tcp_dynamic_primary, on_cog_workpiece_primary)
+        workpieceAbsCOG = p[workpieceAbsCOG[0], workpieceAbsCOG[1], workpieceAbsCOG[2], 0.0, 0.0, 0.0]
+        on_cog_primary = interpolate_pose(on_cog_L1L2_primary, workpieceAbsCOG, massL1L2L3Ratio)
+        on_cog_primary = p[on_cog_primary[0], on_cog_primary[1], on_cog_primary[2], 0.0, 0.0, 0.0]
+        exit_critical
+        if ON_DEBUG_LOG:
+            textmsg("Payload Update Primary end.")
+        end
+    end
+    def on_payload_init_primary():
+        if ON_DEBUG_LOG:
+            textmsg("Payload Init Primary start..")
+        end
+        enter_critical
+        on_mass_base_primary = on_mass_adapters + on_mass_qc_primary
+        local massL0L1Ratio = on_mass_qc_primary / on_mass_base_primary
+        on_mass_L1L2_primary = on_mass_base_primary + on_mass_gripper_primary
+        local massL1L2Ratio = on_mass_gripper_primary / on_mass_L1L2_primary
+        local qcAbsCOG = pose_trans(on_tcp_adapters, on_cog_qc_primary)
+        qcAbsCOG = p[qcAbsCOG[0], qcAbsCOG[1], qcAbsCOG[2], 0.0, 0.0, 0.0]
+        on_cog_base_primary = interpolate_pose(on_cog_adapters, qcAbsCOG, massL0L1Ratio)
+        on_cog_base_primary = p[on_cog_base_primary[0], on_cog_base_primary[1], on_cog_base_primary[2], 0.0, 0.0, 0.0]
+        local gripperAbsCOG = pose_trans(on_tcp_base_primary, on_cog_gripper_primary)
+        gripperAbsCOG = p[gripperAbsCOG[0], gripperAbsCOG[1], gripperAbsCOG[2], 0.0, 0.0, 0.0]
+        on_cog_L1L2_primary = interpolate_pose(on_cog_base_primary, gripperAbsCOG, massL1L2Ratio)
+        on_cog_L1L2_primary = p[on_cog_L1L2_primary[0], on_cog_L1L2_primary[1], on_cog_L1L2_primary[2], 0.0, 0.0, 0.0]
+        exit_critical
+        on_payload_update_primary()
+        if ON_DEBUG_LOG:
+            textmsg("Payload Init Primary end.")
+        end
+    end
+    def on_payload_update():
+        on_payload_update_primary()
+
+        on_mass_actual = on_mass_primary
+        on_cog_actual = on_cog_primary
+
+        on_payload_set_actual()
+    end
+    def on_payload_set_actual():
+
+        on_mass_actual = on_mass_primary
+        on_cog_actual = on_cog_primary
+
+        local CoG = [on_cog_actual[0], on_cog_actual[1], on_cog_actual[2]]
+        on_payload_set(on_mass_actual, CoG)
+    end
+    def on_payload_update_workpiece_primary(workpiece_mass = 0, workpiece_cog = [0.0, 0.0, 0.0]):
+        if ON_DEBUG_LOG:
+            textmsg("Payload Update Workpiece Primary start..")
+        end
+        on_cog_workpiece_primary = p[workpiece_cog[0], workpiece_cog[1], workpiece_cog[2], 0.0, 0.0, 0.0]
+        on_mass_workpiece_primary = workpiece_mass
+        on_payload_update_primary()
+        if ON_DEBUG_LOG:
+            textmsg("Payload Update Workpiece Primary end.")
+        end
+    end
+    def on_payload_set(mass, CoG):
+        if ON_DEBUG_LOG:
+            textmsg("Payload set started!")
+        end
+        local center_of_gravity = [CoG[0], CoG[1], CoG[2]]
+        on_payload_send(center_of_gravity, mass)
+        if (on_isMetric):
+            local roundedMass = floor(mass * 100 + 0.5) / 100
+        else:
+            local roundedMass = floor(mass / ON_LB2KG001 + 0.5) * ON_LB2KG001
+        end
+        set_payload(roundedMass, center_of_gravity)
+        on_mass_actual = roundedMass
+        on_cog_actual = p[CoG[0], CoG[1], CoG[2], 0.0, 0.0, 0.0]
+        if ON_DEBUG_LOG:
+            textmsg("Payload mass, CoG set to: ", str_cat(str_cat(mass, ", "), CoG))
+        end
+    end
+
+    def on_payload_update_secondary():
+    end
+    def on_payload_init_secondary():
+    end
+
+    def on_payload_update_workpiece(workpiece_mass, workpiece_cog = [0.0, 0.0, 0.0], tool_index = 0):
+        if ON_DEBUG_LOG:
+            textmsg("Payload Update Workpiece start..")
+        end
+        if (tool_index != ON_DI_SECONDARY):
+            on_cog_workpiece_primary = p[workpiece_cog[0], workpiece_cog[1], workpiece_cog[2], 0.0, 0.0, 0.0]
+            on_mass_workpiece_primary = workpiece_mass
+        else:
+            on_cog_workpiece_secondary = p[workpiece_cog[0], workpiece_cog[1], workpiece_cog[2], 0.0, 0.0, 0.0]
+            on_mass_workpiece_secondary = workpiece_mass
+        end
+        on_payload_update()
+        if ON_DEBUG_LOG:
+            textmsg("Payload Update Workpiece end.")
+        end
+    end
+    def on_payload_get_cog2tcp_workpiece(tool_index = 0):
+        if (tool_index != ON_DI_SECONDARY):
+            local cog_tool = [on_tcp_workpiece_primary[0], on_tcp_workpiece_primary[1], on_tcp_workpiece_primary[2]]
+        else:
+            local cog_tool = [on_tcp_workpiece_secondary[0], on_tcp_workpiece_secondary[1], on_tcp_workpiece_secondary[2]]
+        end
+        return cog_tool
+    end
+
+    #======    End of OnRobot Payload    ======#
+    #======    OnRobot QC TCP    ======#
+
+    onrobotmini = 0
+
+    def on_tcp_offset_send(TCP_offset):
+        on_robot_TCP_offset = TCP_offset
+    end
+    def on_payload_send(CoG, mass):
+        on_robot_payload_cog = CoG
+        on_robot_payload_mass = mass
+    end
+
+
+    #======    End of OnRobot QC TCP    ======#
+    #======    OnRobot twofg TCP    ======#
+
+    def twofg_payload_set(mass, tool_index = 0, use_guard = False):
+        if ON_DEBUG_LOG:
+            textmsg("twofg Payload mass command starting..")
+        end
+        if (tool_index == ON_DI_SECONDARY):
+            local cogTool = [on_cog_workpiece_secondary[0], on_cog_workpiece_secondary[1], on_cog_workpiece_secondary[2]]
+        else:
+            local cogTool = [on_cog_workpiece_primary[0], on_cog_workpiece_primary[1], on_cog_workpiece_primary[2]]
+        end
+        if (twofg_Grip_detected_arr[tool_index]):
+            local mass2set = mass
+            twofg_Grip_guard_arr[tool_index] = use_guard and not on_ioqc
+        else:
+            local mass2set = 0.0
+            twofg_Grip_guard_arr[tool_index] = False
+        end
+        on_payload_update_workpiece(mass2set, cogTool, tool_index)
+        if ON_DEBUG_LOG:
+            textmsg("2FG Payload mass command ended.")
+        end
+    end
+
+    #======    End of OnRobot twofg TCP    ======#
+    #======    OnRobot  Speedl    ======#
+
+    on_speedl_thread_handler = 0
+    on_speedl_is_enabled = False
+    on_speedl_is_running = False
+    on_speedl_acc = 0.0
+    ft_speedl_hg_caranteen_reached = False
+    ft_speedl_hg_caranteen_safemode = False
+    on_speedl_for_ftcontrol = False
+    on_speedl_for_move = False
+    on_speedl_for_handguide = False
+    on_speedl_for_insertpart = False
+    on_speedl_for_depthcompensation = False
+    on_speedl_for_center = False
+    on_speedl_for_gecko = False
+    on_speedl_acc = 10000.0
+    on_speedl_acc_to_zero = 3.0
+    ON_SPEEDL_FTCONTROL = 1
+    ON_SPEEDL_HANDGUIDE = 2
+    ON_SPEEDL_TRAJECTORY = 3
+    ON_SPEEDL_MOVE = ON_SPEEDL_TRAJECTORY
+    ON_SPEEDL_INSERTPART = 4
+    ON_SPEEDL_DEPTHCOMP = 5
+    ON_SPEEDL_CENTER = 6
+    ON_SPEEDL_GECKO = 7
+    def on_wait_ms(time_ms):
+        local sync_time = ceil(norm(time_ms / 2.0))
+        while (sync_time > 0):
+            sync_time = sync_time-1
+            sync()
+        end
+    end
+    def on_error(status_flag, message, title, stop_var = False):
+        if (status_flag):
+            popup(message, title = title, error = True, blocking = False)
+            stop_var = True
+        end
+        return stop_var
+    end
+    def on_warning(status_flag, message, title, isPopupNeeded = False, is_shown = False):
+        if (status_flag):
+            if (not is_shown):
+                if (isPopupNeeded):
+                    popup(message, title = title, warning = True, blocking = False)
+                else:
+                    textmsg(title + ": ", message)
+                end
+                is_shown = True
+            end
+        else:
+            is_shown = False
+        end
+        return is_shown
+    end
+    def on_speedl_add_extra(speedBase, speedExtra):
+        speedSum = ON_ZERO6D
+        speedBaseP = p[speedBase[0], speedBase[1], speedBase[2], speedBase[3], speedBase[4], speedBase[5]]
+        speedExtraP = p[speedExtra[0], speedExtra[1], speedExtra[2], speedExtra[3], speedExtra[4], speedExtra[5]]
+        speedSumP = pose_add(speedExtraP, speedBaseP)
+        speedSum = [speedSumP[0], speedSumP[1], speedSumP[2], speedSumP[3], speedSumP[4], speedSumP[5]]
+        return speedSum
+    end
+
+    thread on_speedl_thread():
+        if ON_DEBUG_LOG:
+            textmsg("Speedl thread started..")
+        end
+        enter_critical
+        on_speedl_is_running = True
+        on_speedl_is_enabled = True
+        exit_critical
+        on_speedL = ON_ZERO6D
+        on_speedL_last = ON_ZERO6D
+
+        while on_speedl_is_running:
+            on_speedBase = on_speedCB_get()
+            on_speedL = on_speedBase
+
+
+            if on_speedl_is_enabled:
+                if (on_speedL == ON_ZERO6D):
+                    on_speedL = [on_speedL_last[0] / 100, on_speedL_last[1] / 100, on_speedL_last[2] / 100, on_speedL_last[3] / 100, on_speedL_last[4] / 100, on_speedL_last[5] / 100]
+                end
+                speedl(on_speedL, a = on_speedl_acc, t = 0.001)
+            else:
+                speedl(ON_ZERO6D, a = on_speedl_acc_to_zero, t = 0.001)
+            end
+            on_speedL_last = on_speedL
+        end
+
+        on_speedL = ON_ZERO6D
+        if ON_DEBUG_LOG:
+            textmsg("Speedl thread ended.")
+        end
+    end
+    def on_speedl_integer_get():
+        local speedl_integer = binary_list_to_integer([on_speedl_for_ftcontrol, on_speedl_for_handguide, on_speedl_for_move, on_speedl_for_insertpart, on_speedl_for_depthcompensation, on_speedl_for_center, on_speedl_for_gecko])
+        return speedl_integer
+    end
+    def on_speedl_start_for(speedl_id):
+        if (speedl_id == ON_SPEEDL_FTCONTROL):
+            on_speedl_for_ftcontrol = True
+        elif (speedl_id == ON_SPEEDL_HANDGUIDE):
+            on_speedl_for_handguide = True
+        elif (speedl_id == ON_SPEEDL_TRAJECTORY):
+            on_speedl_for_move = True
+        elif (speedl_id == ON_SPEEDL_INSERTPART):
+            on_speedl_for_insertpart = True
+        elif (speedl_id == ON_SPEEDL_DEPTHCOMP):
+            on_speedl_for_depthcompensation = True
+        elif (speedl_id == ON_SPEEDL_CENTER):
+            on_speedl_for_center = True
+        elif (speedl_id == ON_SPEEDL_GECKO):
+            on_speedl_for_gecko = True
+        else:
+            textmsg("Unknown Start speedl ID received: ", speedl_id)
+        end
+        local speedl_integer = on_speedl_integer_get()
+        if not(speedl_integer == 0):
+            if not on_speedl_is_running:
+                on_speedl_thread_handler = run on_speedl_thread()
+            end
+        end
+        return on_speedl_is_running
+    end
+    def on_speedl_stop_for(speedl_id, brake = 10, brakeRot = 10):
+        if (speedl_id == ON_SPEEDL_FTCONTROL):
+            on_speedl_for_ftcontrol = False
+        elif (speedl_id == ON_SPEEDL_HANDGUIDE):
+            on_speedl_for_handguide = False
+        elif (speedl_id == ON_SPEEDL_TRAJECTORY):
+            on_speedl_for_move = False
+        elif (speedl_id == ON_SPEEDL_INSERTPART):
+            on_speedl_for_insertpart = False
+        elif (speedl_id == ON_SPEEDL_DEPTHCOMP):
+            on_speedl_for_depthcompensation = False
+        elif (speedl_id == ON_SPEEDL_CENTER):
+            on_speedl_for_center = False
+        elif (speedl_id == ON_SPEEDL_GECKO):
+            on_speedl_for_gecko = False
+            on_speedGecko_set(ON_ZERO6D)
+        else:
+            textmsg("Unknown Stop speedl ID received: ", speedl_id)
+        end
+        local speedl_integer = on_speedl_integer_get()
+        if (speedl_integer == 0):
+            if (on_speedl_is_running):
+                kill on_speedl_thread_handler
+                enter_critical
+                on_speedl_is_running = False
+                exit_critical
+
+            end
+            if ON_DEBUG_LOG:
+                textmsg("Speedl thread stopped")
+            end
+            stopl(brake, brakeRot)
+        end
+        return on_speedl_is_running
+    end
+    def on_speedl_pause():
+        on_speedl_is_enabled = False
+        return on_speedl_integer_get()
+    end
+    def on_speedl_resume():
+        on_speedl_is_enabled = True
+        return on_speedl_integer_get()
+    end
+
+    #======    End of OnRobot  Speedl    ======#
+    #======    OnRobot TwoFG Engine Messages    ======#
+
+    twofg_error_title = "OnRobot - 2FG 오류"
+    twofg_device_id_waiting = "유효한 OnRobot 2FG ID를 기다리는 중..."
+    twofg_device_id_timeout = "유효한 OnRobot 2FG ID를 기다리는 동안 시간이 초과되었습니다.<br>프로그램이 중지되었습니다."
+    twofg_data_error_title = "OnRobot - 2FG 데이터 오류"
+    twofg_data_error_type = "Gripper가 연결되지 않았거나 알 수 없는 Gripper가 연결되었습니다."
+    twofg_data_warning_title = "OnRobot - 2FG 데이터 경고:"
+    twofg_status_error_title = "OnRobot - 2FG 상태 오류"
+    twofg_status_error_missing = "2FG Gripper와의 통신 문제 장치를 확인하십시오.<br>프로그램이 중지되었습니다."
+    twofg_else_error = "알 수 없는 오류 코드:"
+    twofg_status_msg_single = "2FG 상태:"
+    twofg_data_error_bit0_single = "잘못된 부동 소수 데이터 크기 수신."
+    twofg_data_error_bit1_single = "잘못된 정수 데이터 크기 수신."
+    twofg_data_error_bit2_single = "잘못된 boolean 데이터 크기 수신."
+    twofg_status_msg_primary = "2FG 메인 상태:"
+    twofg_data_error_bit0_primary = "메인 2FG에 잘못된 부동 소수 데이터 크기 수신."
+    twofg_data_error_bit1_primary = "메인 2FG에 잘못된 정수 데이터 크기 수신."
+    twofg_data_error_bit2_primary = "메인 2FG에 잘못된 boolean 데이터 크기 수신."
+    twofg_status_msg_secondary = "2FG 보조 상태:"
+    twofg_data_error_bit0_secondary = "보조 2FG에 잘못된 부동 소수 데이터 크기 수신."
+    twofg_data_error_bit1_secondary = "보조 2FG에 잘못된 정수 데이터 크기 수신."
+    twofg_data_error_bit2_secondary = "보조 2FG에 잘못된 boolean 데이터 크기 수신."
+
+    #======    End of OnRobot TwoFG Engine Messages    ======#
+    #======    OnRobot TwoFG Engine    ======#
+
+    twofg_dataProcess_running = False
+    twofg_start_flange = ON_ZEROPOSE
+    twofg_start_pose = ON_ZEROPOSE
+    twofg_status_warning_title = str_cat(twofg_status_error_title, ": ")
+    def twofg_dataProcess_status_errors(twofg_stop = False):
+        enter_critical
+        local tool_index = twofg_index
+        if (tool_index == ON_DI_DUAL):
+            tool_index = ON_DI_SECONDARY
+            twofg_stop = on_error((twofg_device_id_arr[tool_index] != tool_index), twofg_status_error_missing, twofg_status_error_title, twofg_stop)
+            twofg_stop = on_error((twofg_product_code_arr[tool_index] == ON_DEVICE_ID_MISSING), twofg_status_error_missing, twofg_status_error_title, twofg_stop)
+            tool_index = ON_DI_PRIMARY
+        end
+        twofg_stop = on_error((twofg_device_id_arr[tool_index] != tool_index), twofg_status_error_missing, twofg_status_error_title, twofg_stop)
+        twofg_stop = on_error((twofg_product_code_arr[tool_index] == ON_DEVICE_ID_MISSING), twofg_status_error_missing, twofg_status_error_title, twofg_stop)
+
+
+        exit_critical
+        return twofg_stop
+    end
+    def twofg_dataProcess():
+        enter_critical
+        local tool_index = twofg_index
+        if tool_index == ON_DI_DUAL:
+            twofg_Width_ext_primary = twofg_Width_ext_arr[ON_DI_PRIMARY]
+            twofg_Width_int_primary = twofg_Width_int_arr[ON_DI_PRIMARY]
+            twofg_Force_primary = twofg_Force_arr[ON_DI_PRIMARY]
+            twofg_Busy_primary = twofg_Busy_arr[ON_DI_PRIMARY]
+            twofg_Grip_detected_primary = twofg_Grip_detected_arr[ON_DI_PRIMARY]
+            twofg_Width_ext_secondary = twofg_Width_ext_arr[ON_DI_SECONDARY]
+            twofg_Width_int_secondary = twofg_Width_int_arr[ON_DI_SECONDARY]
+            twofg_Force_secondary = twofg_Force_arr[ON_DI_SECONDARY]
+            twofg_Busy_secondary = twofg_Busy_arr[ON_DI_SECONDARY]
+            twofg_Grip_detected_secondary = twofg_Grip_detected_arr[ON_DI_SECONDARY]
+        else:
+            twofg_Width_ext = twofg_Width_ext_arr[tool_index]
+            twofg_Width_int = twofg_Width_int_arr[tool_index]
+            twofg_Force = twofg_Force_arr[tool_index]
+            twofg_Busy = twofg_Busy_arr[tool_index]
+            twofg_Grip_detected = twofg_Grip_detected_arr[tool_index]
+        end
+        exit_critical
+    end
+    thread twofg_dataProcess_thread():
+        if ON_DEBUG_LOG:
+            textmsg("Starting twofg_dataProcess thread")
+        end
+        while twofg_dataProcess_running:
+            sync()
+            local twofg_stop = False
+            twofg_stop = twofg_dataProcess_status_errors(twofg_stop)
+            if twofg_stop:
+                halt
+            end
+            twofg_dataProcess()
+        end
+        if ON_DEBUG_LOG:
+            textmsg("Stopping twofg_dataProcess thread")
+        end
+    end
+    def twofg_index_get():
+        return twofg_index
+    end
+
+    #======    End of OnRobot TwoFG Engine    ======#
+    textmsg(on_devices_primary_log, ": Quick Changer + 2FG7 + [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]")
+    on_follow_tcp = True
+    on_tcp_active_is_primary = True
+    on_tcp_adapters_array = []
+    on_cog_adapters_array = []
+    on_mass_adapters_array = []
+    on_tcp_qc_primary = p[0.0, 0.0, 0.0136, 0.0, 0.0, 0.0]
+    on_cog_qc_primary = p[0.0, 0.0, 0.004, 0.0, 0.0, 0.0]
+    on_mass_qc_primary = 0.06
+    on_tcp_gripper_static_primary = p[0.0, 0.0, 0.125, 0.0, 0.0, 0.0]
+    on_cog_gripper_primary = p[0.000, 0.000, 0.052, 0.0, 0.0, 0.0]
+    on_mass_gripper_primary = 1.14
+    on_tcp_workpiece_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    on_cog_workpiece_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    on_mass_workpiece_primary = 0.0
+    #======    OnRobot TwoFG Width Messages    ======#
+
+    twofg_grip_title = "OnRobot - 2FG 그립"
+    twofg_grip_return_error_n1 = "twofg 명령이 오류와 함께 반환되었습니다.<br>필요한 너비가 제한 사이에 있는지 확인하십시오.<br>프로그램이 중지되었습니다."
+    twofg_grip_return_error_n2 = "twofg 그립 명령이 마지막에 포스를 적용하지 않았습니다.<br>프로그램이 중지되었습니다."
+
+    #======    End of OnRobot TwoFG Width Messages    ======#
+    #======    OnRobot twofg Width command twofg_grip    ======#
+
+    twofg__grip_param_warning_width = "The parameter 'diameter' is out of the limits. Limited value sent: "
+    twofg__grip_param_warning_force = "The parameter 'force' is out of the limits. Limited value sent: "
+    def twofg_grip(width, force, speed, external_grip = True, tool_index = 0, blocking = True):
+        if ON_DEBUG_LOG:
+            textmsg("twofg Grip start..")
+        end
+        local retVal = 0
+        twofg_Grip_guard_arr[tool_index] = False
+        sync()
+        if (tool_index == ON_DI_SECONDARY):
+            local isPrimary = False
+        else:
+            local isPrimary = True
+        end
+
+        # if (on_follow_tcp):
+        #   on_tcp_set_actual_to(isPrimary)
+        # end
+
+        sync()
+
+        if external_grip:
+            retVal = on_tool_xmlrpc.twofg_grip_external(tool_index, width + 0.0, force, speed)
+        else:
+            retVal = on_tool_xmlrpc.twofg_grip_internal(tool_index, width + 0.0, force, speed)
+        end
+
+        if (retVal != 0):
+            popup(twofg_grip_return_error_n1, twofg_grip_title, error = True, blocking = False)
+            halt
+        end
+
+        if blocking:
+            local timeout = 0
+            while not twofg_Busy_arr[tool_index]:
+                sleep(0.008)
+                timeout = timeout + 1
+                if timeout > 20:
+                    break
+                end
+            end
+            while (twofg_Busy_arr[tool_index] == True):
+                sync()
+            end
+        end
+
+        # if (on_follow_tcp):
+        #   on_tcp_update(isPrimary)
+        # end
+
+        if ON_DEBUG_LOG:
+            textmsg("2FG Grip ended.")
+        end
+
+        return retVal
+    end
+
+    twofg_release_force = 80
+
+    def twofg_release(width, speed, external_release = True, tool_index = 0, blocking = True):
+        local retVal = 0
+        retVal = twofg_grip(width, twofg_release_force, speed, external_release, tool_index, blocking)
+        return retVal
+    end
+
+    #======    End of OnRobot twofg Width command twofg_grip    ======#
+    #======    OnRobot VG Monitor Messages    ======#
+
+    twofg_monitor_error_title = "OnRobot - 2FG 그립 손실"
+    twofg_monitor_grip_lost_error = "그립 손실이 감지되었습니다.<br>프로그램이 중지되었습니다."
+
+    #======    End of OnRobot VG Monitor Messages    ======#
+    #======    OnRobot twofg Monitor    ======#
+
+    thread twofg_monitor_thread():
+        while True:
+            sync()
+            local twofg_error = False
+            if (twofg_index == ON_DI_DUAL):
+                local tool_index = ON_DI_SECONDARY
+                twofg_error = twofg_monitor_check(tool_index)
+                local tool_index = ON_DI_PRIMARY
+            else:
+                local tool_index = twofg_index
+            end
+            twofg_error = twofg_error or twofg_monitor_check(tool_index)
+            if twofg_error:
+                halt
+            end
+        end
+    end
+    def twofg_monitor_check(tool_index = 0):
+        local error = False
+        if twofg_Grip_guard_arr[tool_index] and not twofg_Grip_detected_arr[tool_index]:
+            popup(twofg_monitor_grip_lost_error, title = twofg_monitor_error_title, error = True, blocking = False)
+            twofg_payload_set(0, tool_index = tool_index)
+            error = True
+        end
+        return error
+    end
+
+    #======    End of OnRobot twofg Monitor    ======#
+    #======    OnRobot Run    ======#
+
+    on_portopen_javaSocket()
+    sync()
+    textmsg(on_xmlrpc_start_ip, on_conn_ip)
+    if (ON_REG_USE_TOOL):
+        on_regStart_conn = [ON_CONN_SHIFT_BOOL, ON_CONN_SHIFT_INT, ON_CONN_SHIFT_FLOAT]
+        on_regSum_conn = [ON_CONN_REG_SUM_BOOL, ON_CONN_REG_SUM_INT, ON_CONN_REG_SUM_FLOAT]
+        on_rtde_feed_open(on_conn_ip, on_conn_rtde_feed_name, on_regStart_conn, on_regSum_conn, ON_REGISTERS_SPEEDL_FLOAT)
+        sync()
+        textmsg(on_xmlrpc_start_ip, on_tool_ip)
+        on_regStart_tool = [ON_TOOL_SHIFT_BOOL, ON_TOOL_SHIFT_INT, ON_TOOL_SHIFT_FLOAT]
+        on_regSum_tool = [ON_TOOL_REG_SUM_BOOL, ON_TOOL_REG_SUM_INT, ON_TOOL_REG_SUM_FLOAT]
+        on_rtde_feed_open(on_tool_ip, on_tool_rtde_feed_name, on_regStart_tool, on_regSum_tool, 0)
+        sync()
+    else:
+        on_regStart_conn = [ON_CONN_SHIFT_BOOL, ON_CONN_SHIFT_INT, ON_CONN_SHIFT_FLOAT]
+        on_regSum_conn = [ON_CONN_REG_SUM_BOOL, ON_CONN_REG_SUM_INT, ON_CONN_REG_SUM_FLOAT]
+        on_rtde_feed_open(on_conn_ip, on_conn_rtde_feed_name, on_regStart_conn, on_regSum_conn, ON_REGISTERS_SPEEDL_FLOAT)
+        sync()
+    end
+    on_set_rtde_watchdog(updateHz = 0.2)
+    sync()
+    on_dataProcess_thrd = run on_dataProcess_thread()
+    sync()
+    on_tcp_init_adapters()
+    on_payload_init_adapters()
+    on_tcp_init_primary()
+    on_payload_init_primary()
+
+    on_tcp_update_custom()
+    on_tcp_set_actual_to(on_tcp_active_is_primary)
+    if (on_follow_tcp):
+        on_payload_set_actual()
+    end
+    on_watchdog_thrd = run on_set_watchdog_thread()
+    sync()
+
+    #======    End of OnRobot Run    ======#
+    #======    OnRobot QC Start    ======#
+
+    if (on_toolConnector):
+        tc_setup_tool()
+    end
+    sync()
+
+    #======    End of OnRobot QC Start    ======#
+    #======    OnRobot twofg Run    ======#
+
+    twofg_dataRead_running = True
+    sync()
+    twofg_dataRead_thrd = run twofg_dataRead_thread()
+    sync()
+    textmsg(twofg_device_id_waiting)
+    if (twofg_index == ON_DI_DUAL):
+        local twofg_timeout = 0
+        while not(twofg_product_code_arr[ON_DI_PRIMARY] == twofg_DEVICE_ID_twofg7):
+            sync()
+            twofg_timeout = twofg_timeout + 1
+            if (twofg_timeout > ON_INIT_TIMEOUT):
+                popup(twofg_device_id_timeout, twofg_error_title, error = True, blocking = False)
+                halt
+            end
+        end
+        if ON_DEBUG_LOG:
+            textmsg("Primary twofg: ", twofg_product_code_arr[ON_DI_PRIMARY])
+        end
+        local twofg_timeout = 0
+        while not(twofg_product_code_arr[ON_DI_SECONDARY] == twofg_DEVICE_ID_twofg7):
+            sync()
+            if (twofg_timeout > ON_INIT_TIMEOUT):
+                popup(twofg_device_id_timeout, twofg_error_title, error = True, blocking = False)
+                halt
+            end
+        end
+        if ON_DEBUG_LOG:
+            textmsg("Secondary twofg: ", twofg_product_code_arr[ON_DI_SECONDARY])
+        end
+    else:
+        local twofg_timeout = 0
+        while not(twofg_product_code_arr[twofg_index] == twofg_DEVICE_ID_twofg7):
+            sync()
+            if (twofg_timeout > ON_INIT_TIMEOUT):
+                popup(twofg_device_id_timeout, twofg_error_title, error = True, blocking = False)
+                halt
+            end
+        end
+        if ON_DEBUG_LOG:
+            textmsg("Single twofg: ", twofg_product_code_arr[twofg_index])
+        end
+    end
+
+    sync()
+    twofg_dataProcess_running = True
+    sync()
+    twofg_dataProcess_thrd = run twofg_dataProcess_thread()
+    sync()
+    twofg_monitor_thread_handle = run twofg_monitor_thread()
+    sync()
+
+    #======    End of OnRobot twofg Run    ======#
+    # end: URCap Installation Node
+
+    server_ip = "192.168.0.87"
+    port = 12345
+    socket_open(server_ip, port, "socket_0")
+
+    tcp_camera = p[-0.03, -0.06, 0.03, 0.0, 0.0, 0.0]
+    tcp_gripper = p[0.0, 0.0, 0.1456, 0.0, 0.0, 0.0]
+    set_tcp(tcp_camera)
+    set_tcp(tcp_gripper)
+
+    #######################
+    # request pose_add data
+    #######################
+    socket_send_line("req_data", "socket_0")
+    sleep(0.1)
+    buf = socket_read_ascii_float(6, socket_name = "socket_0", timeout = 2)
+    p_tot = p[buf[1], buf[2], buf[3], 0.0, 0.0, buf[6]]
+
+    textmsg("tool flange: ", get_actual_tool_flange_pose())
+    set_tcp(tcp_camera)
+    p_ = get_actual_tcp_pose()
+    textmsg("p_: ", p_)
+    tool_pose = pose_trans(p_, p_tot)
+    textmsg("tool_pose: ", tool_pose)
+    set_tcp(tcp_gripper)
+
+    
+    ###################
+    # pick and place
+    ###################
+
+    # move to object
+    set_tcp(tcp_gripper)
+    movel(tool_pose, a = 1.2, v = 0.05, t = 0, r = 0.0)
+
+    #hold
+    on_return = twofg_grip(width = 33.0, force = 50, speed = 100, external_grip = True, tool_index = 0)
+    textmsg("hold")
+
+    #move to initial position
+    set_tcp(p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+    p_init_ = [1.57, -1.57, 1.57, -1.57, -1.57, 0.0]  # [rad]
+    movej(p_init_, a = 1.2, v = 0.3, t = 0, r = 0)
+
+    p_end_ = [0, -1.57, 1.57, -1.57, -1.57, 0.0]  # [rad]
+    movej(p_end_, a = 1.2, v = 0.3, t = 0, r = 0)
+    
+    set_tcp(tcp_gripper)
+    p_ = get_actual_tcp_pose()
+    p_final_ = p[p_[0], p_[1], 0.10, p_[3], p_[4], p_[5]]
+    movel(p_final_, a = 1.2, v = 0.1, t = 0, r = 0)
+
+    on_return = twofg_release(width = 70.0, speed = 100, external_release = True, tool_index = 0)
+    textmsg("release")
+
+    set_tcp(p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+    movej(p_end_, a = 1.2, v = 0.3, t = 0, r = 0)
+    movej(p_init_, a = 1.2, v = 0.3, t = 0, r = 0)
+
+    socket_close("socket_0")
+    sleep(0.1)
+end

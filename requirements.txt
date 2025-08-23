@@ -1,0 +1,8 @@
+cv==1.0.0
+opencv-python==4.12.0.88
+opencv-python-headless==4.12.0.88
+pyrealsense2==2.56.4.9191
+ultralytics==8.3.180
+ultralytics-thop==2.0.14
+urllib3==2.2.1
+uvicorn==0.29.0

@@ -1,28 +1,41 @@
-# Universal Robots Quick Tutorial - External Control with Python
+# Universal Robots Quick Tutorial 
 <div align="center">
+  <img src="./readmeImages/MicheloRobotics_logo.png" alt="image" style="width:100%;">
 </div>
 
 ## Introduction
 
 
-파이썬을 이용하여 유니버셜로봇을 외부 컴퓨터로 제어하는 방법을 학습하기 위한 프로젝트 페이지입니다.
+파이썬을 이용하여 유니버셜로봇을 외부 컴퓨터로 제어하고, 더 나아가 비전AI 연동까지 수행해보기 위한 프로젝트 페이지입니다.
 
 유니버설 로봇 지정 트레이닝센터에서 오프라인 트레이닝 세션이 정기적으로 진행되며, 트레이닝센터의 로봇 시스템 구성은 아래와 같습니다.
 
-- 파이썬 python version: 3.11.x ~ 3.12.x
+- 파이썬 python version: 3.11.x ~ 3.13.x
 
 - 로봇 모델 Robot model: UR3e
 
-- 로봇 소프트웨어 버전 Polyscope version: 5.11~5.12
+- 로봇 소프트웨어 버전 Polyscope version: 5.11~5.18  
+      (*v5.21~5.22에서는 오류가 발견되었습니다.)
+
+- 3D 카메라: 인텔 리얼센스 D435 시리즈
 
 - 주변기기: URCaps Grippers(Robotiq two-finger gripper 등), IO제어 컨베이어벨트, IO 포토(위치)센서
 
 - 네트워크: 로컬 네트워크 라우터 사용
 
+- 비전AI: YOLO(detection, classification, segmentation)
+
 
 위의 구성이 아니더라도 튜토리얼을 진행하는데는 크게 무리가 없을 것으로 생각합니다.
 
-혹시 문제가 발생하거나 추가 요청사항이 있을경우 Issue탭이나 contact@portal301.com으로 문의주세요 :)
+혹시 문제가 발생하거나 추가 요청사항이 있을경우 Issue탭에서 문의주세요 :)
+
+## Acknowledgement
+<div align="center">
+  <img src="./readmeImages/snu_sigma_logo.png" alt="image" style="width:30%;"> 
+</div>
+본 튜토리얼은 서울대학교 로봇동아리 '시그마 인텔리전스(Sigma Intelligence)' 학생들의 도움을 받아 제작되었습니다.
+
 
 ## 주요 링크
 
@@ -76,6 +89,24 @@ VScode에서 python extension과 ur script extension을 설치하세요.
 
 
 - VScode에서 파이썬이 인식되지 않는다면 컴퓨터를 재부팅해보시기 바랍니다. 
+
+### Python 패키지 설치
+
+본 튜토리얼에서 필요한 기본 패키지들을 설치합니다
+```
+  pip install -r requirements.txt
+```
+
+AI를 학습하는 세션까지 진행하실 분들은 아래의 명령어로 파이토치를 설치해주세요. 
+ 
+```
+  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+혹시 이미 torch가 설치되어 있다면 아래의 명령어로 삭제후 다시 설치해주세요.
+```
+  pip uninstall -y torch torchvision torchaudio
+  pip cache purge
+```
 
 
 

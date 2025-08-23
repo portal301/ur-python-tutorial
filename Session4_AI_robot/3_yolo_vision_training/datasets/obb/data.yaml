@@ -1,0 +1,11 @@
+train: train/images
+val: valid/images
+test: test/images
+
+names: 
+  0: circle
+  1: hexagon
+  2: oval
+  3: rectangle
+  4: ring
+  5: square

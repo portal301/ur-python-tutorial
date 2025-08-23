@@ -1,0 +1,26 @@
+def move_to_obj_center():
+    server_ip = "192.168.0.87"
+    port = 12345
+    socket_open(server_ip,port,"socket_0")
+
+    tcp_camera = p[-0.03, -0.06, 0.03, 0.0, 0.0, 0.0]
+    tcp_gripper = p[0.0, 0.0, 0.1456, 0.0, 0.0, 0.0]
+    set_tcp(tcp_camera)
+    set_tcp(tcp_gripper)
+
+    socket_send_line("req_data","socket_0")
+    sleep(0.1)
+
+    buf = socket_read_ascii_float(6, socket_name = "socket_0", timeout = 2)
+    # p_rel = p[buf[1],buf[2],buf[3]/2,0.0,0.0,0.0]
+    p_rel = p[buf[1],buf[2],buf[3]-0.3,0.0,0.0,0.0]
+    # p_rel = p[buf[1],buf[2],0,0.0,0.0,0.0]
+
+    set_tcp(tcp_camera)
+    p_ = get_actual_tcp_pose()
+    tool_pose = pose_trans(p_, p_rel)
+    movej(tool_pose, a=1.2, v=0.3, t=0, r=0.0)
+    
+    socket_close("socket_0")
+    sleep(0.1)
+end
