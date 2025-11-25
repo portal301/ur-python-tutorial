@@ -34,7 +34,7 @@ async def handle_client(reader, writer):
 
             if message == "req_data":
                 print("Received data request")
-                p_rel = np.array([pos_3d[0], pos_3d[1], pos_3d[2], 0.0, 0.0, angle])
+                p_rel = [pos_3d[0], pos_3d[1], pos_3d[2], 0.0, 0.0, angle]
                 #TODO: numpy 호환안될 경우 아래와 같이 수정
                 # p_rel = np.array([pos_3d[0], pos_3d[1], pos_3d[2], 0.0, 0.0, angle.cpu().numpy()])
                 print("send", angle)
