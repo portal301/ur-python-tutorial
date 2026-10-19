@@ -17,16 +17,16 @@ command prompt를 두개 열고, ```cd {프로젝트 경로 이름}``` 명령어
 
 #### ex
 ```bash
-cd Document/Portal301/ur-python-tutorial/lecture1
+cd Document/Portal301/ur-python-tutorial/Session1_ur_external_control/lecture1
 ```
 
 **명령 프롬프트**에 다음 명령어를 입력해봅니다.
 
 ```bash    
-python lecture1_server.py
+python server.py
 ```
 ```bash
-python lecture1_client.py
+python client.py
 ```
 
 #### 코드 분석 : Client.py
@@ -41,15 +41,15 @@ def start_client(host='127.0.0.1', port=65432, message="Hello, Server!"):
         print(f"Received from server: {data.decode()}") # Server로 부터 전송받은 메시지를 byte에서 String으로 변환
 
 if __name__ == "__main__":
-    start_client()
+    start_client(message="UR hello")
 ```
 #### 코드 설명
 1. 프로그램이 실행되면, ```s.connect()``` 함수를 사용해서 default 값으로 지정해둔 host, port(여기선 `127.0.0.1`, `65432`)값을 통해 소켓에 접속 시도합니다.
     - 실무에서는 접속의 실패를 감안해서, ```try-except``` 구문으로 예외처리를 실행해야 합니다.
-3. 소켓에 접속이 성공하면 ```encode()```함수로 ```message``` 변수를 ***byte*** 형식으로 디코딩 후 ```sendall()``` 함수를 통해 전송합니다.
-4. ```recv()``` 함수는 연결된 소켓으로부터 메시지를 받는 함수입니다. 
+2. 소켓에 접속이 성공하면 ```encode()```함수로 ```message``` 변수를 ***byte*** 형식으로 인코딩 후 ```sendall()``` 함수를 통해 전송합니다.
+3. ```recv()``` 함수는 연결된 소켓으로부터 메시지를 받는 함수입니다. 
    - 매개변수의 ***1024***는 총 1024바이트를 저장하겠다는 의미입니다. 따라서 2000바이트가 들어오든, 4000바이트가 들어오든 1024바이트만 끊어서 저장하게됩니다.
-   - 메시지가 오지 않는다면 올때가지 기다리게 됩니다.
+   - 메시지가 오지 않는다면 올 때까지 기다리게 됩니다.
    - 따라서 이후 ```print```문은 만약 메시지가 전송되지 않으면 실행되지 않습니다.   
 
 #### 코드 분석 : Server.py
@@ -70,7 +70,8 @@ def start_server(host='127.0.0.1', port=65432):
                 if not data: 
                     break 
                 print(f"Received: {data.decode()}") 
-                conn.sendall(data)  # 전송받은 메시지를 소켓 연결된 대상에게 다시 전송합니다.
+                response=data.decode()+"a-yo" # 전송받은 메시지 뒤에 "a-yo"를 붙입니다.
+                conn.sendall(response.encode())  # 만든 메시지를 소켓 연결된 대상에게 다시 전송합니다.
 
 if __name__ == "__main__":
     start_server()
@@ -84,22 +85,22 @@ if __name__ == "__main__":
 5. ```with conn``` 이하의 구문은 클라이언트와의 연결이 성립된 후 실행됩니다.
 6. 연결이 성립되면, 서버는 클라이언트로부터 1024 바이트의 데이터를 ```recv()``` 함수를 통해 수신합니다.
 7. 만약 수신된 데이터가 없으면, ```while``` 루프를 종료하고 연결을 닫습니다.
-8. 수신된 데이터가 있으면, 해당 데이터를 출력한 후 클라이언트에게 다시 전송합니다.
+8. 수신된 데이터가 있으면, 해당 데이터를 출력한 후 뒤에 "a-yo"를 붙여 클라이언트에게 다시 전송합니다.
 
 
 ## 실습 2
 **server_forever** 파일을 실행해봅니다.
 ```bash
-python lecture1_server_forever.py
+python server_forever.py
 ```
 
 새 명령 프롬프트 창을 연 다음, 다음 명령어를 여러번 실행해봅니다.
 
 ```bash
-python lecture1_client.py
+python client.py
 ``` 
 
-실행 완료 후 서버 쪽 프롬프트는 잊지말고 ```cntl + c```를 눌러 강제 종료합니다.
+실행 완료 후 서버 쪽 프롬프트는 잊지말고 ```Ctrl + C```를 눌러 강제 종료합니다.
 
 #### 코드 분석 : Server_forever.py
 ```Python
@@ -135,7 +136,7 @@ def start_server(host='127.0.0.1', port=65432):
             sys.exit(0)
 
 if __name__ == "__main__":
-    start_server()```
+    start_server()
 ```
 
 #### 코드 설명
@@ -152,16 +153,16 @@ if __name__ == "__main__":
 
 **server_forever_async** 파일을 실행해봅니다.
 ```bash
-python lecture1_server_forever_async.py
+python server_forever_async.py
 ```
 
 새 명령 프롬프트 창을 연 다음, 다음 명령어를 여러번 실행해봅니다.
 
 ```bash
-python lecture1_client.py
+python client.py
 ``` 
 
-실행 완료 후 서버 프롬프트를 ```cntl + c```를 눌러 강제 종료합니다.
+실행 완료 후 서버 프롬프트를 ```Ctrl + C```를 눌러 강제 종료합니다.
 
 #### 코드 분석 : Server_forever_async.py
 ```python

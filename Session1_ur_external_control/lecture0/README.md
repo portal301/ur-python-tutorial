@@ -85,7 +85,6 @@ while count < 5:
 ```
 ### for 문 예시:
 ```python
-코드 복사
 fruits = ["apple", "banana", "cherry"]
 
 for fruit in fruits:

@@ -1,10 +1,10 @@
 import queue
 q = queue.Queue()
-q.put("fisrt queue")
+q.put("first queue")
 q.put("second queue")
 q.put("third queue")
 
-# q = ["fisrt queue","second queue","third queue"]
+# q = ["first queue","second queue","third queue"]
 while not q.empty():
     print(q.get())
 
@@ -31,9 +31,4 @@ def requestToRobot(task):
 
 while not task.empty():
     requestToRobot(task.get())
-
-
-# myrobotMission
-
-# import myrobotMission
 
