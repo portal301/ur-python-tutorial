@@ -1,6 +1,6 @@
-# Session2: 컴퓨터 비전과 3D 인식 기초
+# Session3: 컴퓨터 비전과 3D 인식 기초
 
-Day4에서는 **컴퓨터 비전**과 **3D 인식**의 기초를 다루며, OpenCV 전처리부터 RealSense 카메라 활용, 카메라 보정(Camera Calibration)까지 학습합니다.  
+Day3에서는 **컴퓨터 비전**과 **3D 인식**의 기초를 다루며, OpenCV 전처리부터 RealSense 카메라 활용, 카메라 보정(Camera Calibration)까지 학습합니다.  
 각 강의는 실습 중심으로 진행되며, 로봇 비전과 물체 인식·조작(Pick-and-Place)의 기반 기술을 익히는 것을 목표로 합니다.
 
 ## 강의 구성
