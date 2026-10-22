@@ -77,20 +77,22 @@ def get_frame(pipe, align):
 # ============================================================
 def pixel_to_camera(u, v, depth, intr):
     """픽셀 (u, v) → 카메라 기준 3D 점(m). 깊이를 못 읽으면 None"""
-    # TODO 2: 픽셀 (u, v)의 깊이(m) 읽기  (2_3d_data/3_click_to_3d.py 참고)
-    z = ____
-    if z <= 0:
+    z = depth.get_distance(u, v)                                        # 픽셀 (u, v)까지의 거리(m)
+    # TODO 2: 깊이를 못 읽었으면(0 이하) None 돌려주기
+    if ____:
         return None
-    return np.array(rs.rs2_deproject_pixel_to_point(intr, [u, v], z))
+    return np.array(rs.rs2_deproject_pixel_to_point(intr, [u, v], z))   # 픽셀(u, v) + 깊이(z) → 3D 점
 
 
 def camera_to_base(p_cam, pose):
     """카메라 기준 점(m) → 로봇 베이스 기준 점(m)"""
-    # TODO 3: 좌표 변환 = 회전(R @ 점) 후 이동(+ 위치)
     R_cam_to_tool, _ = cv2.Rodrigues(np.array(TCP_CAMERA[3:], dtype=float))   # 툴 기준 카메라 회전
-    p_tool = ____          # 카메라 → 툴   (툴 기준 카메라 위치: np.array(TCP_CAMERA[:3]))
+    t_cam = np.array(TCP_CAMERA[:3])                                            # 툴 기준 카메라 위치
     R_tool_to_base, _ = cv2.Rodrigues(pose[3:])                                # 베이스 기준 툴 회전
-    return ____            # 툴 → 베이스   (베이스 기준 툴 위치: pose[:3])
+    t_tool = pose[:3]                                                           # 베이스 기준 툴 위치
+    # TODO 3: 좌표 변환 = 회전(R @ 점) 후 이동(+ 위치)
+    p_tool = ____          # 카메라 → 툴
+    return ____            # 툴 → 베이스
 
 
 def make_target(point, pose):
