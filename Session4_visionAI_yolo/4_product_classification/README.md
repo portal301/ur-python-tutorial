@@ -70,7 +70,7 @@ if __name__ == '__main__':
 *주의 - 학습시간이 과하게 소요될 시 epoch수를 줄이거나, 깃허브에 있는 사전학습 된 모델을 사용하십시오.*
 
 
-해당 파일을 실행시키면, YOLO classification 모델이 `datasets` 폴더에 있는 이미지들을 학습하게 됩니다. 학습이 완료되면, `runs/classify/train2/weights/best.pt`에 학습된 모델의 가중치가 저장됩니다. 또한, `runs/classify/train2`에서 모델 학습 결과를 자세히 확인할 수 있습니다.
+해당 파일을 실행시키면, YOLO classification 모델이 `datasets` 폴더에 있는 이미지들을 학습하게 됩니다. 학습이 완료되면, `runs/classify/train/weights/best.pt`에 학습된 모델의 가중치가 저장됩니다. 또한, `runs/classify/train`에서 모델 학습 결과를 자세히 확인할 수 있습니다.
 
 <center><img src="image/val_batch1_pred.jpg" width=50%></center>
 

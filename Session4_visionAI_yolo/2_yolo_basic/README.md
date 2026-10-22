@@ -137,7 +137,7 @@ if __name__ == "__main__":
 
 - `runs/detect/train` 폴더에 train의 결과가 저장됩니다.
 - `runs/detect/train/val_batch0_pred.jpg` 에 검증용 데이터셋에 대한 검증 결과가 저장됩니다. `runs/detect/train/val_batch0_labels.jpg`와 비교해 봤을 때 검증에 성공함을 확인할 수 있습니다.
-- 또한, 학습 결과로 얻은 가중치는 `runs/detect/train/weight` 폴더에 저장됩니다. `best.pt`는 가장 오차가 적었던 epoch에서의 가중치이며, `last.pt`는 가장 마지막 epoch에서의 가중치 입니다. 저장된 가중치를 불러와 학습 단계를 생략하고 사용 가능합니다.
+- 또한, 학습 결과로 얻은 가중치는 `runs/detect/train/weights` 폴더에 저장됩니다. `best.pt`는 가장 오차가 적었던 epoch에서의 가중치이며, `last.pt`는 가장 마지막 epoch에서의 가중치 입니다. 저장된 가중치를 불러와 학습 단계를 생략하고 사용 가능합니다.
 
 #### 예제 코드 (`4_load_trained_model.py`)
 
