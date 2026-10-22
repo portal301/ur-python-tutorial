@@ -25,7 +25,6 @@ YOLO는 이미지 전체를 한 번에 처리하여 객체의 위치와 클래�
 - 객체 탐지와 분류를 동시에 수행
 
 
-
 ## 2. YOLO 환경 구성
 
 #### 요구사항
@@ -38,7 +37,6 @@ YOLO는 이미지 전체를 한 번에 처리하여 객체의 위치와 클래�
 ```bash
 pip install ultralytics
 ```
-
 
 
 ## 3. Pretrained 모델을 이용한 Detection
@@ -71,6 +69,14 @@ if __name__ == "__main__":
 
 ### 추가질문
 사전 학습된 모델을 사용하지 않으면 어떤 결과가 발생할까요?
+
+> 실습: [`practice/1_yolo_output.py`](../practice/1_yolo_output.py) — YOLO 출력 형태 보기 (정답: [`answer/1_yolo_output.py`](../answer/1_yolo_output.py))
+
+> 실습: [`practice/2_pick_target.py`](../practice/2_pick_target.py) — 로봇이 갈 물체 하나 고르기 (정답: [`answer/2_pick_target.py`](../answer/2_pick_target.py))
+
+> 실습: [`practice/3_draw_box.py`](../practice/3_draw_box.py) — 고른 물체를 직접 그리기 (정답: [`answer/3_draw_box.py`](../answer/3_draw_box.py))
+
+> 실습: [`practice/4_yolo_move.py`](../practice/4_yolo_move.py) — AI가 고른 물체 위로 로봇 보내기 (정답: [`answer/4_yolo_move.py`](../answer/4_yolo_move.py))
 
 
 ## 4. 모델 Train 시키기
@@ -140,10 +146,8 @@ if __name__ == "__main__":
 - (`3_yolo_train_pretrained.py`) 에서 저장한 가중치를 불러오고, 이를 이용하여 실시간으로 불러와지는 camera 영상에 object detection을 적용합니다.
 
 
-
 ### 추가 질문
 - Epoch는 정해진 데이터셋을 이용하여 학습을 반복하는 횟수를 의미합니다. Epoch수가 과하게 커지게 되면, 모델에 어떤 문제가 생길 수 있을까요?
-
 
 
 ## 5. 마무리

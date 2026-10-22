@@ -13,8 +13,6 @@
   - [목차](#목차)
   - [1. 이미지 불러오기와 보여주기](#1-이미지-불러오기와-보여주기)
     - [실습 경로 설정 팁](#실습-경로-설정-팁)
-    - [Practice 1: 클릭한 곳 색 바꾸기](#practice-1-클릭한-곳-색-바꾸기)
-    - [Practice 2: 클릭한 색과 비슷한 픽셀 모두 칠하기](#practice-2-클릭한-색과-비슷한-픽셀-모두-칠하기)
   - [2. 블러 처리 (Blur)](#2-블러-처리-blur)
     - [2.1 평균 블러 (Average Blur)](#21-평균-블러-average-blur)
     - [2.2 가우시안 블러 (Gaussian Blur)](#22-가우시안-블러-gaussian-blur)
@@ -22,7 +20,6 @@
     - [2.4 양방향 필터 (Bilateral Filter)](#24-양방향-필터-bilateral-filter)
     - [2.5 블러 처리 요약 및 정리](#25-블러-처리-요약-및-정리)
   - [3. 엣지 검출 (Canny Edges)](#3-엣지-검출-canny-edges)
-    - [Practice 3: 엣지 직접 만들기 (Canny 전에)](#practice-3-엣지-직접-만들기-canny-전에)
     - [1단계: Grayscale 변환](#1단계-grayscale-변환)
     - [2단계: Gaussian Blur 적용](#2단계-gaussian-blur-적용)
     - [3단계: Canny Edge Detection](#3단계-canny-edge-detection)
@@ -87,7 +84,6 @@ pip install matplotlib
 이제부터는 OpenCV를 이용해 이미지를 불러오고, 처리하고, 시각화하는 방법을 단계적으로 배워보겠습니다.
 
 
-
 ## 1. 이미지 불러오기와 보여주기
 OpenCV에서 이미지를 불러오고 보여주는 가장 기본적인 기능입니다. 이후 모든 전처리 작업의 시작점입니다.
 
@@ -126,28 +122,9 @@ python 1_imshow.py
 ```
 이 과정을 생략하면 `cv2.imread()`가 이미지를 찾지 못해 None을 반환하게 됩니다.
 
-### Practice 1: 클릭한 곳 색 바꾸기
+> 실습: [`practice/1_click_color.py`](../practice/1_click_color.py) — 클릭한 곳 색 바꾸기 (정답: [`answer/1_click_color.py`](../answer/1_click_color.py))
 
-이미지는 숫자(픽셀)의 배열입니다. 마우스로 클릭한 픽셀의 색을 읽고, 그 주변을 빨간색으로 칠해 봅시다.
-
-- 문제: [`practice/1_click_color.py`](../practice/1_click_color.py) (`# TODO` 2곳)
-- 정답: [`answer/1_click_color.py`](../answer/1_click_color.py)
-
-```bash
-cd Session3_openCV_and_3D_camera
-python practice/1_click_color.py
-```
-
-### Practice 2: 클릭한 색과 비슷한 픽셀 모두 칠하기
-
-클릭한 픽셀과 색이 비슷한 픽셀을 이미지 전체에서 찾아 빨간색으로 칠해 봅시다.
-
-- 문제: [`practice/2_similar_color.py`](../practice/2_similar_color.py) (`# TODO` 2곳)
-- 정답: [`answer/2_similar_color.py`](../answer/2_similar_color.py)
-
-```bash
-python practice/2_similar_color.py
-```
+> 실습: [`practice/2_similar_color.py`](../practice/2_similar_color.py) — 클릭한 색과 비슷한 픽셀 모두 칠하기 (정답: [`answer/2_similar_color.py`](../answer/2_similar_color.py))
 
 
 ## 2. 블러 처리 (Blur)
@@ -230,23 +207,12 @@ blur_bilateral = cv2.bilateralFilter(img, bilateral_d, bilateral_sigma_color, bi
 **엣지 검출(Canny Edge Detection)** 에 대해 알아보겠습니다.
 
 
-
 ## 3. 엣지 검출 (Canny Edges)
 
 이미지의 **경계(윤곽선)** 을 검출하여 객체의 구조나 형태를 파악하는 데 사용됩니다.
 OpenCV의 Canny 엣지 검출은 일반적으로 다음과 같은 전처리 단계를 거친 후 수행합니다.
 
-### Practice 3: 엣지 직접 만들기 (Canny 전에)
-
-`cv2.Canny` 없이, 픽셀 밝기 차이만으로 엣지를 직접 만들어 봅시다.
-**엣지 = 옆 픽셀과 밝기 차이가 큰 곳**입니다.
-
-- 문제: [`practice/3_my_edge.py`](../practice/3_my_edge.py) (`# TODO` 3곳)
-- 정답: [`answer/3_my_edge.py`](../answer/3_my_edge.py)
-
-```bash
-python practice/3_my_edge.py
-```
+> 실습: [`practice/3_my_edge.py`](../practice/3_my_edge.py) — 엣지 직접 만들기 (Canny 전에) (정답: [`answer/3_my_edge.py`](../answer/3_my_edge.py))
 
 이제 OpenCV의 Canny 엣지 검출을 알아봅시다.
 
@@ -281,7 +247,7 @@ edges = cv2.Canny(blur, threshold1, threshold2)
 
 두 임계값 사이의 경계를 가진 픽셀은 **주변에 강한 엣지가 있을 경우 엣지로 간주**됩니다. 일반적으로 `threshold1 < threshold2` 여야 하며, 실험을 통해 최적값을 찾는 것이 중요합니다.
 
-`3_canny_edges.py` 결과를 Practice 3에서 직접 만든 엣지와 비교해 보세요.
+`3_canny_edges.py` 결과를 실습에서 직접 만든 엣지와 비교해 보세요.
 
 
 ## 4. 윤곽선 추출 (Contours)
@@ -380,7 +346,6 @@ for contour in contours:
 각 방식은 사용하는 목적에 따라 선택됩니다:  
 - 수직/수평 정렬된 영역을 기준으로 자르려면 **`boundingRect()`**  
 - 회전된 물체의 외곽까지 정확하게 감싸고 싶을 땐 **`minAreaRect()`**
-
 
 
 ## 6. 마무리

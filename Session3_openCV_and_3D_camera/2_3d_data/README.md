@@ -17,7 +17,6 @@
   - [3. 마우스 클릭으로 픽셀 → 3D 좌표 변환 실습](#3-마우스-클릭으로-픽셀--3d-좌표-변환-실습)
     - [주요 함수 및 역할](#주요-함수-및-역할-2)
     - [실행 결과](#실행-결과-1)
-    - [Practice: 클릭한 점 위로 로봇 보내기](#practice-클릭한-점-위로-로봇-보내기)
   - [4. 자세 인식과 6DoF 개념 확장](#4-자세-인식과-6dof-개념-확장)
     - [6자유도 (6 Degrees of Freedom, 6DoF)란?](#6자유도-6-degrees-of-freedom-6dof란)
     - [왜 6DoF가 중요한가? (로봇 조작 관점)](#왜-6dof가-중요한가-로봇-조작-관점)
@@ -157,12 +156,7 @@ Clicked Pixel: (312, 254)
 **참고:**  
 일부 픽셀에서는 적외선 센서가 거리 정보를 인식하지 못할 수 있습니다. 이 경우 `get_distance(x, y)`가 `0,0`을 반환하며, 3D 좌표 계산 결과도 `[0.0, 0.0, 0.0]`처럼 **의미 없는 값**이 됩니다. 따라서 클릭 좌표의 깊이값이 0인 경우는 반드시 **예외 처리**가 필요합니다.
 
-### Practice: 클릭한 점 위로 로봇 보내기
-
-3번에서 구한 3D 좌표는 **카메라 기준**입니다. 이 좌표를 **로봇 베이스 기준**으로 바꾸면, 화면에서 클릭한 곳 위로 로봇을 보낼 수 있습니다.
-
-- 문제: [`practice/4_click_move.py`](../practice/4_click_move.py)
-- 정답: [`answer/4_click_move.py`](../answer/4_click_move.py)
+> 실습: [`practice/4_click_move.py`](../practice/4_click_move.py) — 클릭한 점 위로 로봇 보내기 (정답: [`answer/4_click_move.py`](../answer/4_click_move.py))
 
 ## 4. 자세 인식과 6DoF 개념 확장
 
@@ -222,7 +216,6 @@ Clicked Pixel: (312, 254)
 4. 이 Pose를 로봇의 End-effector 목표 자세로 변환  
 5. 역기구학(Inverse Kinematics)으로 경로 생성  
 6. 로봇 그리퍼가 접근하여 정확하게 grasp
-
 
 
 ## 5. 마무리
