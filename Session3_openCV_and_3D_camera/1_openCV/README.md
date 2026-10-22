@@ -130,11 +130,11 @@ python 1_imshow.py
 
 이미지는 숫자(픽셀)의 배열입니다. 마우스로 클릭한 픽셀의 색을 읽고, 그 주변을 빨간색으로 칠해 봅시다.
 
-- 문제: `practice/1_click_color.py` (`# TODO` 2곳)
-- 정답: `answer/1_click_color.py`
+- 문제: [`practice/1_click_color.py`](../practice/1_click_color.py) (`# TODO` 2곳)
+- 정답: [`answer/1_click_color.py`](../answer/1_click_color.py)
 
 ```bash
-cd 1_openCV
+cd Session3_openCV_and_3D_camera
 python practice/1_click_color.py
 ```
 
@@ -142,8 +142,8 @@ python practice/1_click_color.py
 
 클릭한 픽셀과 색이 비슷한 픽셀을 이미지 전체에서 찾아 빨간색으로 칠해 봅시다.
 
-- 문제: `practice/2_similar_color.py` (`# TODO` 2곳)
-- 정답: `answer/2_similar_color.py`
+- 문제: [`practice/2_similar_color.py`](../practice/2_similar_color.py) (`# TODO` 2곳)
+- 정답: [`answer/2_similar_color.py`](../answer/2_similar_color.py)
 
 ```bash
 python practice/2_similar_color.py
@@ -241,8 +241,8 @@ OpenCV의 Canny 엣지 검출은 일반적으로 다음과 같은 전처리 단�
 `cv2.Canny` 없이, 픽셀 밝기 차이만으로 엣지를 직접 만들어 봅시다.
 **엣지 = 옆 픽셀과 밝기 차이가 큰 곳**입니다.
 
-- 문제: `practice/3_my_edge.py` (`# TODO` 3곳)
-- 정답: `answer/3_my_edge.py`
+- 문제: [`practice/3_my_edge.py`](../practice/3_my_edge.py) (`# TODO` 3곳)
+- 정답: [`answer/3_my_edge.py`](../answer/3_my_edge.py)
 
 ```bash
 python practice/3_my_edge.py

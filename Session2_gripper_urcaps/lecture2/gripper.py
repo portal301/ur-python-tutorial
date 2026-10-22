@@ -1,4 +1,5 @@
 # 그리퍼 스크립트를 로봇으로 보내기
+# 실행: Session2_gripper_urcaps 폴더에서 python lecture2/gripper.py
 import socket
 
 PORT_PRIMARY_CLIENT = 30001

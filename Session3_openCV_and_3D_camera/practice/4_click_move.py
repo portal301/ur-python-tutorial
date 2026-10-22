@@ -77,7 +77,7 @@ def get_frame(pipe, align):
 # ============================================================
 def pixel_to_camera(u, v, depth, intr):
     """픽셀 (u, v) → 카메라 기준 3D 점(m). 깊이를 못 읽으면 None"""
-    # TODO 2: 픽셀 (u, v)의 깊이(m) 읽기  (3_click_to_3d.py 참고)
+    # TODO 2: 픽셀 (u, v)의 깊이(m) 읽기  (2_3d_data/3_click_to_3d.py 참고)
     z = ____
     if z <= 0:
         return None

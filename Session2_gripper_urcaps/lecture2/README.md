@@ -8,7 +8,7 @@
 > **TODO (그리퍼 오면 확인할 것)**
 > - 이 실습의 스크립트는 Lecture 1의 `example_urcaps_onrobot.script`(**OnRobot RG2**, URCap 1.10.1)를 바탕으로 만들었습니다.
 > - 실습 장비인 **RG2-FT**에서도 `RG2()` 함수와 Installation Node가 그대로 동작하는지 아직 확인하지 못했습니다.
-> - 그리퍼가 오면 RG2-FT로 만든 프로그램에서 `.script`를 새로 뽑아 비교하고, 다르면 `answer/`, `practice/` 스크립트를 맞춰 주세요.
+> - 그리퍼가 오면 RG2-FT로 만든 프로그램에서 `.script`를 새로 뽑아 비교하고, 다르면 `Session2_gripper_urcaps/answer/`, `practice/` 스크립트를 맞춰 주세요.
 > - 실습 2에서 위치 받기로 읽은 좌표가 **그리퍼 끝(TCP) 기준**인지 확인해 주세요. 스크립트는 Installation Node 끝의 `set_tcp(...)`로 그리퍼 TCP를 씁니다.
 
 ## 목차
@@ -69,8 +69,8 @@ end
 
 ## 3. 실습 1: 그리퍼 열고 닫기
 
-- 문제: `practice/gripper_open_close.script` (`# TODO` 2곳)
-- 정답: `answer/gripper_open_close.script`
+- 문제: [`practice/gripper_open_close.script`](../practice/gripper_open_close.script) (`# TODO` 2곳)
+- 정답: [`answer/gripper_open_close.script`](../answer/gripper_open_close.script)
 
 1. `practice/gripper_open_close.script` 맨 아래의 `____`를 채웁니다.
 ```python
@@ -80,15 +80,15 @@ end
   # TODO 2: 그리퍼 닫기 (폭 20mm, 힘 40N)
   RG2(____,40,0.0,True,False,False)
 ```
-2. `gripper.py`에서 로봇 IP를 확인합니다.
+2. `lecture2/gripper.py`에서 로봇 IP를 확인합니다.
 ```python
 robot_url = "192.168.0.110"
 script_path = "practice/gripper_open_close.script"
 ```
 3. 펜던트를 **원격제어(Remote) 모드**로 두고 실행합니다.
 ```bash
-cd lecture2
-python gripper.py
+cd Session2_gripper_urcaps
+python lecture2/gripper.py
 ```
 
 #### 실행 결과
@@ -101,8 +101,8 @@ python gripper.py
 
 ## 4. 실습 2: 하드코딩 좌표로 집고 놓기
 
-- 문제: `practice/pick_and_place.script` (`# TODO` 4곳)
-- 정답: `answer/pick_and_place.script` (좌표는 예시값이므로 그대로 쓰지 마세요)
+- 문제: [`practice/pick_and_place.script`](../practice/pick_and_place.script) (`# TODO` 4곳)
+- 정답: [`answer/pick_and_place.script`](../answer/pick_and_place.script) (좌표는 예시값이므로 그대로 쓰지 마세요)
 
 ### 4.1 좌표 확인하기
 Day 1 Lecture 3의 [로봇의 현재 정보 받아오기 - Pose](../../Session1_ur_external_control/lecture3/README.md#로봇의-현재-정보-받아오기---pose)를 이용합니다.
@@ -126,13 +126,13 @@ Day 1 Lecture 3의 [로봇의 현재 정보 받아오기 - Pose](../../Session1_
 1. `practice/pick_and_place.script`의 `____` 4곳을 채웁니다.
    - TODO 1, 2: 4.1에서 기록한 좌표
    - TODO 3, 4: 실습 1에서 쓴 `RG2(...)` 닫기/열기
-2. `gripper.py`의 `script_path`를 바꿉니다.
+2. `lecture2/gripper.py`의 `script_path`를 바꿉니다.
 ```python
 script_path = "practice/pick_and_place.script"
 ```
 3. 펜던트를 **원격제어(Remote) 모드**로 두고 실행합니다. 이상하면 바로 펜던트 비상정지 버튼을 누르세요.
 ```bash
-python gripper.py
+python lecture2/gripper.py
 ```
 
 #### 실행 결과

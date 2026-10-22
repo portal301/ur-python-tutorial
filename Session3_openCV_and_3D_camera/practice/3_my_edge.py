@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 threshold = 30          # 밝기 차이가 이 값보다 크면 엣지로 판단
 
 # 1. 이미지 불러오기 + 흑백 변환
-img = cv2.imread('img/shapes_512.jpg')
+img = cv2.imread('1_openCV/img/shapes_512.jpg')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 height, width = gray.shape
 

@@ -161,11 +161,8 @@ Clicked Pixel: (312, 254)
 
 3번에서 구한 3D 좌표는 **카메라 기준**입니다. 이 좌표를 **로봇 베이스 기준**으로 바꾸면, 화면에서 클릭한 곳 위로 로봇을 보낼 수 있습니다.
 
-- 문제: `practice/1_click_move.py`
-- 정답: `answer/1_click_move.py`
-- 설명·힌트·안전 수칙: [practice/README.md](practice/README.md)
-
-> ⚠️ 실제 로봇이 움직입니다. 실행 전에 반드시 [practice/README.md](practice/README.md)의 안전 수칙을 읽으세요.
+- 문제: [`practice/4_click_move.py`](../practice/4_click_move.py)
+- 정답: [`answer/4_click_move.py`](../answer/4_click_move.py)
 
 ## 4. 자세 인식과 6DoF 개념 확장
 

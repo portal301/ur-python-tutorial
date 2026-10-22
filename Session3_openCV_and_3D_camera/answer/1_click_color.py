@@ -1,7 +1,7 @@
 import cv2
 
 # 1. 이미지 불러오기
-img = cv2.imread('img/shapes_512.jpg')
+img = cv2.imread('1_openCV/img/shapes_512.jpg')
 
 
 # 2. 마우스를 클릭하면 자동으로 실행되는 함수
