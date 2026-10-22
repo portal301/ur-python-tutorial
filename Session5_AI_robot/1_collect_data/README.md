@@ -81,7 +81,7 @@ def init_pose():
     sleep(0.1)
 end
 ```
-`init_pose.script`에서는 서버(노트북)과의 통신을 위한 소켓을 연 후 `"initialize"`문자열을 전송합니다. 그 후 버퍼에 들어오느 `joint parameter`를 읽어와서 movej에 넣어줍니다. `Day3/3_robot_remoting`의 `7_set_position2.py`를 통해 `joint parameter`로 로봇을 이동하는 방법을 다시 확인할 수 있습니다. 마지막으로 소켓을 닫으면서 통신을 마무리합니다. 
+`init_pose.script`에서는 서버(노트북)과의 통신을 위한 소켓을 연 후 `"initialize"`문자열을 전송합니다. 그 후 버퍼에 들어오는 `joint parameter`를 읽어와서 movej에 넣어줍니다. Day1 `Session1_ur_external_control/lecture3`의 `set_position2.py`를 통해 `joint parameter`로 로봇을 이동하는 방법을 다시 확인할 수 있습니다. 마지막으로 소켓을 닫으면서 통신을 마무리합니다. 
 
 ### 1.3 생각해보기
 - 이번 스크립트에서는 왜 `trans_pos()`함수를 사용하지 않았을까요?
