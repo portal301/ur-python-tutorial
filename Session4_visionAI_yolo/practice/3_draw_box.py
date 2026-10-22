@@ -54,15 +54,14 @@ def pick_target(result, names):
 # ============================================================
 def draw_target(img, box, names):
     """고른 박스, 이름·신뢰도, 중심을 img 위에 그리기"""
-    # TODO 1: 박스의 왼쪽 위 (x1, y1), 오른쪽 아래 (x2, y2)를 정수로 꺼내기  (xyxy)
-    x1, y1, x2, y2 = ____
-    u, v = map(int, box.xywh[0][:2].tolist())          # 중심
+    x, y, w, h = box.xywh[0].tolist()                  # 중심 x, 중심 y, 폭, 높이 (1단계에서 본 값)
+    # TODO: 중심 (x, y)와 폭 w, 높이 h로 박스의 왼쪽 위 (x1, y1), 오른쪽 아래 (x2, y2) 구하기 (정수로)
+    x1, y1 = ____
+    x2, y2 = ____
     label = f"{names[int(box.cls[0])]} {float(box.conf[0]):.2f}"
-    # TODO 2: 초록색 (0, 255, 0), 두께 2로 박스 그리기  (Day3 OpenCV 참고)
-    ____
-    # TODO 3: 박스 왼쪽 위 조금 위 (x1, y1 - 8)에 label 쓰기  (FONT_HERSHEY_SIMPLEX, 크기 0.6, 초록색, 두께 2)
-    ____
-    cv2.drawMarker(img, (u, v), (0, 0, 255), cv2.MARKER_CROSS, 24, 2)                       # 중심
+    cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)                                  # 박스
+    cv2.putText(img, label, (x1, y1 - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)   # 이름·신뢰도
+    cv2.drawMarker(img, (int(x), int(y)), (0, 0, 255), cv2.MARKER_CROSS, 24, 2)             # 중심
 
 
 # ============================================================

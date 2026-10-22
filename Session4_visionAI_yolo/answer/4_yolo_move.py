@@ -95,12 +95,13 @@ def pick_target(result, names):
 
 def draw_target(img, box, names):
     """고른 박스, 이름·신뢰도, 중심을 img 위에 그리기"""
-    x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
-    u, v = map(int, box.xywh[0][:2].tolist())
+    x, y, w, h = box.xywh[0].tolist()
+    x1, y1 = int(x - w / 2), int(y - h / 2)
+    x2, y2 = int(x + w / 2), int(y + h / 2)
     label = f"{names[int(box.cls[0])]} {float(box.conf[0]):.2f}"
     cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
     cv2.putText(img, label, (x1, y1 - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-    cv2.drawMarker(img, (u, v), (0, 0, 255), cv2.MARKER_CROSS, 24, 2)
+    cv2.drawMarker(img, (int(x), int(y)), (0, 0, 255), cv2.MARKER_CROSS, 24, 2)
 
 
 # ============================================================
