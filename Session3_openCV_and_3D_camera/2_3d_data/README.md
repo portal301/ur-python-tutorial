@@ -40,7 +40,7 @@ RealSense 카메라는 **스테레오 기반 깊이 측정**을 사용합니다.
 - Depth Frame: 1280x720, 90fps    
 
 
-> 더 많은 기술적 정보와 API 문서는 Intel 공식 GitHub 저장소 [IntelRealSense/libRealSense](https://github.com/IntelRealSense/libRealSense)에서 확인할 수 있습니다.
+> 더 많은 기술적 정보와 API 문서는 Intel 공식 GitHub 저장소 [IntelRealSense/librealsense](https://github.com/IntelRealSense/librealsense)에서 확인할 수 있습니다.
 
 ### 준비 사항
 
@@ -50,7 +50,7 @@ RealSense 카메라는 **스테레오 기반 깊이 측정**을 사용합니다.
 #### 설치해야 할 라이브러리
 
 ```bash
-pip install pyRealSense2 opencv-python numpy
+pip install pyrealsense2 opencv-python numpy
 ```
 
 **numpy**: 행렬 및 벡터 연산을 효율적으로 처리하기 위한 수치 계산용 라이브러리입니다. RealSense에서 받은 Depth 데이터를 배열 형태로 다루는 데 필수적으로 사용됩니다.
@@ -60,7 +60,7 @@ pip install pyRealSense2 opencv-python numpy
 
 실시간으로 RGB와 Depth 영상을 수신하고 화면에 시각화하여 깊이 인식 감각을 형성합니다.
 
-**예제 코드 (`1_RealSense.py`):**
+**예제 코드 (`1_realsense.py`):**
 
 ### 주요 함수 및 역할
 
@@ -118,7 +118,7 @@ Pixel (320, 240)
 
 
 ## 3. 마우스 클릭으로 픽셀 → 3D 좌표 변환 실습  
-RGB 화면에서 사용자가 클릭한 픽셀의 3D 위치를 실시간으로 확인합니다. 이를 위해서는 RGB 영상과 depth 영상의 픽셀 좌표를 일치시켜야 합니다. 이 과정으로 정렬(align)이라고 부릅니다. 
+RGB 화면에서 사용자가 클릭한 픽셀의 3D 위치를 실시간으로 확인합니다. 이를 위해서는 RGB 영상과 depth 영상의 픽셀 좌표를 일치시켜야 합니다. 이 과정을 정렬(align)이라고 부릅니다. 
 
 > **RGB-Depth 정렬 (`align`)**:  
 > RealSense는 Color 센서와 Depth 센서가 서로 다른 위치에 장착되어 있기 때문에, 두 이미지의 픽셀 좌표가 일치하지 않을 수 있습니다. `rs.align(rs.stream.color)`을 사용하면 Depth 프레임을 RGB 프레임 기준으로 정렬하여, 동일한 픽셀 좌표계에서 처리할 수 있습니다.
@@ -154,7 +154,7 @@ Clicked Pixel: (312, 254)
 ```
 
 **참고:**  
-일부 픽셀에서는 적외선 센서가 거리 정보를 인식하지 못할 수 있습니다. 이 경우 `get_distance(x, y)`가 `0,0`을 반환하며, 3D 좌표 계산 결과도 `[0.0, 0.0, 0.0]`처럼 **의미 없는 값**이 됩니다. 따라서 클릭 좌표의 깊이값이 0인 경우는 반드시 **예외 처리**가 필요합니다.
+일부 픽셀에서는 적외선 센서가 거리 정보를 인식하지 못할 수 있습니다. 이 경우 `get_distance(x, y)`가 `0.0`을 반환하며, 3D 좌표 계산 결과도 `[0.0, 0.0, 0.0]`처럼 **의미 없는 값**이 됩니다. 따라서 클릭 좌표의 깊이값이 0인 경우는 반드시 **예외 처리**가 필요합니다.
 
 > 실습: [`practice/4_click_move.py`](../practice/4_click_move.py) — 클릭한 점 위로 로봇 보내기 (정답: [`answer/4_click_move.py`](../answer/4_click_move.py))
 

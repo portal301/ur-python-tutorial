@@ -10,7 +10,6 @@
     - [2단계: pip로 OpenCV 설치하기](#2단계-pip로-opencv-설치하기)
   - [matplotlib이란?](#matplotlib이란)
   - [설치 방법](#설치-방법-1)
-  - [목차](#목차)
   - [1. 이미지 불러오기와 보여주기](#1-이미지-불러오기와-보여주기)
     - [실습 경로 설정 팁](#실습-경로-설정-팁)
   - [2. 블러 처리 (Blur)](#2-블러-처리-blur)
@@ -114,10 +113,10 @@ cv2.destroyAllWindows()            # 열린 모든 창 닫기
 ### 실습 경로 설정 팁
 OpenCV에서 이미지 파일을 상대 경로(`img/sample.jpg`)로 불러오는 경우, 터미널에서 Python 파일이 위치한 디렉토리로 먼저 이동해야 합니다.
 
-예를 들어 `Day4/1_opencv/` 폴더에 `1_imshow.py`와 `img/` 폴더가 함께 있다면 아래와 같이 경로를 이동한 후 실행하세요:
+예를 들어 `Session3_openCV_and_3D_camera/1_openCV/` 폴더에 `1_imshow.py`와 `img/` 폴더가 함께 있다면 아래와 같이 경로를 이동한 후 실행하세요:
 
 ```bash
-cd Day4/1_opencv
+cd Session3_openCV_and_3D_camera/1_openCV
 python 1_imshow.py
 ```
 이 과정을 생략하면 `cv2.imread()`가 이미지를 찾지 못해 None을 반환하게 됩니다.
