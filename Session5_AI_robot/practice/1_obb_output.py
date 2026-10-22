@@ -53,7 +53,8 @@ def main():
                 for box in result.obb:
                     name = model.names[int(box.cls[0])]
                     conf = float(box.conf[0])
-                    # TODO 2: xywhr에서 중심·폭·높이·각도를 꺼내고, 각도를 라디안 → 도로 바꾸기
+                    # TODO 2: xywhr에서 중심·폭·높이·각도를 꺼내고 (Day4 1단계처럼 [0]),
+                    #         각도를 라디안 → 도로 바꾸기 (π 라디안 = 180도)
                     x, y, w, h, r = ____
                     deg = ____
                     print(f"  {name:10s} 신뢰도 {conf:.2f}  중심 ({x:.0f}, {y:.0f})  크기 {w:.0f}x{h:.0f}  각도 {deg:.1f}°")

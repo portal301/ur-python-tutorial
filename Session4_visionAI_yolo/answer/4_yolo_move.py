@@ -166,7 +166,8 @@ def main():
                 if box is None:
                     print(f"{TARGET}을(를) 찾지 못했습니다.")
                 else:
-                    u, v = map(int, box.xywh[0][:2].tolist())    # 고른 물체의 중심 = Day3의 클릭한 점
+                    x, y, w, h = box.xywh[0]
+                    u, v = int(x), int(y)                        # 고른 물체의 중심 = Day3의 클릭한 점
                     p_cam = pixel_to_camera(u, v, depth, intr)
                     if p_cam is None:
                         print("깊이를 못 읽었습니다. 물체 위치를 바꿔 보세요.")

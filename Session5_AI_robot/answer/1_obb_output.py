@@ -52,8 +52,8 @@ def main():
                 for box in result.obb:
                     name = model.names[int(box.cls[0])]
                     conf = float(box.conf[0])
-                    x, y, w, h, r = box.xywhr[0].tolist()      # 중심 x, 중심 y, 폭, 높이, 각도(라디안)
-                    deg = math.degrees(r)                       # 라디안 → 도
+                    x, y, w, h, r = box.xywhr[0]               # 중심 x, 중심 y, 폭, 높이, 각도(라디안)
+                    deg = r * 180 / math.pi                     # 라디안 → 도 (π 라디안 = 180도)
                     print(f"  {name:10s} 신뢰도 {conf:.2f}  중심 ({x:.0f}, {y:.0f})  크기 {w:.0f}x{h:.0f}  각도 {deg:.1f}°")
     finally:
         pipe.stop(); cv2.destroyAllWindows()

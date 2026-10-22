@@ -167,7 +167,8 @@ def main():
                 if box is None:
                     print(f"{TARGET}을(를) 찾지 못했습니다.")
                 else:
-                    # TODO 2: 고른 물체의 중심 (u, v) = Day3의 클릭한 점
+                    x, y, w, h = box.xywh[0]                     # 1단계에서 본 값
+                    # TODO 2: 고른 물체의 중심 (u, v) = Day3의 클릭한 점  (픽셀은 정수)
                     u, v = ____
                     p_cam = pixel_to_camera(u, v, depth, intr)
                     if p_cam is None:

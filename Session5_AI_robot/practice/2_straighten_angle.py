@@ -58,10 +58,11 @@ def straighten_angle(deg):
     return ____
 
 
-def rotate_points(points, center, deg):
-    """점들을 center 기준으로 deg만큼 돌리기 (화면 좌표 기준)"""
+def rotate_points(points, cx, cy, deg):
+    """점들을 중심 (cx, cy) 기준으로 deg만큼 돌리기 (화면 좌표 기준)"""
     t = math.radians(deg)
     R = np.array([[math.cos(t), -math.sin(t)], [math.sin(t), math.cos(t)]])
+    center = np.array([cx, cy])
     return (points - center) @ R.T + center
 
 
@@ -83,7 +84,7 @@ def main():
                 # TODO 2: 돌릴 각도 구하기 (r은 라디안)
                 a = ____
                 corners = np.array(box.xyxyxyxy[0].tolist())
-                # TODO 3: 꼭짓점을 중심 기준으로 돌려 "똑바로 세운 모습" 만들기 (어느 방향으로?)
+                # TODO 3: 꼭짓점을 중심 (x, y) 기준으로 돌려 "똑바로 세운 모습" 만들기 (어느 방향으로?)
                 straight = ____
 
                 cv2.polylines(color, [corners.astype(int)], True, (0, 255, 0), 2)

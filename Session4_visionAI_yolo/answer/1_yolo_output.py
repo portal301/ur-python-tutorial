@@ -48,8 +48,8 @@ def main():
                 print(f"\n찾은 물체 수: {len(result.boxes)}")
                 for box in result.boxes:
                     name = model.names[int(box.cls[0])]     # 클래스 번호 → 이름
-                    conf = float(box.conf[0])               # 신뢰도 (0~1)
-                    x, y, w, h = box.xywh[0].tolist()       # 중심 x, 중심 y, 폭, 높이 (픽셀)
+                    conf = box.conf[0]                      # 신뢰도 (0~1)
+                    x, y, w, h = box.xywh[0]                # 중심 x, 중심 y, 폭, 높이 (픽셀)
                     print(f"  {name:12s} 신뢰도 {conf:.2f}  중심 ({x:.0f}, {y:.0f})  크기 {w:.0f}x{h:.0f}")
     finally:
         pipe.stop(); cv2.destroyAllWindows()

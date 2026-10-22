@@ -49,8 +49,9 @@ def main():
             if key == ord("p"):
                 print(f"\n찾은 물체 수: {len(result.boxes)}")
                 for box in result.boxes:
-                    # TODO 3: 박스에서 이름, 신뢰도, 중심·크기 꺼내기  (README의 표 참고)
-                    name = ____                             # 클래스 번호 → 이름  (model.names 사용)
+                    # TODO 3: 박스에서 이름, 신뢰도, 중심·크기 꺼내기
+                    #   값마다 [0]을 붙여 꺼냄 (박스 하나당 값이 1개 든 리스트라서)
+                    name = ____                             # 클래스 번호 → 이름  (model.names[int(번호)])
                     conf = ____                             # 신뢰도 (0~1)
                     x, y, w, h = ____                       # 중심 x, 중심 y, 폭, 높이 (픽셀)
                     print(f"  {name:12s} 신뢰도 {conf:.2f}  중심 ({x:.0f}, {y:.0f})  크기 {w:.0f}x{h:.0f}")
