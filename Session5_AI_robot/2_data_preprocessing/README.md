@@ -41,16 +41,16 @@ Object Detection을 선택하고, 프로젝트 이름 등을 입력한 뒤에 Cr
 
 <img src="image/roboflow7.png" alt="Roboflow 웹사이트">
 
-위와 같은 과정을 업로드한 모든 이미지에 대해 반복합니다. 업로드한 모든 이미지에 대해 라벨링을 완료한 뒤 Add image to Dataset을 클릭하면 데이터셋에 라벨링된 이미지가 포함됩니다. 이때, 데이터셋에서 Train, Valid, Test에 사용할 이미지 갯수의 비율을 나누어 저장할 수 있습니다.
+위와 같은 과정을 업로드한 모든 이미지에 대해 반복합니다. 업로드한 모든 이미지에 대해 라벨링을 완료한 뒤 Add image to Dataset을 클릭하면 데이터셋에 라벨링된 이미지가 포함됩니다. 이때, 데이터셋에서 Train, Valid, Test에 사용할 이미지 개수의 비율을 나누어 저장할 수 있습니다.
 
 <img src="image/roboflow8.png" alt="Roboflow 웹사이트">
 
-이후 좌측 탭에서 Datasets를 클릭하면, 라벨링한 이미지가 잘 데이터셋에 포함될 걸 확인할 수 있습니다. 또한 수동으로 각 이미지의 Split(Train, Valid, Test)을 조정하거나, 데이터셋에서 제외할 수 있습니다.
+이후 좌측 탭에서 Datasets를 클릭하면, 라벨링한 이미지가 잘 데이터셋에 포함된 것을 확인할 수 있습니다. 또한 수동으로 각 이미지의 Split(Train, Valid, Test)을 조정하거나, 데이터셋에서 제외할 수 있습니다.
 
 
 ## 2. 데이터셋 생성
 
-Create New Version을 클릭하여, 최종적인 데이터셋을 추출할 수 있습니다. 이후 다음과 같이 적용한 Preprocessing(데이터 전처리)을 선택할 수 있습니다. (기본 적용된 Auto Orient만 적용해도 무방합니다.)
+Create New Version을 클릭하여, 최종적인 데이터셋을 추출할 수 있습니다. 이후 다음과 같이 적용할 Preprocessing(데이터 전처리)을 선택할 수 있습니다. (기본 적용된 Auto Orient만 적용해도 무방합니다.)
 
 <img src="image/export1.png" alt="Roboflow 웹사이트">
 

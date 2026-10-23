@@ -24,7 +24,7 @@ results = model.train(data="데이터셋파일경로", epochs=250, imgsz=640, de
 
 <img src="image/eval_image_2.jpg" alt="Detection Result">
 
-또한, `runs/detect/train/weights` 폴더내에 학습한 가중치가 생성됨을 확일할 수 있습니다. 해당 파일을 불러온 모델을 이용하여 이후 로봇이 촬영한 사진을 처리할 것이기에, 경로를 잘 기억해두시기 바랍니다.
+또한, `runs/detect/train/weights` 폴더내에 학습한 가중치가 생성됨을 확인할 수 있습니다. 해당 파일을 불러온 모델을 이용하여 이후 로봇이 촬영한 사진을 처리할 것이기에, 경로를 잘 기억해두시기 바랍니다.
 
 ## 2. YOLO OBB 모델 학습
 
@@ -32,6 +32,6 @@ results = model.train(data="데이터셋파일경로", epochs=250, imgsz=640, de
  
 <img src="image/eval_image_2_obb.jpg" alt="Detection Result">
 
-`runs/obb/train/weights` 폴더내에 학습한 가중치가 생성됨을 확일할 수 있습니다.
+`runs/obb/train/weights` 폴더내에 학습한 가중치가 생성됨을 확인할 수 있습니다.
 
 또한, `3_use_trained_model.py` 파일에서 학습된 모델을 불러와 사용하는 것을 실습할 수 있습니다.
