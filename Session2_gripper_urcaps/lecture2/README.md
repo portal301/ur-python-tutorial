@@ -2,14 +2,12 @@
 
 ## 강의 목표
 - Lecture 1에서 로봇으로부터 가져온 `.script` 파일에서 **그리퍼 열기/닫기에 필요한 부분만** 남겨봅니다.
-- `RG2()` 함수로 그리퍼를 원하는 폭만큼 열고 닫아봅니다.
+- `rg2ft_grip()` 함수로 그리퍼를 원하는 폭만큼 열고 닫아봅니다.
 - Day 1에서 배운 위치 받기로 좌표를 확인하고, 로봇 이동과 그리퍼를 묶어 **물체를 집고 놓아봅니다.**
 
-> **TODO (그리퍼 오면 확인할 것)**
-> - 이 실습의 스크립트는 Lecture 1의 `example_urcaps_onrobot.script`(**OnRobot RG2**, URCap 1.10.1)를 바탕으로 만들었습니다.
-> - 실습 장비인 **RG2-FT**에서도 `RG2()` 함수와 Installation Node가 그대로 동작하는지 아직 확인하지 못했습니다.
-> - 그리퍼가 오면 RG2-FT로 만든 프로그램에서 `.script`를 새로 뽑아 비교하고, 다르면 `Session2_gripper_urcaps/answer/`, `practice/` 스크립트를 맞춰 주세요.
-> - 실습 2에서 위치 받기로 읽은 좌표가 **그리퍼 끝(TCP) 기준**인지 확인해 주세요. 스크립트는 Installation Node 끝의 `set_tcp(...)`로 그리퍼 TCP를 씁니다.
+> **TODO (강의장에서 확인할 것)**
+> - 이 실습의 스크립트는 Lecture 1의 `example_urcaps_onrobot_rg2ft.script`(**OnRobot RG2-FT**, URCap 5.10.1)를 바탕으로 만들었습니다. 펜던트 실행은 확인했고, **PC에서 보내서 실행하는 것**은 아직 확인하지 못했습니다.
+> - 실습 2에서 위치 받기로 읽은 좌표가 **그리퍼 끝(TCP) 기준**인지 확인해 주세요. 이 스크립트는 `set_tcp(...)`를 직접 쓰지 않고 URCap 안에서 TCP를 설정합니다.
 
 ## 목차
 - [Lecture 2: 그리퍼 열기/닫기와 하드코딩 좌표로 집고 놓기](#lecture-2-그리퍼-열기닫기와-하드코딩-좌표로-집고-놓기)
@@ -24,44 +22,54 @@
 
 ## 1. 가져온 스크립트 살펴보기
 
-Lecture 1의 `lecture1/scripts/example_urcaps_onrobot.script`를 열어보면 크게 세 부분으로 나뉩니다.
+Lecture 1의 `lecture1/scripts/example_urcaps_onrobot_rg2ft.script`는 펜던트에서 `RG2-FT Grip` 노드 2개(닫기, 열기)만 넣고 만든 프로그램입니다. 열어보면 크게 세 부분으로 나뉩니다.
 
 | 줄 | 내용 | 남길까? |
 |---|---|---|
-| 1 ~ 31 | 로봇 기본 설정 (TCP, 입출력, 중력, 페이로드 등) | 남김 |
-| 32 ~ 271 | `# begin: URCap Installation Node` ~ `# end: URCap Installation Node`<br>그리퍼 설정과 **`RG2()` 함수 정의** | 남김 |
-| 272 ~ | 본문: 로봇 이동(`movej`, `movel`)과 `RG2(...)` 호출 | **필요한 것만** |
+| 1 ~ 57 | 로봇 기본 설정 (TCP, 입출력, 중력, 페이로드 등) | 남김 |
+| 58 ~ 3130 | `# begin: URCap Installation Node` ~ `# end: URCap Installation Node`<br>그리퍼 설정과 **`rg2ft_grip()` 함수 정의** | 남김 |
+| 3131 ~ | 본문: 반복문과 `rg2ft_grip(...)` 호출 | **필요한 것만** |
 
-Installation Node 안에는 `RG2()` 함수가 정의되어 있습니다.
+Installation Node 안에는 `rg2ft_grip()` 함수가 정의되어 있습니다.
 ```python
-def RG2(target_width=110, target_force=40, payload=0.0, set_payload=False, depth_compensation=False, slave=False):
+def rg2ft_grip(width,force,tool_index=0,blocking=True,depth_comp=False,popupmsg=True):
 ```
-- `target_width`: 손가락 사이 폭(mm). 크면 열리고, 작으면 닫힙니다.
-- `target_force`: 잡는 힘(N)
+- `width`: 손가락 사이 폭(mm). 크면 열리고, 작으면 닫힙니다.
+- `force`: 잡는 힘(N)
 
-이 함수 정의가 없으면 본문에서 `RG2(...)`를 부를 수 없으므로, **Installation Node는 지우지 않습니다.**
+이 함수 정의가 없으면 본문에서 `rg2ft_grip(...)`를 부를 수 없으므로, **Installation Node는 지우지 않습니다.**
 
 
 ## 2. 필요한 부분만 남기기
 
 원래 본문은 다음과 같습니다.
 ```python
-  i=0
-  while (i<1):
-    i = i+1
-    movej(p[0,-0.4,0.4,0,0,0],a=1,v=0.2,r=0)
-    RG2(20,40,0.0,True,False,False)
-    movel(p[0,-0.4,0.5,0,0,0],a=1,v=0.2,r=0)
-    movej(p[0,-0.4,0.5,0.2,0,0],a=1,v=0.2,r=0)
-    RG2(100,40,0.0,True,False,False)
+  step_count_... = 0.0
+  thread Step_Counter_Thread_...():
     ...
   end
+  run Step_Counter_Thread_...()
+  while (True):
+    $ 2 "Robot Program"
+    $ 3 "RG2-FT Grip"
+on_return = rg2ft_grip(0.0, 40.0, tool_index = 0, blocking = True, depth_comp = False, popupmsg = True)
+rg2ft_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
+    $ 4 "RG2-FT Grip"
+on_return = rg2ft_grip(100.0, 3.0, tool_index = 0, blocking = True, depth_comp = False, popupmsg = True)
+rg2ft_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
+  end
+end
 ```
-로봇 이동(`movej`, `movel`)과 반복문을 지우고, 그리퍼 열기/닫기만 남기면 다음과 같습니다.
+- `$ 2 "..."` 같은 줄은 펜던트 화면에 지금 실행 중인 노드를 표시하는 용도라 지워도 됩니다.
+- `rg2ft_payload_set(...)`은 물체 무게를 로봇에 알려주는 줄입니다. 그리퍼 노드마다 자동으로 들어가며, 이번 실습에서는 무게를 0으로 둡니다.
+
+스텝 카운터와 반복문(`while (True)`)을 지우고, 그리퍼 열기/닫기만 남기면 다음과 같습니다.
 ```python
-  RG2(100,40,0.0,True,False,False)    # 열기 (폭 100mm)
+  rg2ft_grip(100.0, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)    # 열기 (폭 100mm)
+  rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
   sleep(1.0)
-  RG2(20,40,0.0,True,False,False)     # 닫기 (폭 20mm)
+  rg2ft_grip(20.0, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)     # 닫기 (폭 20mm)
+  rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
 end
 ```
 로봇 팔은 움직이지 않고 그리퍼만 열렸다 닫힙니다.
@@ -75,10 +83,12 @@ end
 1. `practice/gripper_open_close.script` 맨 아래의 `____`를 채웁니다.
 ```python
   # TODO 1: 그리퍼 열기 (폭 100mm, 힘 40N)
-  RG2(____,40,0.0,True,False,False)
+  rg2ft_grip(____, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)
+  rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
   sleep(1.0)
   # TODO 2: 그리퍼 닫기 (폭 20mm, 힘 40N)
-  RG2(____,40,0.0,True,False,False)
+  rg2ft_grip(____, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)
+  rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
 ```
 2. `lecture2/gripper.py`에서 로봇 IP를 확인합니다.
 ```python
@@ -96,7 +106,7 @@ python lecture2/gripper.py
 
 ### 더 해보기
 - 폭을 바꿔서 그리퍼가 조금만 열리게 해보세요.
-- 힘(`target_force`)을 바꿔서 물체를 잡아보세요. 힘이 너무 크면 어떻게 될까요?
+- 힘(`force`)을 바꿔서 물체를 잡아보세요. 힘이 너무 크면 어떻게 될까요?
 
 
 ## 4. 실습 2: 하드코딩 좌표로 집고 놓기
@@ -125,7 +135,7 @@ Day 1 Lecture 3의 [로봇의 현재 정보 받아오기 - Pose](../../Session1_
 ### 4.3 실행하기
 1. `practice/pick_and_place.script`의 `____` 4곳을 채웁니다.
    - TODO 1, 2: 4.1에서 기록한 좌표
-   - TODO 3, 4: 실습 1에서 쓴 `RG2(...)` 닫기/열기
+   - TODO 3, 4: 실습 1에서 쓴 `rg2ft_grip(...)` 닫기/열기
 2. `lecture2/gripper.py`의 `script_path`를 바꿉니다.
 ```python
 script_path = "practice/pick_and_place.script"
