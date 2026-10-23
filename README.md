@@ -10,9 +10,9 @@
 
 유니버설 로봇 지정 트레이닝센터에서 오프라인 트레이닝 세션이 정기적으로 진행되며, 트레이닝센터의 로봇 시스템 구성은 아래와 같습니다.
 
-- 파이썬 python version: 3.11.x ~ 3.13.x
+- 파이썬 python version: 3.12.x
 
-- 로봇 모델 Robot model: UR3e
+- 로봇 모델 Robot model: UR5e
 
 - 로봇 소프트웨어 버전 Polyscope version: 5.11 ~ 5.18  
       (*v5.21 ~ 5.22에서는 오류가 발견되었습니다.)
@@ -66,7 +66,7 @@ VScode에서 python extension과 ur script extension을 설치하세요.
 ### python 설치
   [Python](https://www.python.org/downloads/)
   
-  **3.10.x - 3.12.x 버전 설치를 권장합니다.**
+  **3.12.x 버전 설치를 권장합니다.**
 
 
 
@@ -100,7 +100,7 @@ VScode에서 python extension과 ur script extension을 설치하세요.
 AI를 학습하는 세션까지 진행하실 분들은 아래의 명령어로 파이토치를 설치해주세요. 
  
 ```
-  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 ```
 혹시 이미 torch가 설치되어 있다면 아래의 명령어로 삭제후 다시 설치해주세요.
 ```
