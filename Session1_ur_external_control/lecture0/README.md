@@ -4,7 +4,7 @@
 
 우선 터미널 프롬프트에서 아래 명령어를 통해 lecture0 폴더로 이동하겠습니다. (해당 위치를 프로그램 실행/참조의 기준위치로 설정함)
 
-    cd lecture0
+    cd Session1_ur_external_control/lecture0
 
 ## 1. 이 정도만 알면 간단한 해석은 될거예요.
 
@@ -83,7 +83,7 @@ while count < 5:
     print(count)
     count += 1
 ```
-### for 문 예시:
+#### for 문 예시:
 ```python
 fruits = ["apple", "banana", "cherry"]
 

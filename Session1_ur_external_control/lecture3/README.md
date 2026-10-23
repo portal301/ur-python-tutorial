@@ -50,7 +50,7 @@ UR 로봇에서는 ***urp*** 프로그래밍 언어를 사용합니다. 이 언�
 - `socket_send_line()` 함수를 통해 원하는 데이터를 소켓으로 전송합니다.
 - `socket_close()` 함수를 사용하여 소켓을 닫습니다.
 
-로봇의 현재 위치 값을 이러한 방식으로 얻어보겠습니다. 자세한 내용은 [여기](https://github.com/portal301/ur-python-tutorial/blob/main/scriptManual_SW5.11.pdf)에서 확인할 수 있습니다.
+로봇의 현재 위치 값을 이러한 방식으로 얻어보겠습니다. 자세한 내용은 [여기](../../References/scriptManual_SW5.16.pdf)에서 확인할 수 있습니다.
 
 ## Pose와 Joint Parameter
 UR 로봇을 제어할 때, pose와 joint 파라미터는 서로 다른 방식으로 로봇의 위치와 자세를 정의합니다.
@@ -66,9 +66,9 @@ UR 로봇을 제어할 때, pose와 joint 파라미터는 서로 다른 방식�
 
 이번 실습에서는 로봇의 현재 정보를 보내는 방법에 대해 알아보겠습니다.
 
-코드 전문은 `get_position1.py`와 `get_position1.script`에 존재합니다.
+코드 전문은 `get_position1.py`와 `scripts/socket_get_position1.script`에 존재합니다.
 
-### get_position1.script
+### socket_get_position1.script
 ```python
 def socket_get_position1():
     server_ip = "192.168.0.2"
@@ -90,9 +90,9 @@ def socket_get_position1():
 end
 ```
 
-해당 함수는 컴퓨터에서 열어둔 포트에 접속하여. 현재 pose값을 전송합니다. `get_actual_tcp_pose()` 함수는 현재 로봇의 pose 값, 즉 `X,Y,Z,RX,RY,RZ` 정보를 배열로 반환합니다. 
+해당 함수는 컴퓨터에서 열어둔 포트에 접속하여 현재 pose값을 전송합니다. `get_actual_tcp_pose()` 함수는 현재 로봇의 pose 값, 즉 `X,Y,Z,RX,RY,RZ` 정보를 배열로 반환합니다. 
 
-이때 코드를 보시면, `p[i]`를 한자리(digit)씩 보내는 것을 알 수 있습니다.
+이때 코드를 보시면, `p_[i]`를 한자리(digit)씩 보내는 것을 알 수 있습니다.
 
 ## 로봇의 현재 정보 받아오기 - Pose
 이렇게 한자리씩 보낸 배열값을 한번에 파싱하려면 어떻게 해야할까요?
@@ -124,7 +124,7 @@ async def handle_pos_data(reader):
         i=i+1
     end
 ```
-이때 **get_position1.script** 에서 값을 전송할때 `float`(소수) 형식의 데이터에 10000을 곱해 보냈기 때문에 다시 10000을 나눠서 원래 값과 동일하게 만들어 줍니다.
+이때 **socket_get_position1.script** 에서 값을 전송할때 `float`(소수) 형식의 데이터에 10000을 곱해 보냈기 때문에 다시 10000을 나눠서 원래 값과 동일하게 만들어 줍니다.
 
 ## 로봇의 현재 정보 보내기 - Joint Param
 로봇의 현재 모습을 표현하는 방식에는 `X,Y,Z,RX,RY,RZ`를 표현하는 pose도 있지만, 각 6개의 관절값을 저장하고 있는 **joint parameter**도 존재합니다.
@@ -144,7 +144,7 @@ pose와 마찬가지로 joint parameter도 6자리 배열값이므로, 소켓을
 
 ## 로봇의 pose값으로 움직여보기 
 로봇의 현재 정보를 받아보았으니, 이번엔 반대로 로봇을 움직이는 스크립트를 전송해보겠습니다.
-코드 전문은 `set_position1.script`에 있습니다.
+코드 전문은 `scripts/socket_set_position1.script`에 있습니다.
 
 ```python
     buf=socket_read_ascii_float(6,socket_name="socket_0", timeout=2)
@@ -168,11 +168,11 @@ pose와 마찬가지로 joint parameter도 6자리 배열값이므로, 소켓을
 이후 `movej()` 함수를 통해 로봇을 이동할 수 있습니다.
 
 ## 로봇의 joint parameter값 전송하기
-로봇을 이동하는 방식은 pose 값을 전송하는 방식도 있지만, 로봇의 각 축의 관절 값의 모음인 joint paramter값을 전송해서 할 수 있습니다.
+로봇을 이동하는 방식은 pose 값을 전송하는 방식도 있지만, 로봇의 각 축의 관절 값의 모음인 joint parameter값을 전송해서 할 수 있습니다.
 
 우리는 다음 스크립트를 통해, `q_ready` joint parameter 값을 취한 뒤 `p_goal`에 도착하도록 하려고 합니다.
 
-코드의 전문은 `set_position.script`에 존재합니다
+코드의 전문은 `scripts/socket_set_position2.script`에 존재합니다
 
 ```python
     buf=socket_read_ascii_float(18,socket_name="socket_0", timeout=2)

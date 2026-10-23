@@ -4,7 +4,7 @@ TCP 소켓 서버와 클라이언트 프로그램을 실행해보면서, TCP 통
 
 ## TCP란
 **TCP**는 Transmission Control Protocol의 줄임말로서, 컴퓨터가 네트워크상의 다른 기기와 통신하기 위한 통신규약입니다.
-각각의 패킷(통신 단위) 전송에, 일종의 송장번호인 **SYN**와 **ACK**값을 함께 전송하면서, 패킷이 유실되는 상황을 인식하고, 재전송 할 수 있어 안정적인 통신 방식입니다.
+각각의 패킷(통신 단위) 전송에, 일종의 송장번호인 **SYN**과 **ACK**값을 함께 전송하면서, 패킷이 유실되는 상황을 인식하고, 재전송 할 수 있어 안정적인 통신 방식입니다.
 ### SYN, ACK
 ![image](https://github.com/portal301/ur-python-tutorial/assets/5483768/b2b69ba6-9b46-4ebf-b89d-f0ee765f2649)
 
@@ -29,7 +29,7 @@ python server.py
 python client.py
 ```
 
-#### 코드 분석 : Client.py
+#### 코드 분석 : client.py
 ```python
 import socket
 
@@ -52,7 +52,7 @@ if __name__ == "__main__":
    - 메시지가 오지 않는다면 올 때까지 기다리게 됩니다.
    - 따라서 이후 ```print```문은 만약 메시지가 전송되지 않으면 실행되지 않습니다.   
 
-#### 코드 분석 : Server.py
+#### 코드 분석 : server.py
 ```Python
 import socket
 
@@ -102,7 +102,7 @@ python client.py
 
 실행 완료 후 서버 쪽 프롬프트는 잊지말고 ```Ctrl + C```를 눌러 강제 종료합니다.
 
-#### 코드 분석 : Server_forever.py
+#### 코드 분석 : server_forever.py
 ```Python
 import socket
 import threading
@@ -164,7 +164,7 @@ python client.py
 
 실행 완료 후 서버 프롬프트를 ```Ctrl + C```를 눌러 강제 종료합니다.
 
-#### 코드 분석 : Server_forever_async.py
+#### 코드 분석 : server_forever_async.py
 ```python
 import asyncio
 
@@ -202,7 +202,7 @@ if __name__ == "__main__":
         print("\nServer is shutting down...")
 ```
 
-### 코드 설명
+#### 코드 설명
 `asyncio.start_server()` 함수는 ***비동기*** 방식으로 서버를 실행합니다. asyncio는 ***이벤트 루프***라는 방식을 사용해서 여러 개의 스레드를 열지 않아도, 단일 스레드에서 여러 작업을 동시에 처리할 수 있습니다.
 
 비동기 방식으로 작성할 때는 함수의 앞에 `async`와 `await` 구문을 통해 해당 동작이 비동기임을 알려주어야 합니다.
