@@ -95,7 +95,7 @@ def sendScriptFile(robot_url, script_path, port=PORT_PRIMARY_CLIENT):
 ```python
 def getScriptFromPath(script_path):
     # Open the file in read mode
-    with open(script_path, 'r') as file:
+    with open(script_path, 'r', encoding='utf-8') as file:
         # Read the contents of the file
         script = file.read()
         # print(script)
