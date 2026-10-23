@@ -18,7 +18,7 @@ https://www.kaggle.com/datasets/sriramr/fruits-fresh-and-rotten-for-classificati
 
 ## 1. 데이터셋 구성
 
-YOLO classification 모델에서 사용할 수 있는 데이터셋은 다음과 같은 파일 구조를 띄고 있습니다.
+YOLO classification 모델에서 사용할 수 있는 데이터셋은 다음과 같은 파일 구조를 띠고 있습니다.
 
 ```
 datasets/
@@ -114,4 +114,4 @@ Done. Saved results to: classify_result
 
 
 ## 4. 마무리
-오늘의 실습에서는 비전AI 모델중 하나인 YOLO 모델을 실행시켜보고, 이를 바탕으로 다양한 응용을 실습하였습니다. 6일차 실습은 하나의 프로젝트 형태로 진행될 것이며, 실습 과정에서 배운 내용을 총집합하여 YOLO와 UR robot 을 이용한 Pick & Place 작업을 진행할 것입니다.
+오늘의 실습에서는 비전AI 모델중 하나인 YOLO 모델을 실행시켜보고, 이를 바탕으로 다양한 응용을 실습하였습니다. 5일차 실습은 하나의 프로젝트 형태로 진행될 것이며, 실습 과정에서 배운 내용을 총집합하여 YOLO와 UR robot 을 이용한 Pick & Place 작업을 진행할 것입니다.
