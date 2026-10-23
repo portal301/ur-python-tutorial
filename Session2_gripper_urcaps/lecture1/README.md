@@ -1,4 +1,4 @@
-# Lecture 4
+# Lecture 1: 엔드이펙터 제어 (URCaps)
 ## 강의 목표
 UR로봇의 기능을 확장해주는 URCaps를 원격으로 활용해봅시다.
 
@@ -26,7 +26,7 @@ URCaps는 UR 로봇 시리즈를 위한 소프트웨어 프레임워크입니다
     
       FileZilla Client를 설치해주세요. (다운로드 링크: https://filezilla-project.org/)
 
-      [호스트/사용자명/비밀전호/포트]를 각각 [로봇IP/root/easybot/22] 으로 입력해주세요.
+      [호스트/사용자명/비밀번호/포트]를 각각 [로봇IP/root/easybot/22] 으로 입력해주세요.
 
       "/programs" 경로로 이동 후 방금 작성한 프로그램의 .script 파일을 복사해주세요.
 

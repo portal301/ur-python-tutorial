@@ -1,7 +1,7 @@
 # Day 2: 그리퍼 제어와 하드코딩 Pick and Place
 Day 2 강의는 URCaps로 그리퍼(OnRobot RG2-FT)를 제어하는 방법부터, 정해둔 좌표로 물체를 집고 내려놓는 과정까지 단계적으로 다루는 구성입니다.
 
-## Lecture 1: 엔드이퍽터 제어 (URCaps)
+## Lecture 1: 엔드이펙터 제어 (URCaps)
 - URCaps의 개념과 역할 이해, 로봇 기능 확장 방법 학습.
 - 로봇에서 URCaps 기반 프로그램의 `.script` 파일을 추출하고, PC에서 수정·재실행.
 - 기존 프로그램과 수정본의 동작 비교 실습.
