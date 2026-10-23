@@ -46,7 +46,7 @@ async def handle_client(reader, writer):
             elif message == "req_data":
                 print("Received data request")
                 p_rel = [0.0, 0.0, 0.03, 0.0, 0.0, 0.0]
-                float_string = "({})\n".format(','.join(map(str, p_rel)))
+                float_string = "({})".format(','.join(map(str, p_rel)))
                 writer.write(float_string.encode())
                 await writer.drain()
     except asyncio.CancelledError:

@@ -49,7 +49,7 @@ async def handle_client(reader, writer):
                 p_rel = [0.0, 0.0, -0.10, 0.0, 0.0, 0.0]
                 q_ref = [0.1232, -1.516, -1.6844, -1.4973, 1.5504, 3.2482]
                 arr = p_goal + p_rel + q_ref # 18 floats
-                float_string = "({})\n".format(','.join(map(str, arr)))
+                float_string = "({})".format(','.join(map(str, arr)))
                 writer.write(float_string.encode())
 
                 await writer.drain()
