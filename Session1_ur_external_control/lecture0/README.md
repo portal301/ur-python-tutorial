@@ -135,7 +135,33 @@ person2 = Person("Bob", 25)
 person2.greet()
 ```
 
-## 3. 시스템 최적화
+## 3. import로 만들어진 기능 가져다 쓰기
+
+앞으로 나오는 `socket`, `cv2`, `ultralytics`도 전부 이렇게 불러와서 사용하므로 형태만 알아두면 됩니다.
+
+### 모듈 불러오기 (import)
+모듈은 미리 만들어 둔 기능 묶음입니다. 코드 맨 위에서 `import`로 불러오면 그 기능을 사용할 수 있습니다.
+
+```python
+# import 모듈 → 모듈.기능 으로 사용
+import random
+print(random.randint(1, 6))  # 1~6 중 하나
+
+# from 모듈 import 기능 → 기능 이름만으로 사용
+from time import sleep
+for i in [3, 2, 1]:
+    print(i)
+    sleep(1)  # 1초 대기
+print("출발!")
+
+# import 모듈 as 별명 → 별명으로 사용
+import webbrowser as wb
+wb.open("https://www.universal-robots.com")  # 브라우저 열기
+```
+
+`random`, `time`, `webbrowser`는 파이썬에 기본으로 들어 있습니다. `cv2`, `ultralytics` 같은 모듈은 환경 설정 때 `pip install`로 설치한 것이고, 사용법은 똑같습니다.
+
+## 4. 시스템 최적화
 
 로봇과 주변기기들 간의 통신 시스템을 구축할 때, 각 기기의 독립적인 동작 과정에서 비동기성이 발생할 수 있습니다. 이를 처리하기 위해 비동기 프로그래밍을 적용하고, 발생할 수 있는 다양한 오류를 예외처리로 다루며, 프로세스 병목현상을 줄이기 위해 큐(queue)를 사용할 수 있습니다.
 
