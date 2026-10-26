@@ -12,7 +12,7 @@ def unnamed():
   set_runstate_standard_digital_output_to_value(3, 5)
   set_gravity([0.0, 0.0, 9.82])
   set_safety_mode_transition_hardness(1)
-  set_tcp(p[0.0,0.0,0.0,0.0,0.0,0.0])
+  set_tcp(p[0.0,0.0,0.2387,0.0,0.0,0.0])
   modbus_add_signal("127.0.0.1", 255, 400, 3, "MODBUS_1", False)
   modbus_set_signal_update_frequency("MODBUS_1", 10)
   modbus_add_signal("127.0.0.1", 255, 401, 3, "MODBUS_2", False)
