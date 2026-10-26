@@ -4,8 +4,8 @@ import socket
 
 PORT_PRIMARY_CLIENT = 30001
 
-robot_url = "192.168.0.110"
-script_path = "practice/gripper_open_close.script"     # 실습 1: 그리퍼 열고 닫기
+robot_url = "192.168.0.3"
+script_path = "answer/gripper_open_close.script"     # 실습 1: 그리퍼 열고 닫기
 # script_path = "practice/pick_and_place.script"       # 실습 2: 하드코딩 좌표로 집고 놓기
 # 정답 확인: "practice/" 대신 "answer/"
 
@@ -19,7 +19,12 @@ def getScriptFromPath(script_path):
 def sendScript(robot_url, script, port=PORT_PRIMARY_CLIENT):
     socketClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socketClient.connect((robot_url, port))
-    socketClient.send((script + "\n").encode())
+    socketClient.settimeout(5)
+    socketClient.sendall((script + "\n").encode())
+    # 스크립트가 길어서, 바로 닫으면 뒷부분이 잘림 → "다 보냈다"고 알리고 로봇이 닫을 때까지 기다림
+    socketClient.shutdown(socket.SHUT_WR)
+    while socketClient.recv(4096):   # 로봇이 보내는 상태 데이터는 읽어서 버림
+        pass
     socketClient.close()
 
 

@@ -99,9 +99,9 @@ def unnamed():
   ON_DI_DUAL = 3
   on_robot_type = 5
   on_robot_cycle = 2.0
-  on_device_ip = "192.168.1.1"
+  on_device_ip = "192.168.0.4"
   on_device_socket_port = 51234
-  on_xmlrpc = rpc_factory("xmlrpc", "http://192.168.1.1:41414")
+  on_xmlrpc = rpc_factory("xmlrpc", "http://192.168.0.4:41414")
   on_RPC = rpc_factory("xmlrpc", "http://127.0.0.1:31416")
   ON_DEBUG_LOG = False
   on_isMetric = True
@@ -2856,8 +2856,7 @@ def unnamed():
   end 
   
   #======    End of OnRobot FT Insert Part    ======#
-  #======    OnRobot FT Search Part
-    ======#
+  #======    OnRobot FT Search Part    ======#
   
   def hex_search_part(frameID,axis,isDirectionPositive,max_dist,contact_ft,tcp_speed,retraction):
   sync()
@@ -2930,8 +2929,7 @@ def unnamed():
   return(ft_search_return!=0)
   end 
   
-  #======    End of OnRobot FT Search Part
-    ======#
+  #======    End of OnRobot FT Search Part    ======#
   #======    OnRobot FT Search Center    ======#
   
   hex_center_pose=ON_ZEROPOSE

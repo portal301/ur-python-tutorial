@@ -17,7 +17,12 @@ def getScriptFromPath(script_path):
 def sendScript(robot_url, script, port=PORT_PRIMARY_CLIENT):
     socketClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socketClient.connect((robot_url, port))
-    socketClient.send((script + "\n").encode())
+    socketClient.settimeout(5)
+    socketClient.sendall((script + "\n").encode())
+    # 스크립트가 길어서, 바로 닫으면 뒷부분이 잘림 → "다 보냈다"고 알리고 로봇이 닫을 때까지 기다림
+    socketClient.shutdown(socket.SHUT_WR)
+    while socketClient.recv(4096):   # 로봇이 보내는 상태 데이터는 읽어서 버림
+        pass
     socketClient.close()
 
 def sendScriptFile(robot_url, script_path, port=PORT_PRIMARY_CLIENT):
