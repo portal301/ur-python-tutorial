@@ -11,7 +11,7 @@ from ultralytics import YOLO
 # ============================================================
 # 1. 설정값
 # ============================================================
-MODEL_PATH = "4_pick_and_place/weights/obb/best.pt"
+MODEL_PATH = ""
 TARGET = "square"                                       # 찾을 물체 이름
 CONF_MIN = 0.5
 

@@ -18,7 +18,7 @@ TCP_CAMERA = [-0.026, -0.056, -0.2197, 0, 0, 0]   # 툴(그리퍼 끝 TCP, z 238
 HOVER = 0.30                                     # 물체 위 높이(m)
 GRASP_ABOVE = 0.05                               # 물체 윗면에서 이만큼 위까지만 내려감(m). 강의장에서 그리퍼에 맞춰 조정
 SPEED_V, SPEED_A = 0.05, 0.2                     # 직선 이동 속도(m/s), 가속도
-MODEL_PATH = "4_pick_and_place/weights/obb/best.pt"
+MODEL_PATH = ""
 TARGET = "square"
 CONF_MIN = 0.5
 
