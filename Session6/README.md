@@ -5,7 +5,7 @@
 
 ## 준비물
 - Day 5에서 학습한 M·R OBB 모델
-- 참고 코드: `Session5_AI_robot/practice/3_straighten_pick.py`
+- 참고 코드: `Session5_AI_robot/practice/4_straighten_pick.py`
 
 ## 미션 1: 정렬하기
 - 삐뚤어진 물체를 OBB로 보고 똑바로 세워 놓기

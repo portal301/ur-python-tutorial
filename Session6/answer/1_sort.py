@@ -1,5 +1,5 @@
 # 미션 1: 정렬하기 - 삐뚤어진 MR·obb 물체를 집어서 놓을 칸에 WORD 순서(MR → obb)로 똑바로 놓기
-# - Day5 3단계(삐뚤어진 물체 집어서 똑바로 놓기)에 "여러 개 + 놓을 칸"을 더함
+# - Day5 4단계(삐뚤어진 물체 집어서 똑바로 놓기)에 "여러 개 + 놓을 칸"을 더함
 # - 집는 구역(카메라에 보이는 곳)과 놓을 칸(SLOT)은 서로 다른 구역에 둠
 # - 물체 하나마다: 물체 위 → 손목 a만큼 돌림 → 내려감 → 잡기 → 올라옴
 #                → 놓을 칸 위(손목 원래대로) → 내려감 → 놓기 → 올라옴
@@ -17,7 +17,8 @@ from ultralytics import YOLO
 ROBOT_IP = "192.168.0.3"
 TCP_CAMERA = [-0.026, -0.056, -0.2197, 0, 0, 0]   # 툴(그리퍼 끝 TCP, z 238.7mm) 기준 카메라 위치·회전 (Day3와 같음, 플랜지 기준 z 0.019 - 0.2387)
 HOVER = 0.30                                     # 물체 위 높이(m)
-GRASP_ABOVE = 0.05                               # 물체 윗면에서 이만큼 위까지만 내려감(m). 강의장에서 그리퍼에 맞춰 조정
+TOOL_DOWN = [0.0611, 3.141, 0.0]                 # 툴이 정확히 아래(베이스 -z)를 보는 회전 rx, ry, rz. 집을 때 이 회전을 씀. 강의장에서 다시 재기
+GRASP_OFFSET = [0.0, 0.0, 0.05]                  # 물체 윗면 기준 잡는 위치 보정 x, y, z(m, 베이스 기준으로 더함). z가 음수면 더 내려감. 강의장에서 그리퍼에 맞춰 조정
 SPEED_V, SPEED_A = 0.05, 0.2                     # 직선 이동 속도(m/s), 가속도
 MODEL_PATH = ""                                 # OBB 모델 경로
 CLASSES = ()                          # 모델의 클래스 이름과 같아야 함 (MR 물체, obb = AI 물체)
@@ -195,8 +196,9 @@ def gripper_header():
 def pick_place_lines(obj, slot, pose):
     """물체 하나를 집어서 slot번 칸에 똑바로 놓는 URScript 줄들"""
     p = obj["point"]
-    hover = pose.copy(); hover[:3] = p + [0, 0, HOVER]           # 물체 위, 손목 그대로
-    down = hover.copy(); down[2] = p[2] + GRASP_ABOVE            # 물체까지 내려간 자리
+    hover = pose.copy(); hover[:3] = p + [0, 0, HOVER]           # 물체 위
+    hover[3:] = TOOL_DOWN                                        # 툴은 정확히 아래를 봄
+    down = hover.copy(); down[:3] = p + GRASP_OFFSET             # 물체까지 내려간 자리 (보정 더함)
     hover_rot = rotate_tool_z(hover, obj["a"])                   # 물체 위, 손목을 a만큼 돌림
     down_rot = rotate_tool_z(down, obj["a"])                     # 내려간 자리, 손목을 a만큼 돌림
 

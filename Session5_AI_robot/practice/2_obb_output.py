@@ -1,7 +1,7 @@
-# 1단계: OBB(기울어진 박스) 출력 보기
+# 2단계: OBB(기울어진 박스) 출력 보기
 # - Day4 1단계와 같은데, 박스가 기울어질 수 있음 → 각도 r이 하나 더 나옴
 # - p = 지금 화면의 탐지 결과 출력, q = 종료
-# - 실행: Session5_AI_robot 폴더에서 python practice/1_obb_output.py
+# - 실행: Session5_AI_robot 폴더에서 python practice/2_obb_output.py
 import math
 import numpy as np, cv2, pyrealsense2 as rs
 from ultralytics import YOLO

@@ -1,11 +1,12 @@
-# 3단계: 삐뚤어진 물체를 집어서 똑바로 내려놓기
+# 4단계: 삐뚤어진 물체를 집어서 놓을 곳(PLACE)에 똑바로 내려놓기
+# - 1단계(집고 놓기)에 손목 회전만 더함
 # - 원래 과정(Session4 4_pickup_obb)과 같은 틀:
 #   PC = 물체 찾기 + 서버,  로봇 = PC에 물어보고(req_data) 좌표 계산 + 움직임 (scripts/straighten_pick.script)
-# - 순서: 물체 위 → 손목을 a만큼 돌림 → 내려감 → 잡기 → 올라옴 → 손목을 원래대로 → 내려감 → 놓기 → 올라옴
+# - 순서: 물체 위 → 손목을 a만큼 돌림 → 내려감 → 잡기 → 올라옴 → 놓을 곳 위(손목 원래대로) → 내려감 → 놓기 → 올라옴
 #   (잡은 채로 손목을 원래대로 돌리면 물체가 -a만큼 돌아서 똑바로 섬)
 # - t = 물체 찾기, m = 실행, c = 취소, 스페이스 = 정지 명령, q = 종료
 # - t를 누른 뒤 m을 누를 때까지 로봇을 움직이지 말 것 (로봇이 '지금 자세' 기준으로 계산함)
-# - 실행: Session5_AI_robot 폴더에서 python practice/3_straighten_pick.py
+# - 실행: Session5_AI_robot 폴더에서 python answer/4_straighten_pick.py
 import math, socket
 import numpy as np, cv2, pyrealsense2 as rs
 from ultralytics import YOLO
@@ -14,19 +15,21 @@ from ultralytics import YOLO
 # ============================================================
 # 1. 설정값
 # ============================================================
-ROBOT_IP = "192.168.0.110"
-PC_IP = "192.168.0.199"                          # 로봇이 접속할 PC의 이더넷 IP (Day1 lecture3와 같음)
+ROBOT_IP = "192.168.0.3"
+PC_IP = "192.168.0.2"                            # 로봇이 접속할 PC의 이더넷 IP (Day1 lecture3와 같음)
 PORT = 12345                                     # PC 서버 포트
 TCP_CAMERA = [-0.026, -0.056, -0.2197, 0, 0, 0]   # 툴(그리퍼 끝 TCP, z 238.7mm) 기준 카메라 위치·회전 (Day3와 같음, 플랜지 기준 z 0.019 - 0.2387)
 HOVER = 0.30                                     # 물체 위 높이(m)
-GRASP_ABOVE = 0.05                               # 물체 윗면에서 이만큼 위까지만 내려감(m). 강의장에서 그리퍼에 맞춰 조정
+TOOL_DOWN = [0.0611, 3.141, 0.0]                 # 툴이 정확히 아래(베이스 -z)를 보는 회전 rx, ry, rz. 집을 때 이 회전을 씀. 강의장에서 다시 재기
+GRASP_OFFSET = [0.0, 0.0, 0.05]                  # 물체 윗면 기준 잡는 위치 보정 x, y, z(m, 베이스 기준으로 더함). z가 음수면 더 내려감. 강의장에서 그리퍼에 맞춰 조정
 SPEED_V, SPEED_A = 0.05, 0.2                     # 직선 이동 속도(m/s), 가속도
+PLACE = [0.40, -0.20]                            # TODO 직접 재기!! 놓을 곳의 베이스 기준 x, y(m) (티치펜던트로 그 자리 위에 TCP를 두고 읽은 값)
 GRIP_OPEN, GRIP_CLOSE, GRIP_FORCE = 100.0, 20.0, 40.0   # 그리퍼 열기·닫기 폭(mm), 힘(N). 강의장에서 물체에 맞춰 조정
 MODEL_PATH = ""
 TARGET = ""
 CONF_MIN = 0.5
 GRIPPER_SCRIPT = "../Session2_gripper_urcaps/answer/gripper_open_close.script"   # Day2 그리퍼 스크립트 (위쪽 OnRobot 정의만 가져다 씀)
-ROBOT_SCRIPT = "practice/scripts/straighten_pick.script"                       # 로봇이 할 일 (TODO 1·2는 이 파일 안에 있음)
+ROBOT_SCRIPT = "answer/scripts/straighten_pick.script"                         # 로봇이 할 일
 
 
 # ============================================================
@@ -70,7 +73,9 @@ def settings_lines():
         f"  PORT = {PORT}",
         "  TCP_CAMERA = p[%s]" % ", ".join(str(x) for x in TCP_CAMERA),
         f"  HOVER = {HOVER}",
-        f"  GRASP_ABOVE = {GRASP_ABOVE}",
+        f"  TOOL_DOWN = {TOOL_DOWN}",
+        f"  GRASP_OFFSET = {GRASP_OFFSET}",
+        f"  PLACE = {PLACE}",
         f"  SPEED_V = {SPEED_V}",
         f"  SPEED_A = {SPEED_A}",
         f"  GRIP_OPEN = {GRIP_OPEN}",
@@ -146,16 +151,20 @@ def pixel_to_camera(u, v, depth, intr):
 
 
 # ============================================================
-# 5. 물체 고르기·각도 (1·2단계와 같음)
+# 5. 물체 고르기·각도 (2·3단계와 같음)
 # ============================================================
 def pick_target(result, names):
     """탐지 결과에서 TARGET 중 가장 확실한 박스 하나 고르기. 없으면 None"""
     best, best_conf = None, 0
+    img_h, img_w = result.orig_shape                   # 화면 크기 (세로, 가로)
     for box in result.obb:
         name = names[int(box.cls[0])]
         conf = float(box.conf[0])
         if name != TARGET or conf < CONF_MIN:
             continue
+        corners = box.xyxyxyxy[0].tolist()             # 꼭짓점 4개 [[x, y], ...]
+        if any(not (0 <= x < img_w and 0 <= y < img_h) for x, y in corners):
+            continue                                   # 화면 밖으로 잘린 물체는 빼기
         if conf > best_conf:
             best, best_conf = box, conf
     return best
@@ -202,8 +211,7 @@ def main():
                 else:
                     x, y, w, h, r = box.xywhr[0].tolist()
                     u, v = int(x), int(y)
-                    # TODO 3: 손목을 돌릴 각도 (2단계 참고)
-                    a = ____
+                    a = straighten_angle(math.degrees(r))
                     p_cam = pixel_to_camera(u, v, depth, intr)
                     if p_cam is None:
                         print("깊이를 못 읽었습니다. 물체 위치를 바꿔 보세요.")

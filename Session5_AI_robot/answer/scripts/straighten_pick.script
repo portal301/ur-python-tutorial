@@ -1,9 +1,9 @@
   # ============================================================
-  # Day5 3단계 로봇 쪽 프로그램: 삐뚤어진 물체를 집어서 똑바로 내려놓기
+  # Day5 4단계 로봇 쪽 프로그램: 삐뚤어진 물체를 집어서 놓을 곳(PLACE)에 똑바로 내려놓기
   # - Day1 lecture3(socket_set_position1)과 같은 방식: 로봇이 PC에 접속 → "req_data" → PC가 값을 보내 줌
   # - 이 파일만 따로 보내면 안 됨. PC 프로그램이
   #   [Day2 그리퍼 정의] + [설정값] + [이 파일] + end 로 묶어서 보냄
-  # - 설정값(PC_IP, PORT, TCP_CAMERA, HOVER, GRASP_ABOVE, SPEED_V, SPEED_A,
+  # - 설정값(PC_IP, PORT, TCP_CAMERA, HOVER, TOOL_DOWN, GRASP_OFFSET, PLACE, SPEED_V, SPEED_A,
   #   GRIP_OPEN, GRIP_CLOSE, GRIP_FORCE)은 PC 프로그램 1번 절에서 바꿈
   # ============================================================
 
@@ -40,15 +40,17 @@
   obj = pose_trans(cam, obj_cam)                    # 물체 위치 (베이스 기준)
 
   # ------------------------------------------------------------
-  # 3. 집고 놓는 데 필요한 자세 4개
+  # 3. 집고 놓는 데 필요한 자세 6개
   # ------------------------------------------------------------
-  hover = p[obj[0], obj[1], obj[2] + HOVER, now[3], now[4], now[5]]          # 물체 위, 손목은 지금 그대로
-  down = p[obj[0], obj[1], obj[2] + GRASP_ABOVE, now[3], now[4], now[5]]     # 내려간 자리, 손목 그대로
+  hover = p[obj[0], obj[1], obj[2] + HOVER, TOOL_DOWN[0], TOOL_DOWN[1], TOOL_DOWN[2]]          # 물체 위, 툴은 정확히 아래를 봄
+  down = p[obj[0] + GRASP_OFFSET[0], obj[1] + GRASP_OFFSET[1], obj[2] + GRASP_OFFSET[2], TOOL_DOWN[0], TOOL_DOWN[1], TOOL_DOWN[2]]     # 내려간 자리(보정 더함), 툴은 아래
   hover_rot = pose_trans(hover, p[0, 0, 0, 0, 0, a])                         # 물체 위, 손목을 a만큼 돌림
   down_rot = pose_trans(down, p[0, 0, 0, 0, 0, a])                           # 내려간 자리, 손목을 a만큼 돌림
+  place_hover = p[PLACE[0], PLACE[1], hover[2], TOOL_DOWN[0], TOOL_DOWN[1], TOOL_DOWN[2]]   # 놓을 곳 위, 손목 원래대로
+  place_down = p[PLACE[0], PLACE[1], down[2], TOOL_DOWN[0], TOOL_DOWN[1], TOOL_DOWN[2]]     # 놓을 곳까지 내려간 자리 (집을 때와 같은 높이)
 
   # ------------------------------------------------------------
-  # 4. 집기 → 손목 되돌리기 → 놓기
+  # 4. 집기 → 놓을 곳으로(손목 되돌리기) → 놓기
   # ------------------------------------------------------------
   grip(GRIP_OPEN)       # 시작 전에 벌려 두기
   go(hover)             # 물체 위로
@@ -56,8 +58,8 @@
   go(down_rot)          # 내려감
   grip(GRIP_CLOSE)      # 잡기
   go(hover_rot)         # 올라옴
-  go(hover)             # 손목을 원래대로 → 물체가 똑바로 섬
-  go(down)              # 내려감
+  go(place_hover)       # 놓을 곳 위로, 손목을 원래대로 → 물체가 똑바로 섬
+  go(place_down)        # 내려감
   grip(GRIP_OPEN)       # 놓기
-  go(hover)             # 올라옴
+  go(place_hover)       # 올라옴
   go(now)               # 처음 자세로 돌아옴

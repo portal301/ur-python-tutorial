@@ -1,0 +1,63 @@
+  # ============================================================
+  # Day5 1단계 로봇 쪽 프로그램: 물체를 집어서 놓을 곳(PLACE)에 내려놓기
+  # - Day1 lecture3(socket_set_position1)과 같은 방식: 로봇이 PC에 접속 → "req_data" → PC가 값을 보내 줌
+  # - 이 파일만 따로 보내면 안 됨. PC 프로그램이
+  #   [Day2 그리퍼 정의] + [설정값] + [이 파일] + end 로 묶어서 보냄
+  # - 설정값(PC_IP, PORT, TCP_CAMERA, HOVER, TOOL_DOWN, GRASP_OFFSET, PLACE, SPEED_V, SPEED_A,
+  #   GRIP_OPEN, GRIP_CLOSE, GRIP_FORCE)은 PC 프로그램 1번 절에서 바꿈
+  # - 주의: ____ 를 다 채우지 않으면 로봇이 아무 말 없이 실행하지 않음
+  # ============================================================
+
+  # 그리퍼를 width(mm)만큼 벌리거나 좁히기 (Day2와 같음)
+  def grip(width):
+    rg2ft_grip(width, GRIP_FORCE, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)
+  end
+
+  # 직선 이동
+  def go(pose):
+    movel(pose, a=SPEED_A, v=SPEED_V)
+  end
+
+  # ------------------------------------------------------------
+  # 1. PC에 접속해서 물체 정보 받기: (x, y, z)
+  #    x, y, z = 카메라 기준 물체 위치(m)
+  # ------------------------------------------------------------
+  socket_open(PC_IP, PORT, "pc")
+  socket_send_line("req_data", "pc")
+  buf = socket_read_ascii_float(3, socket_name="pc", timeout=5)
+  socket_close("pc")
+  if buf[0] != 3:                                   # buf[0] = 받은 숫자 개수. 3개가 아니면 멈춤
+    popup("PC data error", error=True)
+    halt
+  end
+  obj_cam = p[buf[1], buf[2], buf[3], 0, 0, 0]
+
+  # ------------------------------------------------------------
+  # 2. 카메라 기준 → 베이스 기준 (pose_trans: 앞 자세 기준으로 뒤 자세만큼 옮긴 자세)
+  # ------------------------------------------------------------
+  now = get_actual_tcp_pose()                       # 지금 툴(그리퍼 끝) 자세
+  cam = pose_trans(now, TCP_CAMERA)                 # 지금 카메라 자세
+  obj = pose_trans(cam, obj_cam)                    # 물체 위치 (베이스 기준)
+
+  # ------------------------------------------------------------
+  # 3. 집고 놓는 데 필요한 자세 4개
+  # ------------------------------------------------------------
+  hover = p[obj[0], obj[1], obj[2] + HOVER, TOOL_DOWN[0], TOOL_DOWN[1], TOOL_DOWN[2]]          # 물체 위, 툴은 정확히 아래를 봄
+  down = p[obj[0] + GRASP_OFFSET[0], obj[1] + GRASP_OFFSET[1], obj[2] + GRASP_OFFSET[2], TOOL_DOWN[0], TOOL_DOWN[1], TOOL_DOWN[2]]     # 내려간 자리(보정 더함), 툴은 아래
+  place_hover = p[PLACE[0], PLACE[1], hover[2], TOOL_DOWN[0], TOOL_DOWN[1], TOOL_DOWN[2]]   # 놓을 곳 위
+  place_down = p[PLACE[0], PLACE[1], down[2], TOOL_DOWN[0], TOOL_DOWN[1], TOOL_DOWN[2]]     # 놓을 곳까지 내려간 자리 (집을 때와 같은 높이)
+
+  # ------------------------------------------------------------
+  # 4. 집기 → 놓을 곳으로 → 놓기
+  # ------------------------------------------------------------
+  grip(GRIP_OPEN)       # 시작 전에 벌려 두기
+  # TODO 1: PC 프로그램 맨 위 주석의 순서대로 go(자세) / grip(폭)을 채우기
+  ____                  # 물체 위로
+  ____                  # 내려감
+  ____                  # 잡기
+  ____                  # 올라옴
+  ____                  # 놓을 곳 위로
+  ____                  # 내려감
+  ____                  # 놓기
+  ____                  # 올라옴
+  go(now)               # 처음 자세로 돌아옴

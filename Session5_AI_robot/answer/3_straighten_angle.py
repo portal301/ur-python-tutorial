@@ -1,8 +1,8 @@
-# 2단계: 얼마나 돌리면 똑바로 서는지 구하기
+# 3단계: 얼마나 돌리면 똑바로 서는지 구하기
 # - 사각형은 90°마다 같은 모양 → 30°나 120°나 똑바로 세우려면 30°만 돌리면 됨
 # - 그래서 각도를 -45° ~ 45° 사이로 맞추면 "가장 적게 돌리는 각도"가 됨
 # - 초록 = 지금 박스, 노랑 = 그만큼 돌려서 똑바로 세운 모습. q = 종료
-# - 실행: Session5_AI_robot 폴더에서 python answer/2_straighten_angle.py
+# - 실행: Session5_AI_robot 폴더에서 python answer/3_straighten_angle.py
 import math
 import numpy as np, cv2, pyrealsense2 as rs
 from ultralytics import YOLO
@@ -12,7 +12,7 @@ from ultralytics import YOLO
 # 1. 설정값
 # ============================================================
 MODEL_PATH = ""
-TARGET = ""                                       # 찾을 물체 이름
+TARGET = ""                                          # 찾을 물체 이름
 CONF_MIN = 0.5
 
 

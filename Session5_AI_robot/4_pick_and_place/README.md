@@ -179,11 +179,13 @@ obb 모델의 결과값은 Detection 모델과 유사하나, 추가적으로 `xy
 - **안전 높이 확보**:  
   배치 시 Z=0.10m처럼 여유 높이를 설정해 충돌을 방지
 
-> 실습: [`practice/1_obb_output.py`](../practice/1_obb_output.py) — OBB 출력 보기 (정답: [`answer/1_obb_output.py`](../answer/1_obb_output.py))
+> 실습: [`practice/1_pick_place.py`](../practice/1_pick_place.py) — 찾은 물체를 집어서 놓을 곳에 내려놓기 (정답: [`answer/1_pick_place.py`](../answer/1_pick_place.py))
 
-> 실습: [`practice/2_straighten_angle.py`](../practice/2_straighten_angle.py) — 얼마나 돌리면 똑바로 서는지 구하기 (정답: [`answer/2_straighten_angle.py`](../answer/2_straighten_angle.py))
+> 실습: [`practice/2_obb_output.py`](../practice/2_obb_output.py) — OBB 출력 보기 (정답: [`answer/2_obb_output.py`](../answer/2_obb_output.py))
 
-> 실습: [`practice/3_straighten_pick.py`](../practice/3_straighten_pick.py) — 삐뚤어진 물체를 집어서 똑바로 내려놓기 (정답: [`answer/3_straighten_pick.py`](../answer/3_straighten_pick.py))
+> 실습: [`practice/3_straighten_angle.py`](../practice/3_straighten_angle.py) — 얼마나 돌리면 똑바로 서는지 구하기 (정답: [`answer/3_straighten_angle.py`](../answer/3_straighten_angle.py))
+
+> 실습: [`practice/4_straighten_pick.py`](../practice/4_straighten_pick.py) — 삐뚤어진 물체를 집어서 놓을 곳에 똑바로 내려놓기 (정답: [`answer/4_straighten_pick.py`](../answer/4_straighten_pick.py))
 
 ## 4. 시연 영상
 <p align="center">
