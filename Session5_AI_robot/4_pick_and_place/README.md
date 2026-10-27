@@ -20,7 +20,7 @@
 
 > 참고 링크: [Onrobot urp 다운로드 링크](https://df.onrobot.com/)
 
-> 이 폴더의 `1_gripper_example.py`, `scripts/gripper_example.script`는 원본 장비(OnRobot 2FG7)용이라 RG2-FT에서는 그대로 실행되지 않습니다. 그리퍼 연습은 Day2의 [`answer/gripper_open_close.script`](../../Session2_gripper_urcaps/answer/gripper_open_close.script)를 사용합니다.
+> 그리퍼 연습은 Day2의 [`answer/gripper_open_close.script`](../../Session2_gripper_urcaps/answer/gripper_open_close.script)를 사용합니다.
 
 ### 1.1 그리퍼를 여닫는 스크립트 (Day2 복습)
 #### 예제코드(Day2 gripper_open_close.script 본문):
