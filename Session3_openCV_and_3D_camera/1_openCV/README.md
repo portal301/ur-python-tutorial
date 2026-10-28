@@ -26,7 +26,7 @@
     - [1단계: 이미지 로드 및 Grayscale 변환](#1단계-이미지-로드-및-grayscale-변환)
     - [2단계: Gaussian Blur 적용 + Canny 엣지 검출](#2단계-gaussian-blur-적용--canny-엣지-검출)
     - [3단계: 윤곽선 추출 및 시각화](#3단계-윤곽선-추출-및-시각화)
-    - [함수 설명:](#함수-설명)
+    - [함수 설명](#함수-설명)
   - [5. 바운딩 박스 (Bounding Box)](#5-바운딩-박스-bounding-box)
     - [1단계: 이미지 불러오기 및 전처리](#1단계-이미지-불러오기-및-전처리)
     - [2단계: 윤곽선 추출](#2단계-윤곽선-추출)
@@ -121,9 +121,9 @@ python 1_imshow.py
 ```
 이 과정을 생략하면 `cv2.imread()`가 이미지를 찾지 못해 None을 반환하게 됩니다.
 
-> 실습: [`practice/1_click_color.py`](../practice/1_click_color.py) — 클릭한 곳 색 바꾸기 (정답: [`answer/1_click_color.py`](../answer/1_click_color.py))
+> 문제: [`practice/1_click_color.py`](../practice/1_click_color.py) — 클릭한 곳 색 바꾸기 (정답: [`answer/1_click_color.py`](../answer/1_click_color.py))
 
-> 실습: [`practice/2_similar_color.py`](../practice/2_similar_color.py) — 클릭한 색과 비슷한 픽셀 모두 칠하기 (정답: [`answer/2_similar_color.py`](../answer/2_similar_color.py))
+> 문제: [`practice/2_similar_color.py`](../practice/2_similar_color.py) — 클릭한 색과 비슷한 픽셀 모두 칠하기 (정답: [`answer/2_similar_color.py`](../answer/2_similar_color.py))
 
 
 ## 2. 블러 처리 (Blur)
@@ -211,7 +211,7 @@ blur_bilateral = cv2.bilateralFilter(img, bilateral_d, bilateral_sigma_color, bi
 이미지의 **경계(윤곽선)** 을 검출하여 객체의 구조나 형태를 파악하는 데 사용됩니다.
 OpenCV의 Canny 엣지 검출은 일반적으로 다음과 같은 전처리 단계를 거친 후 수행합니다.
 
-> 실습: [`practice/3_my_edge.py`](../practice/3_my_edge.py) — 엣지 직접 만들기 (Canny 전에) (정답: [`answer/3_my_edge.py`](../answer/3_my_edge.py))
+> 문제: [`practice/3_my_edge.py`](../practice/3_my_edge.py) — 엣지 직접 만들기 (Canny 전에) (정답: [`answer/3_my_edge.py`](../answer/3_my_edge.py))
 
 이제 OpenCV의 Canny 엣지 검출을 알아봅시다.
 
@@ -281,7 +281,7 @@ contour_color = (180, 100, 50)
 cv2.drawContours(img_contour, contours, -1, contour_color, 2)
 ```
 
-### 함수 설명:
+### 함수 설명
 
 - `cv2.findContours()` : 엣지를 기준으로 윤곽선 리스트를 추출합니다.  
 - `cv2.drawContours()` : 추출한 윤곽선을 이미지 위에 시각화합니다.  

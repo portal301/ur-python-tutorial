@@ -70,13 +70,13 @@ if __name__ == "__main__":
 ### 추가질문
 사전 학습된 모델을 사용하지 않으면 어떤 결과가 발생할까요?
 
-> 실습: [`practice/1_yolo_output.py`](../practice/1_yolo_output.py) — YOLO 출력 형태 보기 (정답: [`answer/1_yolo_output.py`](../answer/1_yolo_output.py))
+> 문제: [`practice/1_yolo_output.py`](../practice/1_yolo_output.py) — YOLO 출력 형태 보기 (정답: [`answer/1_yolo_output.py`](../answer/1_yolo_output.py))
 
-> 실습: [`practice/2_pick_target.py`](../practice/2_pick_target.py) — 로봇이 갈 물체 하나 고르기 (정답: [`answer/2_pick_target.py`](../answer/2_pick_target.py))
+> 문제: [`practice/2_pick_target.py`](../practice/2_pick_target.py) — 로봇이 갈 물체 하나 고르기 (정답: [`answer/2_pick_target.py`](../answer/2_pick_target.py))
 
-> 실습: [`practice/3_draw_box.py`](../practice/3_draw_box.py) — 고른 물체를 직접 그리기 (정답: [`answer/3_draw_box.py`](../answer/3_draw_box.py))
+> 문제: [`practice/3_draw_box.py`](../practice/3_draw_box.py) — 고른 물체를 직접 그리기 (정답: [`answer/3_draw_box.py`](../answer/3_draw_box.py))
 
-> 실습: [`practice/4_yolo_move.py`](../practice/4_yolo_move.py) — AI가 고른 물체 위로 로봇 보내기 (정답: [`answer/4_yolo_move.py`](../answer/4_yolo_move.py))
+> 문제: [`practice/4_yolo_move.py`](../practice/4_yolo_move.py) — AI가 고른 물체 위로 로봇 보내기 (정답: [`answer/4_yolo_move.py`](../answer/4_yolo_move.py))
 
 
 ## 4. 모델 Train 시키기

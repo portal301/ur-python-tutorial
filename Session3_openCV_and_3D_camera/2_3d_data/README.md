@@ -156,7 +156,7 @@ Clicked Pixel: (312, 254)
 **참고:**  
 일부 픽셀에서는 적외선 센서가 거리 정보를 인식하지 못할 수 있습니다. 이 경우 `get_distance(x, y)`가 `0.0`을 반환하며, 3D 좌표 계산 결과도 `[0.0, 0.0, 0.0]`처럼 **의미 없는 값**이 됩니다. 따라서 클릭 좌표의 깊이값이 0인 경우는 반드시 **예외 처리**가 필요합니다.
 
-> 실습: [`practice/4_click_move.py`](../practice/4_click_move.py) — 클릭한 점 위로 로봇 보내기 (정답: [`answer/4_click_move.py`](../answer/4_click_move.py))
+> 문제: [`practice/4_click_move.py`](../practice/4_click_move.py) — 클릭한 점 위로 로봇 보내기 (정답: [`answer/4_click_move.py`](../answer/4_click_move.py))
 
 ## 4. 자세 인식과 6DoF 개념 확장
 
