@@ -185,7 +185,7 @@ obb 모델의 결과값은 Detection 모델과 유사하나, 추가적으로 `xy
 
 > 실습: [`practice/3_straighten_angle.py`](../practice/3_straighten_angle.py) — 얼마나 돌리면 똑바로 서는지 구하기 (정답: [`answer/3_straighten_angle.py`](../answer/3_straighten_angle.py))
 
-> 실습: [`practice/4_straighten_pick.py`](../practice/4_straighten_pick.py) — 삐뚤어진 물체를 집어서 놓을 곳에 똑바로 내려놓기 (정답: [`answer/4_straighten_pick.py`](../answer/4_straighten_pick.py))
+> 실습: [`practice/4_straighten_pick.py`](../practice/4_straighten_pick.py) — 삐뚤어진 물체를 집어서 그 자리에 똑바로 내려놓기 (정답: [`answer/4_straighten_pick.py`](../answer/4_straighten_pick.py))
 
 ## 4. 시연 영상
 <p align="center">
