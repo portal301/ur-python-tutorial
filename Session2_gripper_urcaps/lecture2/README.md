@@ -19,11 +19,11 @@
 
 Lecture 1의 `lecture1/scripts/example_urcaps_onrobot_rg2ft.script`는 펜던트에서 `RG2-FT Grip` 노드 2개(닫기, 열기)만 넣고 만든 프로그램입니다. 열어보면 크게 세 부분으로 나뉩니다.
 
-| 줄 | 내용 | 남길까? |
-|---|---|---|
-| 1 ~ 57 | 로봇 기본 설정 (TCP, 입출력, 중력, 페이로드 등) | 남김 |
-| 58 ~ 3130 | `# begin: URCap Installation Node` ~ `# end: URCap Installation Node`<br>그리퍼 설정과 **`rg2ft_grip()` 함수 정의** | 남김 |
-| 3131 ~ | 본문: 반복문과 `rg2ft_grip(...)` 호출 | **필요한 것만** |
+| 줄 | 내용 |
+|---|---|
+| 1 ~ 57 | 로봇 기본 설정 (TCP, 입출력, 중력, 페이로드 등) |
+| 58 ~ 3130 | `# begin: URCap Installation Node` ~ `# end: URCap Installation Node`<br>그리퍼 설정과 **`rg2ft_grip()` 함수 정의** |
+| 3131 ~ | 본문: 반복문과 `rg2ft_grip(...)` 호출 |
 
 Installation Node 안에는 `rg2ft_grip()` 함수가 정의되어 있습니다.
 ```python
@@ -113,6 +113,6 @@ python lecture2/gripper.py
 
 ## 4. 마무리
 
-이번 실습에서는 URCaps로 만든 긴 `.script`에서 그리퍼 열기/닫기에 필요한 부분만 남기고, 확인한 좌표로 물체를 집고 놓아 보았습니다.
+이번 실습에서는 URCaps로 만든 `.script`로 그리퍼를 열고 닫아 보고, 확인한 좌표로 물체를 집고 놓아 보았습니다.
 
 지금은 좌표를 직접 넣었기 때문에 물체가 조금만 옮겨져도 집지 못합니다. 다음 날부터는 카메라로 물체의 위치를 직접 찾아보겠습니다.
