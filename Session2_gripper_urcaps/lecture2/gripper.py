@@ -6,7 +6,7 @@ PORT_PRIMARY_CLIENT = 30001
 
 robot_url = "192.168.0.3"
 script_path = "answer/gripper_open_close.script"     # 실습 1: 그리퍼 열고 닫기
-# script_path = "practice/pick_and_place.script"       # 실습 2: 하드코딩 좌표로 집고 놓기
+# script_path = "practice/pick_and_place.script"       # 실습 2: 저장한 위치로 Pick and Place
 # 정답 확인: "practice/" 대신 "answer/"
 
 
