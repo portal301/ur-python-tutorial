@@ -167,12 +167,11 @@ pose와 마찬가지로 joint parameter도 6자리 배열값이므로, 소켓을
 
 이후 `movej()` 함수를 통해 로봇을 이동할 수 있습니다.
 
-## 로봇의 joint parameter값 전송하기
-로봇을 이동하는 방식은 pose 값을 전송하는 방식도 있지만, 로봇의 각 축의 관절 값의 모음인 joint parameter값을 전송해서 할 수 있습니다.
+## 목표 위로 갔다가 내려가기
+물체를 집으러 갈 때 목표 위치로 바로 가면, 가는 도중에 물체나 주변에 부딪힐 수 있습니다.
+그래서 **목표 바로 위로 먼저 간 다음, 똑바로 내려가는** 순서로 움직입니다.
 
-우리는 다음 스크립트를 통해, `q_ready` joint parameter 값을 취한 뒤 `p_goal`에 도착하도록 하려고 합니다.
-
-코드의 전문은 `scripts/socket_set_position2.script`에 존재합니다
+코드의 전문은 `scripts/socket_set_position2.script`에 존재합니다. PC(`set_position2.py`)가 숫자 18개를 보내면 로봇이 받아서 움직입니다.
 
 ```python
     buf=socket_read_ascii_float(18,socket_name="socket_0", timeout=2)
@@ -182,57 +181,33 @@ pose와 마찬가지로 joint parameter도 6자리 배열값이므로, 소켓을
 
     ...
 
-    p_=get_actual_tcp_pose()
-    q_=get_actual_joint_positions()
+    p_above = pose_add(p_goal, p_rel)                 # 목표에서 p_rel만큼 위
+    q_above = get_inverse_kin(p_above, qnear=q_ref)   # 위 점을 q_ref와 비슷한 팔 모양으로
 
-    q_goal = get_inverse_kin(p_goal,q_ref)
-    p_ready = get_forward_kin(q=q_goal,tcp=p_rel)
-    q_ready = get_inverse_kin(p_ready,q_ref)
-
-    movej(q_ref, a=1.2, v=0.1, t=0, r=0)
-    sleep(1)
-    movej(q_ready, a=1.2, v=0.1, t=0, r=0.01)
-    movel(q_goal, a=1.2, v=0.1, t=0, r=0)
+    movej(q_above, a=1.2, v=0.3, t=0, r=0)            # 1. 지금 자리에서 위 점으로
+    movel(p_goal, a=1.2, v=0.1, t=0, r=0)             # 2. 똑바로 내려가기
 ```
 
-각 변수들은 다음 역할을 담당합니다.
-```python
-p_goal = p[buf[1], buf[2], buf[3], buf[4], buf[5], buf[6]]
-p_rel = p[buf[7], buf[8], buf[9], buf[10], buf[11], buf[12]]
-q_ref = [buf[13], buf[14], buf[15], buf[16], buf[17], buf[18]]
-```
+### 입력 3개
+| 변수 | 뜻 | 예시 |
+|---|---|---|
+| `p_goal` (buf 1~6) | **어디로** 갈지: 목표 pose | 위치 받기(`get_position1.py`)로 확인한 값 |
+| `p_rel` (buf 7~12) | **얼마나 위에서** 내려올지 | `[0, 0, 0.10, 0, 0, 0]` = 10cm 위 (베이스 기준) |
+| `q_ref` (buf 13~18) | **어떤 팔 모양으로** 갈지 | 같은 자리에서 `get_position2.py`로 확인한 joint 값 |
 
-1. `p_goal`은 목표 위치를 나타내며, buf의 `1`번부터 `6`번 요소를 사용합니다.
-2. `p_rel`은 상대 위치를 나타내며, buf의 `7`번부터 `12`번 요소를 사용합니다.
-3. `q_ref`는 기준 관절 위치를 나타내며, buf의 `13`번부터 `18`번 요소를 사용합니다.
-   
-```python
-p_ = get_actual_tcp_pose()
-q_ = get_actual_joint_positions()
-```
+### 왜 pose(p)와 joint(q)를 오가나요?
+- 사람은 위치를 pose(`x, y, z, rx, ry, rz`)로 생각하지만, `movej`는 관절을 돌려 움직이는 명령이라 joint 값이 필요합니다.
+- 같은 pose를 만드는 팔 모양(joint 값)은 여러 개입니다. (팔꿈치 위/아래, 손목 방향 등)
+- `get_inverse_kin(pose, qnear=q_ref)`는 그중 **`q_ref`와 가장 가까운 답**을 골라 줍니다. 그래서 `q_ref`는 "이 팔 모양으로 가라"는 기준입니다.
+- `movel`은 공간에서 직선으로 움직이는 명령이라 pose를 그대로 넣습니다.
 
-1. p_는 현재 TCP(툴 센터 포인트)의 위치를 가져옵니다.
-2. q_는 현재 관절 위치를 가져옵니다.
+### 동작
+1. `pose_add(p_goal, p_rel)`: 목표 pose에 `p_rel`을 더해 **위 점**을 만듭니다. (베이스 기준이므로 z +0.10 = 10cm 위)
+2. `movej(q_above, ...)`: 지금 자리에서 위 점으로 갑니다. 속도는 0.3입니다.
+3. `movel(p_goal, ...)`: 위 점에서 목표까지 **똑바로** 내려갑니다. 속도는 0.1로 천천히 움직입니다.
 
-```python
-q_goal = get_inverse_kin(p_goal, q_ref)
-p_ready = get_forward_kin(q=q_goal, tcp=p_rel)
-q_ready = get_inverse_kin(p_ready, q_ref)
-```
-1. `q_goal`은 `p_goal` 위치에서의 역기구학(inverse kinematics)을 계산하여 관절 위치를 구합니다.
-2. `p_ready`는 `q_goal` 관절 위치에서의 순기구학(forward kinematics)을 계산하여 `p_rel` TCP 위치를 구합니다.
-3. `q_ready`는 `p_ready` 위치에서의 역기구학을 계산하여 관절 위치를 구합니다.
-
-
-```python
-movej(q_ref, a=1.2, v=0.1, t=0, r=0)
-sleep(1)
-movej(q_ready, a=1.2, v=0.1, t=0, r=0.01)
-movel(q_goal, a=1.2, v=0.1, t=0, r=0)
-```
-
-1. `movej(q_ref, a=1.2, v=0.1, t=0, r=0)`은 로봇을 `q_ref` 조인트 파라미터 값을 사용하여 로봇을 움직입니다. 가속도는 1.2, 속도는 0.1입니다.
-2. `sleep(1)`은 1초 동안 대기합니다.
-3. `movej(q_ready, a=1.2, v=0.1, t=0, r=0.01)`은 로봇을 `q_ready` 조인트 파라미터 값을 사용하여 로봇을 움직입니다. 가속도는 1.2, 속도는 0.1이며, 도달 반경은 0.01입니다.
-4. `movel(q_goal, a=1.2, v=0.1, t=0, r=0)`은 로봇을 `q_goal` 위치로 선형 이동시킵니다. 가속도는 1.2, 속도는 0.1입니다.
-
+### 실습
+1. 펜던트(프리드라이브)로 로봇을 집을 자세로 둡니다.
+2. 그 자리에서 `get_position1.py`로 pose, `get_position2.py`로 joint 값을 받습니다.
+3. `set_position2.py`의 `p_goal`, `q_ref`에 각각 넣고, 로봇을 다른 곳으로 옮긴 뒤 실행합니다.
+4. 로봇이 목표 10cm 위로 갔다가 똑바로 내려오는지 확인합니다.
