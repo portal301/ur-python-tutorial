@@ -1,14 +1,12 @@
-# 그리퍼 스크립트를 로봇으로 보내기
-# 실행: Session2_gripper_urcaps 폴더에서 python lecture2/gripper.py
+# Pick and Place 스크립트를 로봇으로 보내기
+# 실행: lecture2 폴더에서 python gripper.py
 import socket
 import time
 
 PORT_PRIMARY_CLIENT = 30001
 
 robot_url = "192.168.1.104"
-script_path = "practice/gripper_open_close.script"     # 실습 1: 그리퍼 열고 닫기
-# script_path = "practice/pick_and_place.script"       # 실습 2: 저장한 위치로 Pick and Place
-# 정답 확인: "practice/" 대신 "answer/"
+script_path = "scripts/pick_and_place.script"     # 좌표(pick_pose, place_pose)를 먼저 바꾸고 실행
 
 
 def getScriptFromPath(script_path):

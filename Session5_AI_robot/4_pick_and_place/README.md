@@ -20,7 +20,7 @@
 
 > 참고 링크: [Onrobot urp 다운로드 링크](https://df.onrobot.com/)
 
-> 그리퍼 연습은 Day2의 [`answer/gripper_open_close.script`](../../Session2_gripper_urcaps/answer/gripper_open_close.script)를 사용합니다.
+> 그리퍼 연습은 Day2 그리퍼 스크립트를 복사해 둔 [`scripts/gripper_open_close.script`](../scripts/gripper_open_close.script)를 사용합니다.
 
 ### 1.1 그리퍼를 여닫는 스크립트 (Day2 복습)
 #### 예제코드(Day2 gripper_open_close.script 본문):

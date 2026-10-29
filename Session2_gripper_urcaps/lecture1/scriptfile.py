@@ -34,6 +34,7 @@ if __name__ == "__main__":
     # script_path = "scripts/example_urcaps_schunk.script"
     # script_path = "scripts/example_urcaps_onrobot.script"
     script_path = "scripts/example_urcaps_onrobot_rg2ft.script"
+    # script_path = "scripts/gripper_open_close.script"   # 실습: 그리퍼 열고 닫기 (완성본)
     sendScriptFile(robot_url, script_path, PORT_PRIMARY_CLIENT)
 
 

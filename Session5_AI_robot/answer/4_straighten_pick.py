@@ -27,7 +27,7 @@ GRIP_OPEN, GRIP_CLOSE, GRIP_FORCE = 100.0, 20.0, 40.0   # 그리퍼 열기·닫�
 MODEL_PATH = ""
 TARGET = ""
 CONF_MIN = 0.5
-GRIPPER_SCRIPT = "../Session2_gripper_urcaps/answer/gripper_open_close.script"   # Day2 그리퍼 스크립트 (위쪽 OnRobot 정의만 가져다 씀)
+GRIPPER_SCRIPT = "scripts/gripper_open_close.script"   # Day2 그리퍼 스크립트 복사본 (위쪽 OnRobot 정의만 가져다 씀)
 ROBOT_SCRIPT = "answer/scripts/straighten_pick.script"                         # 로봇이 할 일
 
 

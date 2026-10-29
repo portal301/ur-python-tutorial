@@ -3133,6 +3133,6 @@ def unnamed():
   rg2ft_grip(100.0, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)    # 열기 (폭 100mm)
   rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
   sleep(1.0)
-  rg2ft_grip(50.0, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)     # 닫기 (폭 20mm)
+  rg2ft_grip(20.0, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)     # 닫기 (폭 20mm)
   rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
 end
