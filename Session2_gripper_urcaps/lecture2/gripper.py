@@ -1,6 +1,7 @@
 # 그리퍼 스크립트를 로봇으로 보내기
 # 실행: Session2_gripper_urcaps 폴더에서 python lecture2/gripper.py
 import socket
+import time
 
 PORT_PRIMARY_CLIENT = 30001
 
@@ -21,12 +22,9 @@ def getScriptFromPath(script_path):
 def sendScript(robot_url, script, port=PORT_PRIMARY_CLIENT):
     socketClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socketClient.connect((robot_url, port))
-    socketClient.settimeout(5)
     socketClient.sendall((script + "\n").encode())
-    # 스크립트가 길어서, 바로 닫으면 뒷부분이 잘림 → "다 보냈다"고 알리고 로봇이 닫을 때까지 기다림
-    socketClient.shutdown(socket.SHUT_WR)
-    while socketClient.recv(4096):   # 로봇이 보내는 상태 데이터는 읽어서 버림
-        pass
+    # 스크립트가 길어서, 바로 닫으면 뒷부분이 잘림 → 전송이 끝날 때까지 잠깐 기다린 뒤 닫음
+    time.sleep(3)
     socketClient.close()
 
 
