@@ -3130,11 +3130,9 @@ def unnamed():
   # 여기부터 본문: 그리퍼 열기 → 1초 기다리기 → 닫기
   # rg2ft_grip(폭mm, 힘N, ...) : 손가락 사이를 '폭'만큼 벌리거나 좁힘
   # ============================================================
-  # TODO 1: 그리퍼 열기 (폭 100mm, 힘 40N)
-  rg2ft_grip(____, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)
+  rg2ft_grip(100.0, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)    # 열기 (폭 100mm)
   rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
   sleep(1.0)
-  # TODO 2: 그리퍼 닫기 (폭 20mm, 힘 40N)
-  rg2ft_grip(____, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)
+  rg2ft_grip(20.0, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)     # 닫기 (폭 20mm)
   rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
 end
