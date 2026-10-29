@@ -4,16 +4,18 @@ import socket
 
 PORT_PRIMARY_CLIENT = 30001
 
-robot_url = "192.168.0.3"
+robot_url = "192.168.1.104"
 script_path = "practice/gripper_open_close.script"     # 실습 1: 그리퍼 열고 닫기
 # script_path = "practice/pick_and_place.script"       # 실습 2: 저장한 위치로 Pick and Place
 # 정답 확인: "practice/" 대신 "answer/"
 
 
 def getScriptFromPath(script_path):
-    with open(script_path, 'r', encoding='utf-8') as file:
+    # newline='' : 주석 안의 \r 을 줄바꿈으로 바꾸지 않도록 원본 그대로 읽음
+    with open(script_path, 'r', encoding='utf-8', newline='') as file:
         script = file.read()
-    return script
+    # PolyScope가 만든 스크립트에는 주석 중간에 \r 이 섞여 있을 수 있음 → 제거
+    return script.replace('\r', '')
 
 
 def sendScript(robot_url, script, port=PORT_PRIMARY_CLIENT):

@@ -46,8 +46,6 @@ def unnamed():
   modbus_set_runstate_dependent_choice("MODBUS_5",0)
   modbus_set_runstate_dependent_choice("MODBUS_6",0)
   modbus_set_runstate_dependent_choice("MODBUS_13",0)
-  motion_version_set(1)
-  tool_wrench_limit_disable()
   set_target_payload(0.650000, [0.008000, -0.002000, 0.042000], [0.000751, 0.000751, 0.000751, 0.000000, 0.000000, 0.000000])
   set_tool_communication(True, 1000000, 2, 1, 1.5, 3.5)
   set_tool_output_mode(0)
@@ -99,9 +97,9 @@ def unnamed():
   ON_DI_DUAL = 3
   on_robot_type = 5
   on_robot_cycle = 2.0
-  on_device_ip = "192.168.0.4"
+  on_device_ip = "192.168.1.1"
   on_device_socket_port = 51234
-  on_xmlrpc = rpc_factory("xmlrpc", "http://192.168.0.4:41414")
+  on_xmlrpc = rpc_factory("xmlrpc", "http://192.168.1.1:41414")
   on_RPC = rpc_factory("xmlrpc", "http://127.0.0.1:31416")
   ON_DEBUG_LOG = False
   on_isMetric = True

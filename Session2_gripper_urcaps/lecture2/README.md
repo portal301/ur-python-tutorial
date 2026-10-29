@@ -44,7 +44,7 @@ def rg2ft_grip(width,force,tool_index=0,blocking=True,depth_comp=False,popupmsg=
 
 2. `lecture2/gripper.py`에서 로봇 IP를 확인합니다.
 ```python
-robot_url = "192.168.0.110"
+robot_url = "192.168.1.104"
 script_path = "practice/gripper_open_close.script"
 ```
 3. 펜던트를 **원격제어(Remote) 모드**로 두고 실행합니다.

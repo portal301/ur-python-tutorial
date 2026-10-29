@@ -12,7 +12,7 @@ PORT_SECONDARY_CLIENT = 30002
 
 #TODO: IP 주소 바꾸기
 server_ip = "192.168.0.87"
-robot_ip = "192.168.0.31"
+robot_ip = "192.168.1.104"
 script_path = "scripts/pickup.script"
 weight_path = "weights/obb/best.pt"
 obj_height = 0.045 # height offset for ring

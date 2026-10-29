@@ -22,7 +22,7 @@
 ### 파이썬 파일 실행하기
 `helloworld.py`를 실행합니다.
 ```python
-robot_url = "192.168.0.5"
+robot_url = "192.168.1.104"
 socketPrimaryClient.connect((robot_url, 30001)) # 30001 --> Primary interface
 ```
 
@@ -115,7 +115,7 @@ def getScriptFromPath(script_path):
 
 ```python
 if __name__ == "__main__":
-    robot_url = "192.168.0.5"
+    robot_url = "192.168.1.104"
     script_path = "scripts/helloworld.script"
     # script_path = "scripts/slowmove.script"
     # sendScriptFile(robot_url, script_path, PORT_PRIMARY_CLIENT)

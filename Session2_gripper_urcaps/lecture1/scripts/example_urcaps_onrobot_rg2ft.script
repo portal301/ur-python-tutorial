@@ -46,8 +46,6 @@ def unnamed():
   modbus_set_runstate_dependent_choice("MODBUS_5",0)
   modbus_set_runstate_dependent_choice("MODBUS_6",0)
   modbus_set_runstate_dependent_choice("MODBUS_13",0)
-  motion_version_set(1)
-  tool_wrench_limit_disable()
   set_target_payload(0.650000, [0.008000, -0.002000, 0.042000], [0.000751, 0.000751, 0.000751, 0.000000, 0.000000, 0.000000])
   set_tool_communication(True, 1000000, 2, 1, 1.5, 3.5)
   set_tool_output_mode(0)
@@ -2856,7 +2854,7 @@ def unnamed():
   end 
   
   #======    End of OnRobot FT Insert Part    ======#
-  #======    OnRobot FT Search Part    ======#
+  #======    OnRobot FT Search Part ======#
   
   def hex_search_part(frameID,axis,isDirectionPositive,max_dist,contact_ft,tcp_speed,retraction):
   sync()
@@ -2929,7 +2927,7 @@ def unnamed():
   return(ft_search_return!=0)
   end 
   
-  #======    End of OnRobot FT Search Part    ======#
+  #======    End of OnRobot FT Search Part ======#
   #======    OnRobot FT Search Center    ======#
   
   hex_center_pose=ON_ZEROPOSE
@@ -3142,15 +3140,15 @@ def unnamed():
     #   Source: OnRobot, 5.10.1, OnRobot A/S
     #   Type: RG2-FT Grip
     $ 3 "RG2-FT Grip"
-on_return = rg2ft_grip(0.0, 40.0, tool_index = 0, blocking = True, depth_comp = False, popupmsg = True)
-rg2ft_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
+    on_return = rg2ft_grip(0.0, 40.0, tool_index = 0, blocking = True, depth_comp = False, popupmsg = True)
+    rg2ft_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
     # end: URCap Program Node
     # begin: URCap Program Node
     #   Source: OnRobot, 5.10.1, OnRobot A/S
     #   Type: RG2-FT Grip
     $ 4 "RG2-FT Grip"
-on_return = rg2ft_grip(100.0, 3.0, tool_index = 0, blocking = True, depth_comp = False, popupmsg = True)
-rg2ft_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
+    on_return = rg2ft_grip(100.0, 3.0, tool_index = 0, blocking = True, depth_comp = False, popupmsg = True)
+    rg2ft_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
     # end: URCap Program Node
   end
 end
