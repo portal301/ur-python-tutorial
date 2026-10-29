@@ -46,7 +46,7 @@ async def handle_client(reader, writer):
             elif message == "req_data":
                 print("Received data request")
                 p_goal = [0.2626, -0.1777, 0.3691, 2.1936, 2.2199, -0.0141]
-                p_rel = [0.0, 0.0, -0.10, 0.0, 0.0, 0.0]
+                p_rel = [0.0, 0.0, 0.10, 0.0, 0.0, 0.0]     # 목표에서 10cm 위 (베이스 기준)
                 q_ref = [0.1232, -1.516, -1.6844, -1.4973, 1.5504, 3.2482]
                 arr = p_goal + p_rel + q_ref # 18 floats
                 float_string = "({})".format(','.join(map(str, arr)))

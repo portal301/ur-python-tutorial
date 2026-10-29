@@ -13,15 +13,9 @@ def socket_set_position2():
 
     socket_close("socket_0")
 
-    p_=get_actual_tcp_pose()
-    q_=get_actual_joint_positions()
+    p_above = pose_add(p_goal, p_rel)                 # 목표에서 p_rel만큼 위
+    q_above = get_inverse_kin(p_above, qnear=q_ref)   # 위 점을 q_ref와 비슷한 팔 모양으로
 
-    q_goal = get_inverse_kin(p_goal,q_ref)
-    p_ready = get_forward_kin(q=q_goal,tcp=p_rel)
-    q_ready = get_inverse_kin(p_ready,q_ref)
-
-    movej(q_ref, a=1.2, v=0.3, t=0, r=0)
-    sleep(1)
-    movej(q_ready, a=1.2, v=0.3, t=0, r=0.01)
-    movel(q_goal, a=1.2, v=0.3, t=0, r=0)
+    movej(q_above, a=1.2, v=0.3, t=0, r=0)            # 1. 지금 자리에서 위 점으로
+    movel(p_goal, a=1.2, v=0.1, t=0, r=0)             # 2. 똑바로 내려가기
 end
