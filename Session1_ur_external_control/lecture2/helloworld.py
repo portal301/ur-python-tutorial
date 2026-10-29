@@ -1,6 +1,6 @@
 import socket
 
-robot_url = "192.168.0.31"
+robot_url = "192.168.1.104"
 script = """
 def helloworld():
     popup("Happy learning!")

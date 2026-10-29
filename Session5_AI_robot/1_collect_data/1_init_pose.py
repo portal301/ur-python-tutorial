@@ -28,7 +28,7 @@ PORT_PRIMARY_CLIENT = 30001
 PORT_SECONDARY_CLIENT = 30002
 
 server_ip = "192.168.0.87"
-robot_ip = "192.168.0.31"
+robot_ip = "192.168.1.104"
 script_path = "scripts/init_pose.script"
 
 async def handle_client(reader, writer):

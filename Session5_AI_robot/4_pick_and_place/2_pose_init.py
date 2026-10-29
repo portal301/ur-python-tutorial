@@ -11,7 +11,7 @@ PORT_SECONDARY_CLIENT = 30002
 
 #TODO: 로봇 및 컴퓨터 ip 설정
 server_ip = "192.168.0.87"
-robot_ip = "192.168.0.31"
+robot_ip = "192.168.1.104"
 script_path = "scripts/pose_init.script"
 
 async def handle_client(reader, writer):
