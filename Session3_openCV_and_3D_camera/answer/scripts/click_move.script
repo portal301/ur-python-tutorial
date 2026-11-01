@@ -1,0 +1,31 @@
+def click_move():
+    server_ip = "192.168.0.77"       # 이 PC의 IP (로봇이 여기로 접속함)
+    port = 12345
+    socket_open(server_ip, port, "socket_0")
+
+    socket_send_line("req_data", "socket_0")
+    sleep(0.1)
+    buf = socket_read_ascii_float(18, socket_name="socket_0", timeout=2)
+    socket_close("socket_0")
+    if buf[0] != 18:
+        textmsg("click_move: no data from PC")
+        halt
+    end
+
+    p_cam = p[buf[1], buf[2], buf[3], buf[4], buf[5], buf[6]]               # 카메라 기준 클릭한 점
+    tool_camera = p[buf[7], buf[8], buf[9], buf[10], buf[11], buf[12]]      # 툴 기준 카메라 위치 (캘리브레이션 값)
+    p_rel = p[buf[13], buf[14], buf[15], buf[16], buf[17], buf[18]]         # 점에서 얼마나 위로 갈지
+
+    tool_pose = get_actual_tcp_pose()                    # 베이스 기준 지금 툴 자세
+    cam_pose = pose_trans(tool_pose, tool_camera)        # 베이스 기준 카메라 자세
+    point = pose_trans(cam_pose, p_cam)                  # 베이스 기준 클릭한 점
+
+    p_goal = p[point[0], point[1], point[2], tool_pose[3], tool_pose[4], tool_pose[5]]   # 위치는 점, 회전은 지금 그대로
+    p_above = pose_add(p_goal, p_rel)                    # 점에서 p_rel만큼 위
+
+    p_down = pose_add(p_goal, p[0, 0, 0.02, 0, 0, 0])    # 표면 2cm 위 (충돌 방지)
+
+    movel(p_above, a=0.2, v=0.05)                        # 1. 위 점으로
+    movel(p_down, a=0.2, v=0.02)                         # 2. 천천히 내려가기
+    movel(p_above, a=0.2, v=0.05)                        # 3. 다시 올라오기
+end

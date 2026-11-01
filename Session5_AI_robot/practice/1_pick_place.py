@@ -4,7 +4,7 @@
 #   PC = 물체 찾기 + 서버,  로봇 = PC에 물어보고(req_data) 좌표 계산 + 움직임 (scripts/pick_place.script)
 # - 순서: 물체 위 → 내려감 → 잡기 → 올라옴 → 놓을 곳 위 → 내려감 → 놓기 → 올라옴
 # - 모델은 OBB 모델이지만 여기서는 박스 중심만 씀 (각도는 2단계부터)
-# - t = 물체 찾기, m = 실행, c = 취소, 스페이스 = 정지 명령, q = 종료
+# - t = 물체 찾기, m = 실행, c = 취소, q = 종료
 # - t를 누른 뒤 m을 누를 때까지 로봇을 움직이지 말 것 (로봇이 '지금 자세' 기준으로 계산함)
 # - 실행: Session5_AI_robot 폴더에서 python practice/1_pick_place.py
 import socket
@@ -18,7 +18,7 @@ from ultralytics import YOLO
 ROBOT_IP = "192.168.1.104"
 PC_IP = "192.168.0.199"                          # 로봇이 접속할 PC의 이더넷 IP (Day1 lecture3와 같음)
 PORT = 12345                                     # PC 서버 포트
-TCP_CAMERA = [-0.026, -0.056, -0.2197, 0, 0, 0]   # 툴(그리퍼 끝 TCP, z 238.7mm) 기준 카메라 위치·회전 (Day3와 같음, 플랜지 기준 z 0.019 - 0.2387)
+TCP_CAMERA = [-0.026, -0.056, -0.2197, 0, 0, 0]   # 툴(그리퍼 끝 TCP, z 238.7mm) 기준 카메라 위치·회전 (Day3와 같음)
 HOVER = 0.30                                     # 물체 위 높이(m)
 TOOL_DOWN = [0.0611, 3.141, 0.0]                 # 툴이 정확히 아래(베이스 -z)를 보는 회전 rx, ry, rz. 집고 놓을 때 이 회전을 씀. 강의장에서 다시 재기
 GRASP_OFFSET = [0.0, 0.0, 0.05]                  # 물체 윗면 기준 잡는 위치 보정 x, y, z(m, 베이스 기준으로 더함). z가 음수면 더 내려감. 강의장에서 그리퍼에 맞춰 조정
@@ -47,12 +47,6 @@ def send(script):
     except socket.timeout:
         pass
     r.close()
-
-
-def stop():
-    """정지 명령 보내기"""
-    send("def stop_now():\n  stopl(0.5)\nend")
-    print(">> 정지 명령 보냄")
 
 
 def read_file(path):
@@ -193,8 +187,6 @@ def main():
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
-            if key == ord(" "):
-                stop()
             if key == ord("c"):
                 plan = None; print("취소")
             if key == ord("t"):
@@ -215,7 +207,7 @@ def main():
                 pick_place(server, plan[2])
                 plan = None
     except KeyboardInterrupt:
-        stop()
+        pass
     finally:
         server.close(); pipe.stop(); cv2.destroyAllWindows()
 
