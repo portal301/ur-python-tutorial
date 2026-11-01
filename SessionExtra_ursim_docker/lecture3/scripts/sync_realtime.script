@@ -1,0 +1,22 @@
+def sync_realtime():
+    server_ip = "192.168.0.2"   # PC IP (ipconfig)
+    port = 12345
+    socket_open(server_ip, port, "socket_0")
+
+    while (True):
+        # ask PC for the next target joints
+        socket_send_line("next", "socket_0")
+        r = socket_read_ascii_float(6, "socket_0", 1.0)
+
+        # no answer within 1 s -> stop
+        if (r[0] != 6):
+            break
+        end
+
+        target = [r[1], r[2], r[3], r[4], r[5], r[6]]
+        servoj(target, t=0.05, lookahead_time=0.1, gain=300)
+    end
+
+    stopj(2)
+    socket_close("socket_0")
+end
