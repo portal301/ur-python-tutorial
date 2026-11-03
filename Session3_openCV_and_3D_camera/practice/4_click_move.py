@@ -43,10 +43,10 @@ async def handle_client(reader, writer):
 
             if message == "req_data" and p_cam is not None:
                 print("Received data request")
-                # TODO 2: Day1 set_position2에서 직접 적었던 p_goal 자리에 카메라로 찾은 점 넣기
+                # TODO: Day1 set_position2에서 직접 적었던 p_goal 자리에 카메라로 찾은 점 넣기
                 #         (p_cam의 x, y, z 3개 + 회전 0, 0, 0 → 6개짜리 리스트)
                 p_goal = ____
-                # TODO 3: 점에서 HOVER만큼 위 (z만 HOVER, 나머지 0 → 6개짜리 리스트)
+                # TODO: 점에서 HOVER만큼 위 (z만 HOVER, 나머지 0 → 6개짜리 리스트)
                 p_rel = ____
                 arr = p_goal + TCP_CAMERA + p_rel           # 18 floats
                 float_string = "({})".format(','.join(map(str, arr)))
@@ -102,8 +102,7 @@ def get_frame(pipe, align):
 def pixel_to_camera(u, v, depth, intr):
     """픽셀 (u, v) → 카메라 기준 3D 점(m). 깊이를 못 읽으면 None"""
     z = depth.get_distance(u, v)                                        # 픽셀 (u, v)까지의 거리(m)
-    # TODO 1: 깊이를 못 읽었으면(0 이하) None 돌려주기
-    if ____:
+    if z <= 0:                                                          # 0이면 깊이를 못 읽은 것
         return None
     return np.array(rs.rs2_deproject_pixel_to_point(intr, [u, v], z))   # 픽셀(u, v) + 깊이(z) → 3D 점
 

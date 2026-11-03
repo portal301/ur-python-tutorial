@@ -17,11 +17,11 @@ def click_move():
     p_rel = p[buf[13], buf[14], buf[15], buf[16], buf[17], buf[18]]         # 점에서 얼마나 위로 갈지
 
     tool_pose = get_actual_tcp_pose()                    # 베이스 기준 지금 툴 자세
-    cam_pose = pose_trans(tool_pose, tool_camera)        # 베이스 기준 카메라 자세
-    point = pose_trans(cam_pose, p_cam)                  # 베이스 기준 클릭한 점
+    cam_pose = pose_trans(____, ____)                    # 베이스 기준 카메라 자세
+    point = pose_trans(____, ____)                       # 베이스 기준 클릭한 점
 
     p_goal = p[point[0], point[1], point[2], tool_pose[3], tool_pose[4], tool_pose[5]]   # 위치는 점, 회전은 지금 그대로
-    # TODO 4: 점(p_goal)에서 p_rel만큼 위 (Day1 socket_set_position2.script 참고)
+    # TODO: 점(p_goal)에서 p_rel만큼 위 (Day1 socket_set_position2.script 참고)
     p_above = ____
 
     p_down = pose_add(p_goal, p[0, 0, 0.02, 0, 0, 0])    # 표면 2cm 위 (충돌 방지)
