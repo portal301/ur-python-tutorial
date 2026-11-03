@@ -3,6 +3,8 @@
 # - 로봇이 홈(사진 찍는 자세)에 있을 때만 찾음:
 #   스크립트를 보내면 busy = True → 로봇이 집고·놓고·홈으로 돌아온 뒤 "done"을 보내면 busy = False
 # - 카메라 좌표 → 로봇 베이스 좌표 변환은 로봇 스크립트(scripts/color_pick.script)가 함
+# - 로봇은 점을 2번 물어봄(req_data): 홈에서 1번(대략 위치) → 카메라가 물체 바로 위로 가서 1번 더(정확한 위치)
+#   → PC는 매 프레임 최신 점을 계산해 두고 물어볼 때마다 그 값으로 답함
 # - 로봇 스크립트는 시작할 때의 자세를 "홈"으로 기억하고 마지막에 그 자세로 돌아옴
 #   → 처음에 로봇을 사진 찍을 자세(물체가 화면에 보이는 자세)에 두고 실행
 # - q = 종료, r = busy 강제 해제 (로봇이 중간에 멈췄을 때)
@@ -21,16 +23,18 @@ PORT_PRIMARY_CLIENT = 30001
 robot_ip = "192.168.1.104"
 script_path = os.path.join(os.path.dirname(__file__), "scripts", "color_pick.script")
 
-TCP_CAMERA = [-0.026, -0.056, -0.2197, 0, 0, 0]   # 툴(그리퍼 끝 TCP, z 238.7mm) 기준 카메라 위치·회전
+TCP_CAMERA = [-0.0367, -0.0546, -0.2067, 0, 0, 0] # 툴(그리퍼 끝 TCP, z 238.7mm) 기준 카메라 위치·회전
+                                                  # 로봇 자세 16개에서 같은 물체를 재서 맞춘 값 (이전 값 [-0.026, -0.056, -0.2197])
 
 # 노란색 범위 (B, G, R). 조명에 따라 다르니 "yellow mask" 창을 보면서 조정
 YELLOW_LOWER = (0, 70, 100)
 YELLOW_UPPER = (90, 210, 255)
 MIN_PIXELS = 500        # 노란 덩어리가 이보다 작으면 "없음"으로 판단 (작은 잡음 무시)
 IGNORE_X = 540          # 이 x보다 오른쪽은 무시 (화면 오른쪽에 보이는 노란 그리퍼 부품)
+TOP_BAND = 0.005        # 윗면으로 볼 깊이 범위 (m). 가장 가까운 면에서 5mm 이내 픽셀만 윗면으로 침
 
 p_cam = None            # 찾은 점 (카메라 기준, m). 아직 없으면 None
-busy = False            # True면 로봇이 일하는 중 → 찾지도 보내지도 않음
+busy = False            # True면 로봇이 일하는 중 → 점은 계속 계산하지만 스크립트는 다시 보내지 않음
 
 
 # ============================================================
@@ -50,8 +54,8 @@ async def handle_client(reader, writer):
 
             print(f"Received from {addr}: {message}")
 
-            if message == "req_data" and p_cam is not None:
-                print("Received data request")
+            if message == "req_data" and p_cam is not None:    # 홈에서 1번, 물체 위에서 1번 → 2번 옴
+                print(f"Received data request → 최신 점 {np.round(p_cam*1000,1)} mm 보냄")
                 p_goal = list(p_cam) + [0.0, 0.0, 0.0]      # 카메라로 찾은 점
                 arr = p_goal + TCP_CAMERA                   # 12 floats
                 float_string = "({})".format(','.join(map(str, arr)))
@@ -110,19 +114,27 @@ def get_frame(pipe, align):
     return color, depth, intr
 
 
-def pixel_to_camera(u, v, depth, intr):
-    """픽셀 (u, v) → 카메라 기준 3D 점(m). 깊이를 못 읽으면 None"""
-    z = depth.get_distance(u, v)                                        # 픽셀 (u, v)까지의 거리(m)
-    if z <= 0:                                                          # 0이면 깊이를 못 읽은 것
+def blob_to_camera(blob, depth, intr):
+    """노란 덩어리 → 카메라 기준 윗면 중심 3D 점(m). 깊이를 못 읽으면 None
+    화면 중심에서 먼 물체는 옆면도 보여서 2D 중심이 바깥쪽으로 밀림
+    → 덩어리 픽셀을 전부 3D로 바꾸고, 카메라에 가장 가까운 면(윗면)만 골라 평균"""
+    d = np.asanyarray(depth.get_data()) * depth.get_units()           # 깊이 이미지 (m)
+    vs, us = np.nonzero(blob & (d > 0))                                # 덩어리 안에서 깊이를 읽은 픽셀들
+    if len(us) == 0:
         return None
-    return np.array(rs.rs2_deproject_pixel_to_point(intr, [u, v], z))   # 픽셀(u, v) + 깊이(z) → 3D 점
+    z = d[vs, us]
+    z_top = np.percentile(z, 5)                                        # 윗면 깊이 (min 대신 5%: 튀는 값 무시)
+    top = z <= z_top + TOP_BAND                                        # 윗면 근처 픽셀만 (옆면 제외)
+    pts = [rs.rs2_deproject_pixel_to_point(intr, [int(u), int(v)], float(zz))   # 픽셀 + 깊이 → 3D 점
+           for u, v, zz in zip(us[top], vs[top], z[top])]
+    return np.mean(pts, axis=0)                                        # 윗면 점들의 평균 = 윗면 중심
 
 
 # ============================================================
 # 4. 노란색 찾기 (2_similar_color의 "범위 안에 드는 픽셀 고르기"와 같은 생각)
 # ============================================================
 def find_yellow(color):
-    """노란 픽셀들의 중심 (u, v)와 마스크 반환. 없으면 (None, 마스크)"""
+    """노란 픽셀들의 중심 (u, v), 마스크, 가장 큰 덩어리 반환. 없으면 (None, 마스크, None)"""
     # 2_similar_color에서는 이중 for문으로 직접 비교했지만, 카메라 화면은 매 프레임 바뀌어서 너무 느림
     # → 같은 일을 한 번에 해주는 cv2.inRange 사용 (범위 안 = 255, 밖 = 0)
     mask = cv2.inRange(color, YELLOW_LOWER, YELLOW_UPPER)
@@ -130,12 +142,12 @@ def find_yellow(color):
     # 물체가 여러 개면 전체 평균은 물체 사이 빈 곳이 됨 → 붙어 있는 덩어리별로 나눠서 가장 큰 것 하나만
     n, labels, stats, centers = cv2.connectedComponentsWithStats(mask)
     if n < 2:                                       # 0번은 배경. 덩어리가 없음
-        return None, mask
+        return None, mask, None
     best = 1 + np.argmax(stats[1:, cv2.CC_STAT_AREA])   # 가장 큰 덩어리 번호
     if stats[best, cv2.CC_STAT_AREA] < MIN_PIXELS:
-        return None, mask
+        return None, mask, None
     cx, cy = centers[best]
-    return (int(cx), int(cy)), mask                 # 그 덩어리의 중심점
+    return (int(cx), int(cy)), mask, labels == best # 그 덩어리의 중심점(화면 표시용)과 덩어리 픽셀
 
 
 # ============================================================
@@ -148,20 +160,19 @@ async def camera_loop():
     try:
         while True:
             color, depth, intr = get_frame(pipe, align)
-            center, mask = find_yellow(color)
+            center, mask, blob = find_yellow(color)
 
-            # (1) 로봇이 홈에서 쉬는 중이고 노란 물체가 보이면 → 점 계산해서 보내기
-            if not busy and center is not None:
-                point = pixel_to_camera(center[0], center[1], depth, intr)
-                if point is None:
-                    print("깊이를 못 읽었습니다. 다시 찾습니다.")
-                else:
-                    p_cam = point
-                    print(f"노란 물체 {center} → 카메라 기준 점 {np.round(p_cam*1000,1)} mm. 로봇에 보냅니다.")
-                    busy = True                     # 보내기 전에 먼저 True (로봇 일하는 동안 또 보내지 않게)
-                    await sendScriptFile(robot_ip, script_path, PORT_PRIMARY_CLIENT)
+            # (1) 매 프레임 최신 점 계산 (로봇이 일하는 중에도)
+            #     로봇이 물체 위에서 2차 측정(req_data)을 보내면 이 최신 값으로 답함
+            p_cam = blob_to_camera(blob, depth, intr) if center is not None else None
 
-            # (2) 화면 표시
+            # (2) 로봇이 홈에서 쉬는 중이고 노란 물체가 보이면 → 로봇에 스크립트 보내기
+            if not busy and p_cam is not None:
+                print(f"노란 물체 {center} → 카메라 기준 점 {np.round(p_cam*1000,1)} mm. 로봇에 보냅니다.")
+                busy = True                         # 보내기 전에 먼저 True (로봇 일하는 동안 또 보내지 않게)
+                await sendScriptFile(robot_ip, script_path, PORT_PRIMARY_CLIENT)
+
+            # (3) 화면 표시
             if center is not None:
                 cv2.drawMarker(color, center, (0, 0, 255), cv2.MARKER_CROSS, 24, 2)
             state = "BUSY" if busy else "READY"
@@ -169,7 +180,7 @@ async def camera_loop():
             cv2.imshow("color pick", color)
             cv2.imshow("yellow mask", mask)
 
-            # (3) 키 처리
+            # (4) 키 처리
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break

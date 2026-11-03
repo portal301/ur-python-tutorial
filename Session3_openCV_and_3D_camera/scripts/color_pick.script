@@ -1215,7 +1215,7 @@ def unnamed():
   rg2ft_warnings_logged_right=integer_to_binary_list(0)
   rg2ft_dataProcess_running=False
   def rg2ft_dataProcess_errors(sensor_stop=False):
-  sensor_stop=on_error((rg2ft_Prox_status!=0),rg2ft_prox_status_error,rg2ft_prox_error_title,sensor_stop)
+  # sensor_stop=on_error((rg2ft_Prox_status!=0),rg2ft_prox_status_error,rg2ft_prox_error_title,sensor_stop)
   if(rg2ft_Status_left!=0):
   local sensor_status_bits=integer_to_binary_list(rg2ft_Status_left)
   sensor_stop=on_error(sensor_status_bits[0],rg2ft_sensor_bit0_error_left,rg2ft_sensor_error_title,sensor_stop)
@@ -3131,36 +3131,57 @@ def unnamed():
   # 앞부분(1 ~ 3128줄)은 Day2 pick_and_place.script와 같음 (그리퍼 설정, rg2ft_grip 정의)
   # 좌표는 예시값이므로 Day 1 Lecture 3 '위치 받기'로 확인한 값으로 바꾸세요
   # ============================================================
-  server_ip = "192.168.1.10"       # 이 PC의 IP (로봇이 여기로 접속함)
+  server_ip = "192.168.1.100"      # 이 PC의 IP (로봇이 여기로 접속함)
   port = 12345
-  place_pose = p[0.20, -0.40, 0.10, 0.0, 3.14, 0.0]    # 놓을 곳 (예시값)
+  # 놓을 곳 (베이스 기준). 펜던트 이동 탭의 TCP 값을 그대로 넣기: x, y, z는 mm → m (÷1000), rx, ry, rz는 rad 그대로
+  # 펜던트 TCP 설정이 이 스크립트(z 238.7mm)와 같을 때 읽은 값이어야 함. 이 자세에서 베이스 기준 10cm 위 → 수직으로 내려와 놓음
+  place_pose = p[-0.53711, -0.58661, 0.29200, -1.90944, -1.92826, 0.70986]    # ← 여기 숫자만 바꾸기 (미끄럼틀 맨 위, 그리퍼 35° 기울임)
+  release_gap = 0.0                                # 놓을 때 미끄럼틀에서 띄울 거리 (m). 미끄럼틀을 누르면 키우고, 블록이 튀면 줄이기
+  place_pose = pose_trans(place_pose, p[0, 0, -release_gap, 0, 0, 0])   # 그리퍼 축 방향으로 release_gap만큼 덜 들어간 곳에서 놓기
   up = p[0, 0, 0.10, 0, 0, 0]                          # 10cm 위 (베이스 기준)
-  grip_depth = p[0, 0, -0.02, 0, 0, 0]                 # 물체 윗면에서 2cm 더 내려가서 집기 (물체 높이에 맞게 조정)
+  grip_depth = p[0, 0, -0.025, 0, 0, 0]                # 물체 윗면에서 0.5cm 더 내려가서 집기 (물체 높이에 맞게 조정)
 
   # 0. 지금 자세 = 홈 (사진 찍은 자세). 마지막에 여기로 돌아옴
   q_home = get_actual_joint_positions()
 
-  # 1. PC에서 찾은 점 받기
-  socket_open(server_ip, port, "socket_0")
-  socket_send_line("req_data", "socket_0")
-  sleep(0.1)
-  buf = socket_read_ascii_float(12, socket_name="socket_0", timeout=2)
-  if buf[0] != 12:
-    textmsg("color_pick: no data from PC")
-    socket_send_line("done", "socket_0")            # PC가 계속 기다리지 않게 알려주고 끝
+  look_height = 0.30                                   # 2차 측정 때 카메라를 물체 윗면 위 30cm에 둠 (손가락 끝은 약 8cm 위)
+  # PC에 점 물어보고 받은 값 12개 돌려주기 (못 받으면 끝)
+  def read_pc():
+    socket_open(server_ip, port, "socket_0")
+    socket_send_line("req_data", "socket_0")
+    sleep(0.1)
+    buf = socket_read_ascii_float(12, socket_name="socket_0", timeout=2)
+    if buf[0] != 12:
+      textmsg("color_pick: no data from PC")
+      socket_send_line("done", "socket_0")          # PC가 계속 기다리지 않게 알려주고 끝
+      socket_close("socket_0")
+      halt
+    end
     socket_close("socket_0")
-    halt
+    return buf
   end
-  socket_close("socket_0")
 
-  p_cam = p[buf[1], buf[2], buf[3], buf[4], buf[5], buf[6]]               # 카메라 기준 찾은 점
-  tool_camera = p[buf[7], buf[8], buf[9], buf[10], buf[11], buf[12]]      # 툴 기준 카메라 위치 (캘리브레이션 값)
+  # 받은 값 → 베이스 기준 찾은 점 (4_click_move와 같은 계산)
+  def to_base(buf):
+    p_cam = p[buf[1], buf[2], buf[3], buf[4], buf[5], buf[6]]               # 카메라 기준 찾은 점
+    tool_camera = p[buf[7], buf[8], buf[9], buf[10], buf[11], buf[12]]      # 툴 기준 카메라 위치 (캘리브레이션 값)
+    cam_pose = pose_trans(get_actual_tcp_pose(), tool_camera)               # 베이스 기준 카메라 자세
+    return pose_trans(cam_pose, p_cam)                                      # 베이스 기준 찾은 점 (물체 윗면)
+  end
 
-  # 2. 카메라 기준 → 베이스 기준 (4_click_move와 같음)
-  tool_pose = get_actual_tcp_pose()                    # 베이스 기준 지금 툴 자세
-  cam_pose = pose_trans(tool_pose, tool_camera)        # 베이스 기준 카메라 자세
-  point = pose_trans(cam_pose, p_cam)                  # 베이스 기준 찾은 점 (물체 윗면)
+  # 1. 홈에서 1차 측정 (비스듬히 보므로 대략적인 위치)
+  buf = read_pc()
+  tool_camera = p[buf[7], buf[8], buf[9], buf[10], buf[11], buf[12]]
+  point = to_base(buf)
 
+  # 2. 카메라가 물체 바로 위에 오도록 이동 → 2차 측정 (위에서 내려다보니 옆면·각도 오차가 줄어듦)
+  cam_pose = pose_trans(get_actual_tcp_pose(), tool_camera)
+  cam_look = p[point[0], point[1], point[2] + look_height, cam_pose[3], cam_pose[4], cam_pose[5]]
+  movel(pose_trans(cam_look, pose_inv(tool_camera)), a=0.5, v=0.1)    # 카메라 자세 → 툴 자세로 바꿔서 이동
+  sleep(1.0)                                          # 흔들림이 가라앉고 PC가 새 화면으로 다시 계산할 때까지
+  point = to_base(read_pc())
+
+  tool_pose = get_actual_tcp_pose()
   p_top = p[point[0], point[1], point[2], tool_pose[3], tool_pose[4], tool_pose[5]]   # 위치는 점, 회전은 지금 그대로
   pick_pose = pose_add(p_top, grip_depth)              # 집을 높이
 
@@ -3169,7 +3190,7 @@ def unnamed():
   rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
   movel(pose_add(pick_pose, up), a=0.5, v=0.1)
   movel(pick_pose, a=0.5, v=0.05)
-  rg2ft_grip(20.0, 40.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)
+  rg2ft_grip(20.0, 10.0, tool_index=0, blocking=True, depth_comp=False, popupmsg=True)
   rg2ft_payload_set(mass=0.0, tool_index=0, use_guard=True)
   movel(pose_add(pick_pose, up), a=0.5, v=0.05)
 
